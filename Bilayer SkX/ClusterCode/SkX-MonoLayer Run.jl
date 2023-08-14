@@ -68,7 +68,7 @@ for (j2idx, j2) in enumerate(J2s)
 
       latticeLocal = Lattice(UClocal, L)
 
-      mc = runAnneal(69,680,latticeLocal,2500,250000,0.99, H, J2,outfile = "Official-Cluster-Run-1-MonoLayer/H=$h,J2=$j2");
+      mc = runAnneal(69,680,latticeLocal,2500,250000,0.99, H, J2,"Official-Cluster-Run-1-MonoLayer/H=$h,J2=$j2");
       # DetailedMonoPlot(mc,mc.lattice,vertex)
       # SkXnumberPhase[hidx, j2idx] = round(getSkyrmionNumber(0,mc.lattice,vertex),digits=1)
    end
