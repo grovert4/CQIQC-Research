@@ -1,4 +1,4 @@
-using SpinMC, LinearAlgebra, Plots
+using SpinMC_more_more, LinearAlgebra, Plots
 include("functions.jl")
 
 #Unit Cell Construction
