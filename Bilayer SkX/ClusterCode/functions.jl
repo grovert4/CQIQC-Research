@@ -1,4 +1,4 @@
-using SpinMC, LinearAlgebra, Plots, ColorSchemes, PyPlot
+using SpinMC_more_more, LinearAlgebra, Plots, ColorSchemes, PyPlot
 ioff()
 
 function getSkyrmionNumber(layer,lat,vertex)
