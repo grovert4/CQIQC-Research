@@ -1,5 +1,5 @@
-using Pkg
-Pkg.add(url="https://github.com/grovert4/SpinMC_more_more.jl")
+#using Pkg
+#Pkg.add(url="https://github.com/grovert4/SpinMC_more_more.jl")
 using SpinMC_more_more, LinearAlgebra, Plots, ColorSchemes, PyPlot
 ioff()
 
