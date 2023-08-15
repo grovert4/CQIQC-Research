@@ -58,25 +58,30 @@ vertex=getVertex(Lattice0)
 SkXnumberPhase = zeros(length(Hs),length(J2s))
 
 for (j2idx, j2) in enumerate(J2s)
-   global J2 = j2
-   for (hidx,h) in enumerate(Hs)
+   filename = "./Official-Cluster-Run-1-MonoLayer/H=$h,J2=$j2.hdf"
+   if isfile(filename) 
+        println("Already Completed "*filename)
+   else
+      global J2 = j2
+      for (hidx,h) in enumerate(Hs)
 
-      global H = h
-      UClocal = deepcopy(UCglobal)
+         global H = h
+         UClocal = deepcopy(UCglobal)
 
-      #Add J2 2NN AF interaction 
-      addInteraction!(UClocal, 1, 1, -J2 * I, (-1,1))
-      addInteraction!(UClocal, 1, 1, -J2 * I, (1,2))
-      addInteraction!(UClocal, 1, 1, -J2 * I, (2,1))
-      
-      #Local Magnetic field
-      setField!(UClocal, 1, [0,0,-H])
+         #Add J2 2NN AF interaction 
+         addInteraction!(UClocal, 1, 1, -J2 * I, (-1,1))
+         addInteraction!(UClocal, 1, 1, -J2 * I, (1,2))
+         addInteraction!(UClocal, 1, 1, -J2 * I, (2,1))
+         
+         #Local Magnetic field
+         setField!(UClocal, 1, [0,0,-H])
 
-      latticeLocal = Lattice(UClocal, L)
+         latticeLocal = Lattice(UClocal, L)
 
-      mc = runAnneal(69,680,latticeLocal,2500,250000,0.99, H, J2,"Official-Cluster-Run-1-MonoLayer/H=$h,J2=$j2");
-      # DetailedMonoPlot(mc,mc.lattice,vertex)
-      # SkXnumberPhase[hidx, j2idx] = round(getSkyrmionNumber(0,mc.lattice,vertex),digits=1)
+         mc = runAnneal(69,680,latticeLocal,2500,250000,0.99, H, J2,"Official-Cluster-Run-1-MonoLayer/H=$h,J2=$j2.hdf");
+         # DetailedMonoPlot(mc,mc.lattice,vertex)
+         # SkXnumberPhase[hidx, j2idx] = round(getSkyrmionNumber(0,mc.lattice,vertex),digits=1)
+      end
    end
 end
 
