@@ -73,11 +73,12 @@ SkXnumberPhase = zeros(length(Hs),length(J2s))
 # How to use multiple nodes? 
 println(commSize)
 for (j2idx, j2) in enumerate(J2s[1+ceil(Int64, num/cores)*commRank:1+ceil(Int64,num/cores)*(commRank+1)])
-   println(filename)
    for (hidx,h) in enumerate(Hs[1+ceil(Int64, num/cores)*commRank:1+ceil(Int64,num/cores)*(commRank+1)])
       println("Rank " , commRank , " working on h = " , h, "working on j2 = ", j2) 
 
       filename = "/scratch/andykh/02_Data/Monolayer_Runs/H=$h,J2=$j2.hdf"
+      println(filename)
+
       if isfile(filename) 
            println("Already Completed "*filename)
       else
