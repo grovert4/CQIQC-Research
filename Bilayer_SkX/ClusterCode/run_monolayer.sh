@@ -5,8 +5,8 @@
 #SBATCH --mail-type=END
 #SBATCH --mail-type=FAIL
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=40
+#SBATCH --ntasks-per-node=40
+#SBATCH --cpus-per-task=40 
 #SBATCH --account=def-aparamek
 #SBATCH --time=1:45:00
 #SBATCH --mem-per-cpu=4000MB

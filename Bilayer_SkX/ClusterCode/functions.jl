@@ -125,8 +125,8 @@ function runAnneal(t0,tf,lat,thermSweeps,MeasureSweeps, coolRate, H, J2, outfile
             m = MonteCarlo(monte.lattice, 1/temp, thermalizationSweeps, measurementSweeps, reportInterval = 50000, rewrite = false);
 
             if ind == length(ts)
-               h = round(H,sigdigits=5)
-               j2 = round(J2,sigdigits=5)
+               h = round(H,sigdigits=3)
+               j2 = round(J2,sigdigits=3)
                run!(m, outfile = outfile)
             else
                run!(m)

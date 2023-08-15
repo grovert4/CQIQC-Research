@@ -1,6 +1,6 @@
 #using Pkg
 #Pkg.add(url="https://github.com/grovert4/SpinMC_more_more.jl")
-using SpinMC_more_more, LinearAlgebra#, Plots
+using SpinMC_more_more, LinearAlgebra, LazyGrids
 include("functions.jl")
 using MPI
 MPI.Initialized() || MPI.Init()
@@ -19,6 +19,15 @@ J1 = 1.0
 A_ion = 0.2
 D = 0.25
 J_ll = 0.0
+Hlength = 30
+Jlength = 30
+size = 36
+cores = 40
+t0 = 1E-1
+tf = 1E-3
+thermSweeps = 2500
+measureSweeps = 250000
+
 
 #Helpful Matrices
 I = [1.0 0.0 0.0; 0.0 1.0 0.0; 0.0 0.0 1.0]
@@ -45,25 +54,35 @@ addInteraction!(UCglobal, 1, 1, Dex(D1v), (1,0))
 addInteraction!(UCglobal, 1, 1, Dex(D2v), (0,1)) #(0,1)
 addInteraction!(UCglobal, 1, 1, Dex(D3v), (-1,-1)) #
 
-L = (24, 24)
+L = (size, size)
+
+num = Hlength * Jlength
+(Harr, J2arr) = ndgrid(range(0.0,1.0,Hlength),range(0.0,-0.5,Jlength) )
+Hs = collect(Iterators.flatten(Harr))
+J2s = collect(Iterators.flatten(J2arr))
 
 
-Hs = union(collect(range(0.0,1.1,length = 36)))
-J2s = collect(range(0.0,-0.5,length = 36))
-
-UClocal0 = deepcopy(UCglobal)
-Lattice0 = Lattice(UClocal0, L)
-vertex=getVertex(Lattice0)
+#UClocal0 = deepcopy(UCglobal)
+#Lattice0 = Lattice(UClocal0, L)
+#vertex=getVertex(Lattice0)
 
 SkXnumberPhase = zeros(length(Hs),length(J2s))
 
-for (j2idx, j2) in enumerate(J2s)
-   #global J2 = j2 # why is this a global? 
-   for (hidx,h) in enumerate(Hs)
+
+# need to combine looped for loop 
+# How to use multiple nodes? 
+println(CommSize)
+for (j2idx, j2) in enumerate(J2s[1+ceil(Int64, num/cores)*commRank:1+ceil(Int64,num/cores)*(commRank+1)])
+   println(filename)
+   for (hidx,h) in enumerate(Hs[1+ceil(Int64, num/cores)*commRank:1+ceil(Int64,num/cores)*(commRank+1)])
+      println("Rank " , commRank , " working on h = " , h, "working on j2 = ", j2) 
+
       filename = "/scratch/andykh/02_Data/Monolayer_Runs/H=$h,J2=$j2.hdf"
       if isfile(filename) 
            println("Already Completed "*filename)
       else
+         x0 = x' .* ones(ksize)
+         y0 = ones(ksize)' .* x
          #global H = h
          UClocal = deepcopy(UCglobal)
 
@@ -77,9 +96,9 @@ for (j2idx, j2) in enumerate(J2s)
 
          latticeLocal = Lattice(UClocal, L)
 
-         mc = runAnneal(69,680,latticeLocal,2500,250000,0.99, h, j2,"/scratch/andykh/02_Data/Monolayer_Runs/H=$h,J2=$j2.hdf");
-         # DetailedMonoPlot(mc,mc.lattice,vertex)
-         # SkXnumberPhase[hidx, j2idx] = round(getSkyrmionNumber(0,mc.lattice,vertex),digits=1)
+         mc = runAnneal(t0,tf,latticeLocal,thermSweeps,measureSweeps,0.99, h, j2,"/scratch/andykh/02_Data/Monolayer_Runs/H=$h,J2=$j2.hdf");
+            # DetailedMonoPlot(mc,mc.lattice,vertex)
+            # SkXnumberPhase[hidx, j2idx] = round(getSkyrmionNumber(0,mc.lattice,vertex),digits=1)
       end
    end
 end
