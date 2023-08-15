@@ -11,6 +11,6 @@
 #SBATCH --time=1:45:00
 #SBATCH --mem-per-cpu=4000MB
 #SBATCH --output=/scratch/andykh/SLURMOutputs/slurm-%x-%j.txt
-module load julia/1.9.1
+module load julia/1.8.5
 
 srun julia SkX_MonoLayer_Run.jl
