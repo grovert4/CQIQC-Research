@@ -82,9 +82,6 @@ for (j2idx, j2) in enumerate(J2s[1+ceil(Int64, num/cores)*commRank:1+ceil(Int64,
       if isfile(filename) 
            println("Already Completed "*filename)
       else
-         x0 = x' .* ones(ksize)
-         y0 = ones(ksize)' .* x
-         #global H = h
          UClocal = deepcopy(UCglobal)
 
          #Add J2 2NN AF interaction 
