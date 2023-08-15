@@ -13,4 +13,4 @@
 #SBATCH --output=/scratch/andykh/SLURMOutputs/slurm-%x-%j.txt
 module load julia/1.8.5
 
-srun --ntasks-per-node=40 julia SkX_MonoLayer_Run.jl
+srun julia SkX_MonoLayer_Run.jl
