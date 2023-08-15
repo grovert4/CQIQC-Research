@@ -74,8 +74,9 @@ SkXnumberPhase = zeros(length(Hs),length(J2s))
 println(commSize, "commsize?")
 for (j2idx, j2) in enumerate(J2s[1+ceil(Int64, num/cores)*commRank:1+ceil(Int64,num/cores)*(commRank+1)])
    for (hidx,h) in enumerate(Hs[1+ceil(Int64, num/cores)*commRank:1+ceil(Int64,num/cores)*(commRank+1)])
+      h = round(h,sigdigits=3)
+      j2 = round(j2,sigdigits=3)
       println("Rank " , commRank , " working on h = " , h, "working on j2 = ", j2) 
-
       filename = "/scratch/andykh/02_Data/Monolayer_Runs/H=$h,J2=$j2.hdf"
       println(filename)
 
