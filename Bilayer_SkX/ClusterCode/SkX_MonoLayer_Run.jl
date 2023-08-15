@@ -60,7 +60,7 @@ SkXnumberPhase = zeros(length(Hs),length(J2s))
 for (j2idx, j2) in enumerate(J2s)
    #global J2 = j2 # why is this a global? 
    for (hidx,h) in enumerate(Hs)
-      filename = "./Official-Cluster-Run-1-MonoLayer/H=$h,J2=$j2.hdf"
+      filename = "/scratch/andykh/02_Data/Monolayer_Runs/H=$h,J2=$j2.hdf"
       if isfile(filename) 
            println("Already Completed "*filename)
       else
@@ -77,7 +77,7 @@ for (j2idx, j2) in enumerate(J2s)
 
          latticeLocal = Lattice(UClocal, L)
 
-         mc = runAnneal(69,680,latticeLocal,2500,250000,0.99, h, j2,"Official-Cluster-Run-1-MonoLayer/H=$h,J2=$j2.hdf");
+         mc = runAnneal(69,680,latticeLocal,2500,250000,0.99, h, j2,"/scratch/andykh/02_Data/Monolayer_Runs/H=$h,J2=$j2.hdf");
          # DetailedMonoPlot(mc,mc.lattice,vertex)
          # SkXnumberPhase[hidx, j2idx] = round(getSkyrmionNumber(0,mc.lattice,vertex),digits=1)
       end
