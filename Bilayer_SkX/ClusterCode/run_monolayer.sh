@@ -4,8 +4,7 @@
 #SBATCH --mail-type=BEGIN
 #SBATCH --mail-type=END
 #SBATCH --mail-type=FAIL
-#SBATCH --nodes=1
-#SBATCH --ntasks-per-node=40
+#SBATCH --ntasks=48
 #SBATCH --cpus-per-task=1 
 #SBATCH --account=def-aparamek
 #SBATCH --time=1:45:00
@@ -13,4 +12,4 @@
 #SBATCH --output=/scratch/andykh/SLURMOutputs/slurm-%x-%j.txt
 module load julia/1.8.5
 
-srun julia SkX_MonoLayer_Run.jl
+mpirun julia SkX_MonoLayer_Run.jl
