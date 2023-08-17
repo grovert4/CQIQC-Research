@@ -109,18 +109,20 @@ end
 
 function runAnneal(t0,tf,lat,thermSweeps,MeasureSweeps, coolRate, H, J2, outfile)
    betas = [1/t0:coolRate:1/tf]
+   println(collect(betas), "BETAS")
    monte = nothing
-   for (ind,beta) in enumerate(betas) 
-      thermalizationSweeps = thermSweeps
-      measurementSweeps = 0
-      if ind == 1
-        m = MonteCarlo(lat, beta, thermalizationSweeps, measurementSweeps, reportInterval = 50000, rewrite = true);
-        run!(m)
-      else
-        if ind == length(ts)
-           thermalizationSweeps = 0
-           measurementSweeps = MeasureSweeps
-        end
+    for (ind,beta) in enumerate(betas) 
+        println(beta, "betas")
+        thermalizationSweeps = thermSweeps
+        measurementSweeps = 0
+        if ind == 1
+            m = MonteCarlo(lat, beta, thermalizationSweeps, measurementSweeps, reportInterval = 50000, rewrite = true);
+            run!(m)
+        else
+            if ind == length(ts)
+                thermalizationSweeps = 0
+                measurementSweeps = MeasureSweeps
+            end
         m = MonteCarlo(monte.lattice, beta, thermalizationSweeps, measurementSweeps, reportInterval = 50000, rewrite = false);
 
         if ind == length(ts)
