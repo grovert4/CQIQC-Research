@@ -78,8 +78,8 @@ for (j2idx, j2) in enumerate(J2s[start_index:end_index])
       h = round(h,sigdigits=3)
       j2 = round(j2,sigdigits=3)
       println("Rank " , commRank , " working on h = " , h, " working on j2 = ", j2) 
-      #filename = "/scratch/andykh/02_Data/Monolayer_Runs/H=$h,J2=$j2.hdf"
-      println(filename)
+      filename = "/scratch/andykh/02_Data/Monolayer_Runs/H=$h,J2=$j2.hdf"
+      #println(filename)
 
       if isfile(filename) 
            println("Already Completed "*filename)
