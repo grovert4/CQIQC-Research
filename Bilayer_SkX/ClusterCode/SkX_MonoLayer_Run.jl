@@ -92,7 +92,7 @@ for (j2idx, j2) in enumerate(J2s[start_index:end_index])
          latticeLocal = Lattice(UClocal, L)
          println("Running Simulation")
 
-         mc = runAnneal(t0,tf,latticeLocal,thermSweeps,measureSweeps,0.99, h, j2,"/scratch/andykh/02_Data/Monolayer_Runs/H=$h,J2=$j2.hdf");
+         mc = runAnneal(t0,tf,latticeLocal,thermSweeps,measureSweeps,inputFile["coolRate"], h, j2,"/scratch/andykh/02_Data/Monolayer_Runs/H=$h,J2=$j2.hdf");
          println("Finished Simulation")
 
       end
