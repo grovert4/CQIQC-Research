@@ -11,7 +11,7 @@
   "J2_length":30,
   "t_max":0.5,
   "t_min":1E-3,
-  "coolRate":0.99,
+  "coolRate":10,
   "thermalizationSweeps": 2500,
   "measurementSweeps": 250000
 }

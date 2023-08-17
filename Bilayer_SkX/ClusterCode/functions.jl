@@ -108,9 +108,9 @@ end
 
 
 function runAnneal(t0,tf,lat,thermSweeps,MeasureSweeps, coolRate, H, J2, outfile)
-   betas = [1/t0:10:1/tf]
+   betas = [1/t0:coolRate:1/tf]
    monte = nothing
-   for (ind,beta) in enumerate(ts) 
+   for (ind,beta) in enumerate(betas) 
       thermalizationSweeps = thermSweeps
       measurementSweeps = 0
       if ind == 1
