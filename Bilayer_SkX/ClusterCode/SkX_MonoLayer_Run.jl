@@ -69,15 +69,16 @@ remainder = rem(gridsize, commSize)
 SkXnumberPhase = zeros(length(Hs),length(J2s))
 
  
-start_index = rank * elements_per_process + min(rank, remainder) + 1
-end_index = start_index + elements_per_process - 1 + (rank < remainder ? 1 : 0)
+start_index = commRank * elements_per_process + min(commRank, remainder) + 1
+end_index = start_index + elements_per_process - 1 + (commRank < remainder ? 1 : 0)
+
 println(commSize, "commsize?")
 for (j2idx, j2) in enumerate(J2s[start_index,end_index])
    for (hidx,h) in enumerate(Hs[start_index,end_index])
       h = round(h,sigdigits=3)
       j2 = round(j2,sigdigits=3)
       println("Rank " , commRank , " working on h = " , h, " working on j2 = ", j2) 
-      filename = "/scratch/andykh/02_Data/Monolayer_Runs/H=$h,J2=$j2.hdf"
+      #filename = "/scratch/andykh/02_Data/Monolayer_Runs/H=$h,J2=$j2.hdf"
       println(filename)
 
       if isfile(filename) 
