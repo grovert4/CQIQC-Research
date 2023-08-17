@@ -78,7 +78,6 @@ for (j2idx, j2) in enumerate(J2s[start_index:end_index])
       if isfile(filename) 
            println("Already Completed "*filename)
       else
-         println("Inside Here")
          UClocal = deepcopy(UCglobal)
 
          #Add J2 2NN AF interaction 
@@ -90,10 +89,8 @@ for (j2idx, j2) in enumerate(J2s[start_index:end_index])
          setField!(UClocal, 1, [0,0,-h])
 
          latticeLocal = Lattice(UClocal, L)
-         println("Running Simulation")
 
          mc = runAnneal(t0,tf,latticeLocal,thermSweeps,measureSweeps,inputFile["coolRate"], h, j2,"/scratch/andykh/02_Data/Monolayer_Runs/H=$h,J2=$j2.hdf");
-         println("Finished Simulation")
 
       end
    end
