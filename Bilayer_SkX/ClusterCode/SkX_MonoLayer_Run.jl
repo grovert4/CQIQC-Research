@@ -19,7 +19,6 @@ inputFile = JSON.parsefile("./Input_Files/"*ARGS[1]*".json")
 J1 = inputFile["J_1"]
 D = inputFile["D"]
 A_ion = inputFile["A_ion"]
-J_ll = inputFile["J_perp"]
 t0 = inputFile["t_max"]
 tf = inputFile["t_min"]
 thermSweeps = inputFile["thermalizationSweeps"]
