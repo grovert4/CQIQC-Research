@@ -113,24 +113,24 @@ function runAnneal(t0,tf,lat,thermSweeps,MeasureSweeps, coolRate, H, J2, outfile
    for (ind,temp) in enumerate(ts) 
       thermalizationSweeps = thermSweeps
       measurementSweeps = 0
-   
       if ind == 1
-            m = MonteCarlo(lat, 1/temp, thermalizationSweeps, measurementSweeps, reportInterval = 50000, rewrite = true);
-            run!(m)
+        m = MonteCarlo(lat, 1/temp, thermalizationSweeps, measurementSweeps, reportInterval = 50000, rewrite = true);
+        run!(m)
       else
-            if ind == length(ts)
-               thermalizationSweeps = 0
-               measurementSweeps = MeasureSweeps
-            end
-            m = MonteCarlo(monte.lattice, 1/temp, thermalizationSweeps, measurementSweeps, reportInterval = 50000, rewrite = false);
+        if ind == length(ts)
+           thermalizationSweeps = 0
+           measurementSweeps = MeasureSweeps
+        end
+        println("running MC", thermalizationSweeps, measurementSweeps)
+        m = MonteCarlo(monte.lattice, 1/temp, thermalizationSweeps, measurementSweeps, reportInterval = 50000, rewrite = false);
 
-            if ind == length(ts)
-               h = round(H,sigdigits=3)
-               j2 = round(J2,sigdigits=3)
-               run!(m, outfile = outfile)
-            else
-               run!(m)
-            end  
+        if ind == length(ts)
+           h = round(H,sigdigits=3)
+           j2 = round(J2,sigdigits=3)
+           run!(m, outfile = outfile)
+        else
+           run!(m)
+        end  
       end
       monte = deepcopy(m)
    end
