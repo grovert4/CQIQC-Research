@@ -57,7 +57,7 @@ num = Hlength * Jlength
 Hs = collect(Iterators.flatten(Harr))
 J2s = collect(Iterators.flatten(J2arr))
 
-gridsize = Hlength*Jlength
+gridsize =inputFile["H_length"]*inputFile["J2_length"]
 
 elements_per_process = div(gridsize, commSize)
 remainder = rem(gridsize, commSize)
