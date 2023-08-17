@@ -23,8 +23,8 @@ Hlength = 30
 Jlength = 30
 size = 36
 cores = commSize
-t0 = 1E-1
-tf = 1E-3
+t0 = 1/1E-1
+tf = 1/1E-3
 thermSweeps = 2500
 measureSweeps = 250000
 
@@ -80,7 +80,6 @@ for (j2idx, j2) in enumerate(J2s[start_index:end_index])
       println("Rank " , commRank , " working on h = " , h, " working on j2 = ", j2) 
       filename = "/scratch/andykh/02_Data/Monolayer_Runs/H=$h,J2=$j2.hdf"
       #println(filename)
-
       if isfile(filename) 
            println("Already Completed "*filename)
       else
