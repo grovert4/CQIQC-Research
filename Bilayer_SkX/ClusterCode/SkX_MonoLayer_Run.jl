@@ -67,7 +67,7 @@ SkXnumberPhase = zeros(length(Hs),length(J2s))
 start_index = commRank * elements_per_process + min(commRank, remainder) + 1
 end_index = start_index + elements_per_process - 1 + (commRank < remainder ? 1 : 0)
 
-println(commSize, "commsize?")
+println(commSize, " commSize?")
 for (j2idx, j2) in enumerate(J2s[start_index:end_index])
    for (hidx,h) in enumerate(Hs[start_index:end_index])
       h = round(h,sigdigits=3)
