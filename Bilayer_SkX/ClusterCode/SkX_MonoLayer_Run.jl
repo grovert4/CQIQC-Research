@@ -52,7 +52,7 @@ addInteraction!(UCglobal, 1, 1, Dex(D3v), (-1,-1)) #
 
 L = (inputFile["System_Size"], inputFile["System_Size"])
 
-(Harr, J2arr) = ndgrid(range(inputFile["H_min"],inputFile["H_max"],inputFile["H_length"]),range(inputFile["J2_min"],inputFile["J2_max"],inputFile["J2_length"]) )
+(J2arr,Harr) = ndgrid(range(inputFile["H_min"],inputFile["H_max"],inputFile["H_length"]),range(inputFile["J2_min"],inputFile["J2_max"],inputFile["J2_length"]) )
 Hs = collect(Iterators.flatten(Harr))
 J2s = collect(Iterators.flatten(J2arr))
 
@@ -73,7 +73,7 @@ for (j2idx, j2) in enumerate(J2s[start_index:end_index])
       h = round(h,sigdigits=3)
       j2 = round(j2,sigdigits=3)
       println("Rank " , commRank , " working on h = " , h, " working on j2 = ", j2) 
-      filename = "/scratch/andykh/02_Data/Monolayer_Runs/"*ARGS[1]*"_H=$h,J2=$j2.hdf"
+      filename = "/scratch/andykh/02_Data/Monolayer_Runs/"*ARGS[1]*"_H=$h,J2=$j2"
       #println(filename)
       if isfile(filename) 
            println("Already Completed "*filename)
