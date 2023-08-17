@@ -52,7 +52,6 @@ addInteraction!(UCglobal, 1, 1, Dex(D3v), (-1,-1)) #
 
 L = (inputFile["System_Size"], inputFile["System_Size"])
 
-num = Hlength * Jlength
 (Harr, J2arr) = ndgrid(range(inputFile["H_min"],inputFile["H_max"],inputFile["H_length"]),range(inputFile["J2_min"],inputFile["J2_max"],inputFile["J2_length"]) )
 Hs = collect(Iterators.flatten(Harr))
 J2s = collect(Iterators.flatten(J2arr))
