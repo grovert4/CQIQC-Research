@@ -1,6 +1,6 @@
 #using Pkg
 #Pkg.add(url="https://github.com/grovert4/SpinMC_more_more.jl")
-using SpinMC_more_more, LinearAlgebra, LazyGrids
+using SpinMC_more_more, LinearAlgebra, LazyGrids, JSON
 include("functions.jl")
 using MPI
 MPI.Initialized() || MPI.Init()
@@ -13,21 +13,18 @@ a2 = (-1/2 , sqrt(3)/2)  #/
 UCglobal = UnitCell(a1 , a2)
 
 b1 = addBasisSite!(UCglobal, (0.0, 0.0)) ##layer A (z = 0)
-
+inputFile = JSON.parsefile("./Input_Files/"*ARGS[1]*".json")
 #Parameters
-J1 = 1.0
-A_ion = 0.2
-D = 0.25
-J_ll = 0.0
-Hlength = 30
-Jlength = 30
-size = 36
-cores = commSize
-t0 = 1/1E-1
-tf = 1/1E-3
-thermSweeps = 2500
-measureSweeps = 250000
 
+J1 = inputFile["J_1"]
+D = inputFile["D"]
+A_ion = inputFile["A_ion"]
+J_ll = inputFile["J_perp"]
+t0 = inputFile["t_max"]
+tf = inputFile["t_min"]
+thermSweeps = inputFile["thermalizationSweeps"]
+measureSweeps = inputFile["measurementSweeps"]
+cores = commSize
 
 #Helpful Matrices
 I = [1.0 0.0 0.0; 0.0 1.0 0.0; 0.0 0.0 1.0]
@@ -54,10 +51,10 @@ addInteraction!(UCglobal, 1, 1, Dex(D1v), (1,0))
 addInteraction!(UCglobal, 1, 1, Dex(D2v), (0,1)) #(0,1)
 addInteraction!(UCglobal, 1, 1, Dex(D3v), (-1,-1)) #
 
-L = (size, size)
+L = (inputFile["System_Size"], inputFile["System_Size"])
 
 num = Hlength * Jlength
-(Harr, J2arr) = ndgrid(range(0.0,1.0,Hlength),range(0.0,-0.5,Jlength) )
+(Harr, J2arr) = ndgrid(range(inputFile["H_min"],inputFile["H_max"],inputFile["H_length"]),range(inputFile["J2_min"],inputFile["J2_max"],inputFile["J2_length"]) )
 Hs = collect(Iterators.flatten(Harr))
 J2s = collect(Iterators.flatten(J2arr))
 
@@ -78,7 +75,7 @@ for (j2idx, j2) in enumerate(J2s[start_index:end_index])
       h = round(h,sigdigits=3)
       j2 = round(j2,sigdigits=3)
       println("Rank " , commRank , " working on h = " , h, " working on j2 = ", j2) 
-      filename = "/scratch/andykh/02_Data/Monolayer_Runs/H=$h,J2=$j2.hdf"
+      filename = "/scratch/andykh/02_Data/Monolayer_Runs/"*ARGS[1]*"_H=$h,J2=$j2.hdf"
       #println(filename)
       if isfile(filename) 
            println("Already Completed "*filename)
