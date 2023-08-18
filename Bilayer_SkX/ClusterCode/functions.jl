@@ -126,7 +126,7 @@ function runAnneal(t0,tf,lat,thermSweeps,MeasureSweeps, coolRate, H, J2, outfile
         if ind == length(betas)
            h = round(H,sigdigits=3)
            j2 = round(J2,sigdigits=3)
-           run!(m, outfile = outfile)
+           run_nompi!(m, outfile = outfile)
            println(outfile)
         else
            run!(m)
