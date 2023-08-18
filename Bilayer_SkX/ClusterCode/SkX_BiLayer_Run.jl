@@ -40,10 +40,6 @@ D3v = D .* [-1/2, -sqrt(3)/2, 0]
 
 ExchangeD(v) = [0 -v[3] v[2]; v[3] 0 -v[1]; -v[2] v[1] 0]
 
-D1ex = ExchangeD(D1v)
-D2ex = ExchangeD(D2v)
-D3ex = ExchangeD(D3v)
-
 addInteraction!(UCglobal, b1, b2, -J_ll * Sz , (0,0,0))
 
 ##Same layer interactions
@@ -59,9 +55,9 @@ for i in 1:length(UCglobal.basis)
 
 
     ##DM interaction
-    addInteraction!(UCglobal, i, i, (-1)^(i+1) * D1ex, (1,0,0))
-    addInteraction!(UCglobal, i, i, (-1)^(i+1) * D2ex, (0,1,0)) #(0,1)
-    addInteraction!(UCglobal, i, i, (-1)^(i+1) * D3ex, (-1,-1,0)) #
+    addInteraction!(UCglobal, i, i, (-1)^(i+1) * ExchangeD(D1v), (1,0,0))
+    addInteraction!(UCglobal, i, i, (-1)^(i+1) * ExchangeD(D2v), (0,1,0)) #(0,1)
+    addInteraction!(UCglobal, i, i, (-1)^(i+1) * ExchangeD(D3v), (-1,-1,0)) #
 end
 
 
