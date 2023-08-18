@@ -69,30 +69,30 @@ end_index = start_index + elements_per_process - 1 + (commRank < remainder ? 1 :
 
 println(commSize, " commSize?")
 for (j2idx, j2) in enumerate(J2s[start_index:end_index])
-   for (hidx,h) in enumerate(Hs[start_index:end_index])
-      h = round(h,sigdigits=3)
-      j2 = round(j2,sigdigits=3)
-      println("Rank " , commRank , " working on h = " , h, " working on j2 = ", j2) 
-      filename = "/scratch/andykh/02_Data/Monolayer_Runs/"*ARGS[1]*"_H=$h,J2=$j2.h5"
-      #println(filename)
-      if isfile(filename) 
-           println("Already Completed "*filename)
-      else
-         UClocal = deepcopy(UCglobal)
+   #for (hidx,h) in enumerate(Hs[start_index:end_index])
+      # fix this to be a 1D grid 
+   h = round(Hs[j2idx],sigdigits=3)
+   j2 = round(j2,sigdigits=3)
+   println("Rank " , commRank , " working on h = " , h, " working on j2 = ", j2) 
+   filename = "/scratch/andykh/02_Data/Monolayer_Runs/"*ARGS[1]*"_H=$h,J2=$j2.h5"
+   #println(filename)
+   if isfile(filename) 
+        println("Already Completed "*filename)
+   else
+      UClocal = deepcopy(UCglobal)
 
-         #Add J2 2NN AF interaction 
-         addInteraction!(UClocal, 1, 1, -j2 * I, (-1,1))
-         addInteraction!(UClocal, 1, 1, -j2 * I, (1,2))
-         addInteraction!(UClocal, 1, 1, -j2 * I, (2,1))
-         
-         #Local Magnetic field
-         setField!(UClocal, 1, [0,0,-h])
+      #Add J2 2NN AF interaction 
+      addInteraction!(UClocal, 1, 1, -j2 * I, (-1,1))
+      addInteraction!(UClocal, 1, 1, -j2 * I, (1,2))
+      addInteraction!(UClocal, 1, 1, -j2 * I, (2,1))
+      
+      #Local Magnetic field
+      setField!(UClocal, 1, [0,0,-h])
 
-         latticeLocal = Lattice(UClocal, L)
+      latticeLocal = Lattice(UClocal, L)
 
-         mc = runAnneal(t0,tf,latticeLocal,thermSweeps,measureSweeps,inputFile["coolRate"], h, j2,filename);
+      mc = runAnneal(t0,tf,latticeLocal,thermSweeps,measureSweeps,inputFile["coolRate"], h, j2,filename);
 
-      end
    end
 end
 
