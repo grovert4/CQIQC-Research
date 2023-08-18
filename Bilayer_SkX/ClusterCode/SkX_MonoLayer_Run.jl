@@ -7,13 +7,6 @@ MPI.Initialized() || MPI.Init()
 commSize = MPI.Comm_size(MPI.COMM_WORLD)
 commRank = MPI.Comm_rank(MPI.COMM_WORLD)
 
-#Unit Cell Construction
-a1 = (1.0 , 0.0)  #-
-a2 = (-1/2 , sqrt(3)/2)  #/
-UCglobal = UnitCell(a1 , a2)
-
-b1 = addBasisSite!(UCglobal, (0.0, 0.0)) ##layer A (z = 0)
-inputFile = JSON.parsefile("./Input_Files/"*ARGS[1]*".json")
 #Parameters
 
 J1 = inputFile["J_1"]
@@ -24,6 +17,15 @@ tf = inputFile["t_min"]
 thermSweeps = inputFile["thermalizationSweeps"]
 measureSweeps = inputFile["measurementSweeps"]
 cores = commSize
+
+
+#Unit Cell Construction
+a1 = (1.0 , 0.0)  #-
+a2 = (-1/2 , sqrt(3)/2)  #/
+UCglobal = UnitCell(a1 , a2)
+
+b1 = addBasisSite!(UCglobal, (0.0, 0.0)) ##layer A (z = 0)
+inputFile = JSON.parsefile("./Input_Files/"*ARGS[1]*".json")
 
 #Helpful Matrices
 I = [1.0 0.0 0.0; 0.0 1.0 0.0; 0.0 0.0 1.0]
