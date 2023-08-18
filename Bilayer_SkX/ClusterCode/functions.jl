@@ -129,7 +129,7 @@ function runAnneal(t0,tf,lat,thermSweeps,MeasureSweeps, coolRate, H, J2, outfile
            run_nompi!(m, outfile = outfile)
            println(outfile)
         else
-           run!(m)
+           run_nompi!(m)
         end  
       end
       monte = deepcopy(m)
