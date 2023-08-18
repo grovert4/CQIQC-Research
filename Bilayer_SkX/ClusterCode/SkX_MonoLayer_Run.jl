@@ -63,24 +63,23 @@ gridsize =inputFile["H_length"]*inputFile["J2_length"]
 elements_per_process = div(gridsize, commSize)
 remainder = rem(gridsize, commSize)
 
-SkXnumberPhase = zeros(length(Hs),length(J2s))
-
  
 start_index = commRank * elements_per_process + min(commRank, remainder) + 1
 end_index = start_index + elements_per_process - 1 + (commRank < remainder ? 1 : 0)
 
-#println(commSize, " commSize?")
+println(gridsize)
+println(elements_per_process)
+
 for (j2idx, j2) in enumerate(J2s[start_index:end_index])
-   println(j2idx, "index")
    h = round(Hs[j2idx],sigdigits=3)
-   println(h, Hs[j2idx], "confused")
    j2 = round(j2,sigdigits=3)
-   println("Rank " , commRank , " working on h = " , h, " working on j2 = ", j2) 
    filename = "/scratch/andykh/02_Data/Monolayer_Runs/"*ARGS[1]*"_H=$h,J2=$j2.h5"
    #println(filename)
    if isfile(filename) 
         println("Already Completed "*filename)
    else
+      println("Rank " , commRank , " working on h = " , h, " working on j2 = ", j2) 
+
       UClocal = deepcopy(UCglobal)
 
       #Add J2 2NN AF interaction 
