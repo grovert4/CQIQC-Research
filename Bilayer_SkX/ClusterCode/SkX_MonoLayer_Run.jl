@@ -69,9 +69,9 @@ end_index = start_index + elements_per_process - 1 + (commRank < remainder ? 1 :
 
 println(commSize, " commSize?")
 for (j2idx, j2) in enumerate(J2s[start_index:end_index])
-   #for (hidx,h) in enumerate(Hs[start_index:end_index])
-      # fix this to be a 1D grid 
+   println(j2idx, "index")
    h = round(Hs[j2idx],sigdigits=3)
+   print(h)
    j2 = round(j2,sigdigits=3)
    println("Rank " , commRank , " working on h = " , h, " working on j2 = ", j2) 
    filename = "/scratch/andykh/02_Data/Monolayer_Runs/"*ARGS[1]*"_H=$h,J2=$j2.h5"
