@@ -115,7 +115,7 @@ function runAnneal(t0,tf,lat,thermSweeps,MeasureSweeps, coolRate, H, J2, outfile
         measurementSweeps = 0
         if ind == 1
             m = MonteCarlo(lat, beta, thermalizationSweeps, measurementSweeps, reportInterval = 50000, rewrite = true);
-            run!(m)
+            run_nompi!(m)
         else
             if ind == length(betas)
                 thermalizationSweeps = 0
