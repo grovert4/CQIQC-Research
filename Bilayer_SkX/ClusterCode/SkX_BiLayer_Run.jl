@@ -94,12 +94,12 @@ for (j2idx, j2) in enumerate(J2s[start_index:end_index])
 
             for i in 1:length(UCglobal.basis)
          #Add J2 2NN AF interaction 
-         addInteraction!(UClocal, i, i, -J2 * I, (-1,1,0))
-         addInteraction!(UClocal, i, i, -J2 * I, (1,2,0))
-         addInteraction!(UClocal, i, i, -J2 * I, (2,1,0))
+         addInteraction!(UClocal, i, i, -j2 * I, (-1,1,0))
+         addInteraction!(UClocal, i, i, -j2 * I, (1,2,0))
+         addInteraction!(UClocal, i, i, -j2 * I, (2,1,0))
          
          #Local Magnetic field
-         setField!(UClocal, i, [0,0,-H])
+         setField!(UClocal, i, [0,0,-h])
       end
 
       latticeLocal = Lattice(UClocal, L)
