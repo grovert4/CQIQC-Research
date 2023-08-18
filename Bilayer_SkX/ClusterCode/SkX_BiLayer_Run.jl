@@ -1,6 +1,6 @@
 #using Pkg
 #Pkg.add(url="https://github.com/grovert4/SpinMC_more_more.jl")
-using SpinMC_more_more, LinearAlgebra, Plots
+using SpinMC_more_more, LinearAlgebra, LazyGrids, JSON#, Plots
 include("functions.jl")
 
 using MPI
