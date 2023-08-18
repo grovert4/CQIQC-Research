@@ -88,11 +88,10 @@ for (j2idx, j2) in enumerate(J2s[start_index:end_index])
    filename = "/scratch/andykh/02_Data/Bilayer_Runs/"*ARGS[1]*"_H=$h,J2=$j2.h5"
    #println(filename)
    if isfile(filename) 
-        println("Already Completed "*filename)
+      println("Already Completed "*filename)
    else
       UClocal = deepcopy(UCglobal)
-
-            for i in 1:length(UCglobal.basis)
+      for i in 1:length(UCglobal.basis)
          #Add J2 2NN AF interaction 
          addInteraction!(UClocal, i, i, -j2 * I, (-1,1,0))
          addInteraction!(UClocal, i, i, -j2 * I, (1,2,0))
