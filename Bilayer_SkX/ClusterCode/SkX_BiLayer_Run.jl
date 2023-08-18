@@ -1,4 +1,3 @@
-#using Pkg
 #Pkg.add(url="https://github.com/grovert4/SpinMC_more_more.jl")
 using SpinMC_more_more, LinearAlgebra, LazyGrids, JSON#, Plots
 include("functions.jl")
@@ -27,7 +26,6 @@ UCglobal = UnitCell(a1, a2, a3)
 
 b1 = addBasisSite!(UCglobal, (0.0, 0.0, 0.0)) ##layer A (z = 0)
 b2 = addBasisSite!(UCglobal, (0.0, 0.0, 1.0)) ##layer A  (z = 1)
-
 
 
 #Helpful Matrices
@@ -71,9 +69,6 @@ gridsize =inputFile["H_length"]*inputFile["J2_length"]
 
 elements_per_process = div(gridsize, commSize)
 remainder = rem(gridsize, commSize)
-
-SkXnumberPhase = zeros(length(Hs),length(J2s))
-
  
 start_index = commRank * elements_per_process + min(commRank, remainder) + 1
 end_index = start_index + elements_per_process - 1 + (commRank < remainder ? 1 : 0)
