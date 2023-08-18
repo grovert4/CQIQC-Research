@@ -75,9 +75,6 @@ end_index = start_index + elements_per_process - 1 + (commRank < remainder ? 1 :
 
 #println(commSize, " commSize?")
 for (j2idx, j2) in enumerate(J2s[start_index:end_index])
-   println(j2idx, "index")
-   h = round(Hs[j2idx],sigdigits=3)
-   println(h, Hs[j2idx], "confused")
    j2 = round(j2,sigdigits=3)
    println("Rank " , commRank , " working on h = " , h, " working on j2 = ", j2) 
    filename = "/scratch/andykh/02_Data/Bilayer_Runs/"*ARGS[1]*"_H=$h,J2=$j2.h5"
@@ -95,11 +92,8 @@ for (j2idx, j2) in enumerate(J2s[start_index:end_index])
          #Local Magnetic field
          setField!(UClocal, i, [0,0,-h])
       end
-
       latticeLocal = Lattice(UClocal, L)
-
       mc = runAnneal(t0,tf,latticeLocal,thermSweeps,measureSweeps,inputFile["coolRate"], h, j2,filename);
-
    end
 end
 
