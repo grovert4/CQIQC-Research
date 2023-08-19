@@ -71,8 +71,8 @@ end_index = start_index + elements_per_process - 1 + (commRank < remainder ? 1 :
 
 #println(commSize, " commSize?")
 for (j2idx, j2) in enumerate(J2s[start_index:end_index])
-   j2 = round(j2,sigdigits=3)
-   h = round(Hs[j2idx],sigdigits=3)
+   j2 = round(j2,sigdigits=5)
+   h = round(Hs[j2idx],sigdigits=5)
 
    println("Rank " , commRank , " working on h = " , h, " working on j2 = ", j2) 
    filename = "/scratch/andykh/02_Data/Bilayer_Runs/"*ARGS[1]*"_H=$h,J2=$j2.h5"
