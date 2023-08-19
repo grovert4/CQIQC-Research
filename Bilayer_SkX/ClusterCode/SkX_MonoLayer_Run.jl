@@ -67,19 +67,19 @@ remainder = rem(gridsize, commSize)
 start_index = commRank * elements_per_process + min(commRank, remainder) + 1
 end_index = start_index + elements_per_process - 1 + (commRank < remainder ? 1 : 0)
 
-println(gridsize)
-println(elements_per_process)
-println(length(J2s), " J length")
-println(length(Hs), " H length")
-println(commRank, " rank, out of ", commSize)
-println(start_index, " : ", end_index, " index")
+#println(gridsize)
+#println(elements_per_process)
+#println(length(J2s), " J length")
+#println(length(Hs), " H length")
+#println(commRank, " rank, out of ", commSize)
+#println(start_index, " : ", end_index, " index")
 for (j2idx, j2) in enumerate(J2s[start_index:end_index])
-   h = round(Hs[j2idx],sigdigits=3)
-   j2 = round(j2,sigdigits=3)
+   h = round(Hs[j2idx],sigdigits=5)
+   j2 = round(j2,sigdigits=5)
    filename = "/scratch/andykh/02_Data/Monolayer_Runs/"*ARGS[1]*"_H=$h,J2=$j2.h5"
    #println(filename)
    if isfile(filename) 
-        println("Already Completed "*filename)
+      println("Already Completed "*filename)
    else
       println("Rank " , commRank , " working on h = " , h, " working on j2 = ", j2) 
 
