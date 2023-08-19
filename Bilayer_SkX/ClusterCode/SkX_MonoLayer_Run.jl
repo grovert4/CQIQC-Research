@@ -69,7 +69,9 @@ end_index = start_index + elements_per_process - 1 + (commRank < remainder ? 1 :
 
 println(gridsize)
 println(elements_per_process)
-
+println(length(J2s), " J length")
+println(length(Hs), " H length")
+println(start_index, end_index, " index")
 for (j2idx, j2) in enumerate(J2s[start_index:end_index])
    h = round(Hs[j2idx],sigdigits=3)
    j2 = round(j2,sigdigits=3)

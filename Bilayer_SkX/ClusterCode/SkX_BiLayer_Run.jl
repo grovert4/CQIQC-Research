@@ -1,13 +1,10 @@
-#Pkg.add(url="https://github.com/grovert4/SpinMC_more_more.jl")
-using SpinMC_more_more, LinearAlgebra, LazyGrids, JSON#, Plots
+using SpinMC_more_more, LinearAlgebra, JSON, LazyGrids
 include("functions.jl")
-
 using MPI
 MPI.Initialized() || MPI.Init()
 commSize = MPI.Comm_size(MPI.COMM_WORLD)
 commRank = MPI.Comm_rank(MPI.COMM_WORLD)
 inputFile = JSON.parsefile("./Input_Files/"*ARGS[1]*".json")
-
 J1 = inputFile["J_1"]
 D = inputFile["D"]
 A_ion = inputFile["A_ion"]
@@ -16,7 +13,6 @@ tf = inputFile["t_min"]
 thermSweeps = inputFile["thermalizationSweeps"]
 measureSweeps = inputFile["measurementSweeps"]
 J_ll = inputFile["J_perp"]
-cores = commSize
 
 #Unit Cell Construction
 a1 = (1.0 , 0.0, 0.0)  #-
@@ -59,12 +55,12 @@ for i in 1:length(UCglobal.basis)
 end
 
 
-L = (inputFile["System_Size"], inputFile["System_Size"])
-
 (Harr,J2arr) = ndgrid(range(inputFile["H_min"],inputFile["H_max"],inputFile["H_length"]),range(inputFile["J2_min"],inputFile["J2_max"],inputFile["J2_length"]) )
 Hs = collect(Iterators.flatten(Harr))
 J2s = collect(Iterators.flatten(J2arr))
 
+
+L = (inputFile["System_Size"], inputFile["System_Size"], 1)
 gridsize =inputFile["H_length"]*inputFile["J2_length"]
 
 elements_per_process = div(gridsize, commSize)
@@ -98,5 +94,3 @@ for (j2idx, j2) in enumerate(J2s[start_index:end_index])
       mc = runAnneal(t0,tf,latticeLocal,thermSweeps,measureSweeps,inputFile["coolRate"], h, j2,filename);
    end
 end
-
-
