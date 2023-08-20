@@ -69,12 +69,9 @@ for i in start_index:end_index
    h = round(Hs[i],sigdigits=5)
    j2 = round(J2s[i],sigdigits=5)
    filename = "/scratch/andykh/02_Data/Monolayer_Runs/"*ARGS[1]*"_H=$h,J2=$j2.h5"
-   #println(filename)
-   println(h, " hs", j2, "js", j2idx)
 
    if isfile(filename) 
-      #println("Already Completed "*filename)
-      dummy = 5
+      println("Already Completed "*filename)
    else
       println("Rank " , commRank , " working on h = " , h, " working on j2 = ", j2) 
 
