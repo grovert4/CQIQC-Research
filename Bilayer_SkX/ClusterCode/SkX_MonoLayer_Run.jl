@@ -67,7 +67,7 @@ end_index = start_index + elements_per_process - 1 + (commRank < remainder ? 1 :
 
 for i in start_index:end_index
    h = round(Hs[i],sigdigits=5)
-   j2 = round(j2[i],sigdigits=5)
+   j2 = round(J2s[i],sigdigits=5)
    filename = "/scratch/andykh/02_Data/Monolayer_Runs/"*ARGS[1]*"_H=$h,J2=$j2.h5"
    #println(filename)
    println(h, " hs", j2, "js", j2idx)
