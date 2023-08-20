@@ -59,10 +59,13 @@ Hs = collect(Iterators.flatten(Harr))
 J2s = collect(Iterators.flatten(J2arr))
 display(Hs)
 display(J2s)
+println("Looking at Ranges")
 println(inputFile["H_min"],inputFile["H_max"],inputFile["H_length"])
 println(inputFile["J2_min"],inputFile["J2_max"],inputFile["J2_length"])
+println("Done Looking at Ranges")
+
 println(Hs[899])
-println(Hs[500:800])
+#println(Hs[500:800])
 
 
 gridsize =inputFile["H_length"]*inputFile["J2_length"]
@@ -86,7 +89,8 @@ for (j2idx, j2) in enumerate(J2s[start_index:end_index])
    filename = "/scratch/andykh/02_Data/Monolayer_Runs/"*ARGS[1]*"_H=$h,J2=$j2.h5"
    #println(filename)
    if isfile(filename) 
-      println("Already Completed "*filename)
+      #println("Already Completed "*filename)
+      dummy = 5
    else
       println("Rank " , commRank , " working on h = " , h, " working on j2 = ", j2) 
 
