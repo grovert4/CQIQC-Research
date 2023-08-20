@@ -124,8 +124,8 @@ function runAnneal(t0,tf,lat,thermSweeps,MeasureSweeps, coolRate, H, J2, outfile
         m = MonteCarlo(monte.lattice, beta, thermalizationSweeps, measurementSweeps, reportInterval = 50000, rewrite = false);
 
         if ind == length(betas)
-           h = round(H,sigdigits=3)
-           j2 = round(J2,sigdigits=3)
+           h = round(H,sigdigits=5)
+           j2 = round(J2,sigdigits=5)
            run_nompi!(m, outfile = outfile)
            println(outfile)
         else

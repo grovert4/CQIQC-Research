@@ -57,6 +57,13 @@ L = (inputFile["System_Size"], inputFile["System_Size"])
 (Harr,J2arr) = ndgrid(range(inputFile["H_min"],inputFile["H_max"],inputFile["H_length"]),range(inputFile["J2_min"],inputFile["J2_max"],inputFile["J2_length"]) )
 Hs = collect(Iterators.flatten(Harr))
 J2s = collect(Iterators.flatten(J2arr))
+display(Hs)
+display(J2s)
+println(inputFile["H_min"],inputFile["H_max"],inputFile["H_length"])
+println(inputFile["J2_min"],inputFile["J2_max"],inputFile["J2_length"])
+println(Hs[899])
+println(Hs[500:800])
+
 
 gridsize =inputFile["H_length"]*inputFile["J2_length"]
 
