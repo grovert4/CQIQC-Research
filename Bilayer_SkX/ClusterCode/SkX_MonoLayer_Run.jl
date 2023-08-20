@@ -57,12 +57,10 @@ L = (inputFile["System_Size"], inputFile["System_Size"])
 (Harr,J2arr) = ndgrid(range(inputFile["H_min"],inputFile["H_max"],inputFile["H_length"]),range(inputFile["J2_min"],inputFile["J2_max"],inputFile["J2_length"]) )
 Hs = collect(Iterators.flatten(Harr))
 J2s = collect(Iterators.flatten(J2arr))
+println("Hs")
 display(Hs)
+println("J2s")
 display(J2s)
-println("Looking at Ranges")
-println(inputFile["H_min"],inputFile["H_max"],inputFile["H_length"])
-println(inputFile["J2_min"],inputFile["J2_max"],inputFile["J2_length"])
-println("Done Looking at Ranges")
 
 println(Hs[899])
 #println(Hs[500:800])
@@ -88,6 +86,8 @@ for (j2idx, j2) in enumerate(J2s[start_index:end_index])
    j2 = round(j2,sigdigits=5)
    filename = "/scratch/andykh/02_Data/Monolayer_Runs/"*ARGS[1]*"_H=$h,J2=$j2.h5"
    #println(filename)
+   println(h, " hs" j2, "js")
+
    if isfile(filename) 
       #println("Already Completed "*filename)
       dummy = 5
