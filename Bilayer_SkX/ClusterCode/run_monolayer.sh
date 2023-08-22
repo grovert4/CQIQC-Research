@@ -12,4 +12,4 @@
 #SBATCH --output=/scratch/andykh/SLURMOutputs/slurm-%x-%j.txt
 module load julia/1.8.5
 
-srun julia SkX_MonoLayer_Run.jl 08.17.2023_Monolayer
+srun julia SkX_MonoLayer_Run.jl 08.21.2023_Monolayer
