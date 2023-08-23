@@ -1,4 +1,4 @@
-using SpinMC_more_more, LinearAlgebra, Plots, ColorSchemes, PyPlot
+using SpinMC_more_more, LinearAlgebra, Plots, ColorSchemes, PyPlot, HDF5
 ioff()
 
 function getSkyrmionNumber(layer,lat,vertex)
@@ -150,4 +150,31 @@ function runAnneal(t0,tf,lat,thermSweeps,MeasureSweeps, coolRate, outfile=nothin
       monte = deepcopy(m);
    end
    return monte
+end
+
+function updateSpins!(file, lat)
+   file = h5open(file)["mc"]
+   sites = parse.(Int64,collect(keys(read(file["lattice"]["spins"]))))
+   spins = collect(values(read(file["lattice"]["spins"])))
+
+   sorted = sortperm(sites)
+   lat.spins = reshape(vcat(spins[sorted]...),(3,lat.length))  
+
+   close(file)
+end
+
+function readEnergy(file)
+   file = h5open(file)["mc"]
+   energy = read(file["observables"]["energyDensity"]["mean"])
+   std = read(file["observables"]["energyDensity"]["error"])
+   close(file)
+   return [energy, std]
+end
+
+function avgSz(lat)
+   avg = 0
+   for i in 1:length(lat.sitePositions)
+      avg += lat.spins[3,i]
+   end
+   return avg/length(lat.sitePositions)
 end
