@@ -1,8 +1,11 @@
 using Plots, TightBindingToolkit, LinearAlgebra, ColorSchemes
 
+
 #Skyrmion Lattice
 # a1 = [3.0 , sqrt(3)]
-# a2 = [3.0 , -sqrt(3)]
+# a2 = [3.0 , -sqrt(3)
+
+
 a1 = [-3.0, sqrt(3)]
 a2 = [3.0, sqrt(3)]
 UC = UnitCell([a1 , a2] , 4) 
@@ -12,8 +15,18 @@ l1 = [1.0, 0]
 l2 = [-0.5, sqrt(3)/2]
 
 ##Parameters
-t = 1.0
-jh = -5.0
+t = -1.0
+t_param = Param(t, 2)
+
+tinter = -0.3
+tinter_param = Param(tinter, 2)
+
+t_density = -0.8
+t_density_param = Param(t_density, 2)
+
+jh = -1.0       
+jh_param = Param(jh, 2)
+
 su2spin = SpinMats(1//2)
 su4spin = SpinMats(3//2)
 
@@ -24,15 +37,10 @@ for j = 1:2
     end
 end
 
-##Adding boundary points of outer-hexagon 
-# AddBasisSite!(UC, 2 * l2)
-# AddBasisSite!(UC, 2 * l2 + l1)
-# AddBasisSite!(UC, 2 * l2 + 2 * l1)
-# AddBasisSite!(UC, l2 + 2 * l1)
-# AddBasisSite!(UC, -l1 + l2)
-
 ##Istrotropic bonds
-AddIsotropicBonds!(UC, 1.0, -t * su4spin[4], "iso", checkOffsetRange = 1)
+AddIsotropicBonds!(t_param, UC, 1.0, su4spin[4], "iso", checkOffsetRange = 1)
+AddIsotropicBonds!(tinter_param, UC, 0.0,  2 * kron(su2spin[1], su2spin[4]) ,  "isoHop")
+AddIsotropicBonds!(t_density_param, UC, 0.0,  2 * kron(su2spin[3], su2spin[4]) ,  "imbalance")
 
 ##Functions that will be useful for adding anisotropic bonds
 tau0(v) = [sin(pi * (1 - norm(v)/2)) * v[1]/norm(v), sin(pi * (1 - norm(v)/2 )) * v[2]/norm(v), cos(pi * (1 - norm(v)/2 ))]
@@ -52,78 +60,51 @@ for (ind, bas) in enumerate(UC.basis)
     else 
         closest = [bas, bas-a1, bas-a2]
         clv = closest[findmin(x -> norm(x), closest)[2]] 
-        mat = intermat(tau0(clv), tau1(clv))
+        mat = intermat(replace!(tau0(clv), NaN => 0.0), replace!(tau1(clv), NaN => 0.0))
     end
-    replace!(mat, NaN + NaN * im => 0.0 + 0.0 * im)
-    AddAnisotropicBond!(UC, ind, ind, [0,0], -jh * mat, 0.0, "interaction")
+    AddAnisotropicBond!(jh_param, UC, ind, ind, [0,0], mat, 0.0, "interaction")
 end
+
+CreateUnitCell!(UC, [t_param, tinter_param, jh_param, t_density_param])
 
 ##Plotting the unit cell
 plot_UC = Plot_UnitCell!(UC);
-# display(plot_UC)
+
+# JH_range = collect(-1.0:-1.0)
+tinter_range = collect(-0.0:-0.2:-1.0)
+t_density_range = collect(0.0:0.2:1.0)
+gaps = []
+mus = []
+combined_Cnums = []
+individual_Cnums = []
 
 ##Creating BZ and Hamiltonian Model
-kSize = 6 * 15 + 3  
+kSize = 6 * 12 + 3  
 bz = BZ(kSize, 2)
 FillBZ!(bz, UC)
 path = CombinedBZPath(bz, [bz.HighSymPoints["G"], bz.HighSymPoints["K1"], bz.HighSymPoints["M2"]] ; nearest=true)
-H = Hamiltonian(UC, bz)
-DiagonalizeHamiltonian!(H)
-Mdl = Model(UC, bz, H)
-SolveModel!(Mdl)
-
-##Plotting the band structure
-bands = Plot_Band_Structure!(Mdl, [bz.HighSymPoints["G"], bz.HighSymPoints["K1"], bz.HighSymPoints["M2"]] , labels = ["G", "K1", "M2"], plot_legend=false);
-# plot(bands, legend = false)
-# display(bands)
-
-##Calculating Chern Numbers for bands
-# totC = 0
-# for i in 1:2*length(UC.basis)
-#     c = ChernNumber(H, [i])
-#     println(round(c))
-# end
-println(ChernNumber(H, collect(1:2*length(UC.basis))))
 
 
-function spinsSkx()
-    xspin, yspin, zspin =[],[],[]
-    xpos,ypos = [],[]
-    for (ind, bas) in enumerate(UC.basis)
-    end
+for tdensity_val in t_density_range
+    push!(t_density_param.value, tdensity_val)
+    ModifyUnitCell!(UC, [t_density_param])
 
-    for j = -3:3
-        for i = -3:3
-            bas = i .* l1 + j .* l2
-            if norm(bas) <= 2
-                # if 1 < norm(bas) < 2
-                #     push!(xspin, normalize(tau(bas) + tau(-bas))[1]) 
-                #     push!(yspin, normalize(tau(bas) + tau(-bas))[2]) 
-                #     push!(zspin, normalize(tau(bas) + tau(-bas))[3]) 
-                #     push!(xpos, bas[1])
-                #     push!(ypos, bas[2])
-                # else 
-                push!(xpos, bas[1])
-                push!(ypos, bas[2])
-                push!(xspin, tau(bas)[1])
-                push!(yspin, tau(bas)[2])
-                push!(zspin, tau(bas)[3])
-            end
-        end
-    end
-    replace!(xspin, NaN=> 0.0)
-    replace!(yspin, NaN=> 0.0)
-    replace!(zspin, NaN=> 0.0)
+    for tinter_val in tinter_range
+    
+        push!(tinter_param.value, tinter_val)
+        ModifyUnitCell!(UC, [tinter_param])
 
+        global H = Hamiltonian(UC, bz)
+        DiagonalizeHamiltonian!(H)
+        global Mdl = Model(UC, bz, H; filling = 1/24)
+        SolveModel!(Mdl; get_gap = true)
+        global bands = Plot_Band_Structure!(Mdl, [bz.HighSymPoints["G"], bz.HighSymPoints["K1"], bz.HighSymPoints["M2"]] , collect(1:12), labels = ["G", "K1", "M2"], plot_legend=false);
+        display(bands)
+            # savefig(bands,"Jh  v t-inter bands/Jh = $jh_val, t-inter = $tinter_val.png")
 
-    display(Plots.quiver(xpos,ypos,quiver=(xspin,yspin), line_z=repeat([[zspin zspin]'...], inner=2), c=:bwr, legend=false, aspect_ratio=:equal, background_color = :black))
-end
-
-
-function BandColor(bs)
-    for i in 1:2 * length(UC.basis)
-        c = round(ChernNumber(H, [i]))
-
-        bs.series_list[i].plotattributes[:linecolor] = ColorSchemes.oslo10[findfirst(x -> x==c, cs)]
+        push!(combined_Cnums, ChernNumber(H, collect(1:2)))
+        push!(gaps, Mdl.gap)
+        push!(mus, Mdl.mu)
+        println(ChernNumber(H, collect(1:2)))
     end
 end
