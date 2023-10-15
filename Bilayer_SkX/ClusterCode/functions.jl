@@ -1,5 +1,4 @@
 using SpinMC_more_more, LinearAlgebra, HDF5
-ioff()
 
 function getSkyrmionNumber(layer,lat,vertex)
     Q = 0
