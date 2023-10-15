@@ -5,13 +5,13 @@
   "System_Size":36,
   "H_min":0.0,
   "H_max":1.0,
-  "H_length":30,
+  "H_length":31,
   "J2_min":-0.5,
   "J2_max":0.0,
-  "J2_length":30,
-  "t_max":0.5,
+  "J2_length":31,
+  "t_max":5,
   "t_min":1E-3,
-  "coolRate":2,
-  "thermalizationSweeps": 2500,
-  "measurementSweeps": 250000
+  "coolRate":0.995,
+  "thermalizationSweeps": 5000,
+  "measurementSweeps": 500000
 }
