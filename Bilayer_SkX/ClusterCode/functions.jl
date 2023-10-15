@@ -1,6 +1,5 @@
-#using Pkg
-#Pkg.add(url="https://github.com/grovert4/SpinMC_more_more.jl")
-using SpinMC_more_more, LinearAlgebra #, Plots, ColorSchemes, PyPlot
+using SpinMC_more_more, LinearAlgebra, Plots, ColorSchemes, PyPlot, HDF5
+ioff()
 
 function getSkyrmionNumber(layer,lat,vertex)
     Q = 0
@@ -8,7 +7,6 @@ function getSkyrmionNumber(layer,lat,vertex)
         Si = collect(getSpin(lat, i[1] + layer))
         Sj = collect(getSpin(lat, i[2] + layer))
         Sk = collect(getSpin(lat, i[3] + layer))            
-        # rho = sqrt(2 * (1 + dot(Si,Sj)) * (1 + dot(Sj, Sk)) * (1 + dot(Sk, Si)))
         Q += atan( dot(Si, cross(Sj,Sk)) / (1 + dot(Si, Sj) + dot(Sj, Sk) + dot(Sk, Si) ) )
     end 
     return Q/(2 * pi)  
@@ -62,11 +60,11 @@ function getCenters(lat)
         end
     elseif length(lat.unitcell.basis) == 1
         for (ind, i) in enumerate(lat.sitePositions)
-            if (i .+ a1 in lat.sitePositions) && (findmin(x -> norm(i .+ a2 .+ a1 .- x),lat.sitePositions)[2] == ind + 25)
-                push!(centerpos, collect(i .+ a1 ./ 2 .+ (0,sqrt(3)/6))[1:2])
+            if (i .+ a1 in lat.sitePositions) && (findmin(x -> norm(i .+ a2 .+ a1 .- x),lat.sitePositions)[2] == ind + numBasis * (size + 1))
+               push!(centerpos, collect(i .+ a1 ./ 2 .+ (0,sqrt(3)/6))[1:2])
             end
-            if (findmin(x -> norm(i .+ a2 .- x),lat.sitePositions)[2] == ind + 1) && (findmin(x -> norm(i .+ a2 .+ a1 .- x),lat.sitePositions)[2] == ind + 25)
-                push!(centerpos, collect(i .+ (0,sqrt(3)/3))[1:2])
+            if (findmin(x -> norm(i .+ a2 .- x),lat.sitePositions)[2] == ind + numBasis) && (findmin(x -> norm(i .+ a2 .+ a1 .- x),lat.sitePositions)[2] == ind + numBasis * (size + 1))
+               push!(centerpos, collect(i .+ (0,sqrt(3)/3))[1:2])
             end
         end
     end
@@ -75,64 +73,109 @@ function getCenters(lat)
 end
 
 function getVertex(lat)
-    if size(lat)[1] != 24
-        return "Lattice size is not 24x24"
-    else
-        vertex = []
-        if length(lat.unitcell.basis) == 2
-            for (ind, i) in enumerate(lat.sitePositions)
-                if i[3] == 0
-                    if (i .+ a1 in lat.sitePositions) && (findmin(x -> norm(i .+ a2 .+ a1 .- x),lat.sitePositions)[2] == ind + 50)
-                        push!(vertex, [ind, ind + 48, ind + 50])
-                    end
-                    if (findmin(x -> norm(i .+ a2 .- x),lat.sitePositions)[2] == ind + 2) && (findmin(x -> norm(i .+ a2 .+ a1 .- x),lat.sitePositions)[2] == ind + 50)
-                        push!(vertex, [ind, ind + 50, ind+2])
-                    end
-                end
-            end
-            return vertex
-        elseif length(lat.unitcell.basis) == 1
-            for (ind, i) in enumerate(lat.sitePositions)
-                if (i .+ a1 in lat.sitePositions) && (findmin(x -> norm(i .+ a2 .+ a1 .- x),lat.sitePositions)[2] == ind + 25)
-                    push!(vertex, [ind, ind + 24, ind + 25])
-                end
-                if (findmin(x -> norm(i .+ a2 .- x),lat.sitePositions)[2] == ind + 1) && (findmin(x -> norm(i .+ a2 .+ a1 .- x),lat.sitePositions)[2] == ind + 25)
-                    push!(vertex, [ind, ind + 25, ind+1])
-                end
-            end
-            return vertex
-        end
-    end
+   vertex = []
+   size = lat.size[1]
+   numBasis = length(lat.unitcell.basis)
+
+   if numBasis == 2
+      sitea12(ind) = checkbounds(Bool, lat.sitePositions, ind + numBasis * size) ? ind + numBasis*size  : ((ind + numBasis * (size - 1)) % (numBasis * size)) + numBasis
+      sitea22(ind) = (((ind + 1) % (numBasis * size)) != 0) ? ind + numBasis : (ind - numBasis * (size - 1))
+      sitea1pa22(ind) = sitea22(sitea12(ind))
+
+      for (ind, i) in enumerate(lat.sitePositions)   
+         if i[3] == 0         
+            push!(vertex, [ind, sitea12(ind), sitea1pa22(ind)])
+            push!(vertex, [ind, sitea1pa22(ind), sitea22(ind)])
+         end
+      end
+      
+   elseif numBasis == 1
+      sitea1(ind) = checkbounds(Bool, lat.sitePositions, ind + numBasis * size) ? ind + size  : ((ind + size - 1) % size) + 1 
+      sitea2(ind) = (ind % size != 0) ? ind + 1  : (ind - (size - 1))
+      sitea1pa2(ind) = sitea2(sitea1(ind))   
+      for (ind, i) in enumerate(lat.sitePositions)
+            push!(vertex, [ind, sitea1(ind), sitea1pa2(ind)])
+            push!(vertex, [ind, sitea1pa2(ind), sitea2(ind)])
+      end
+   end
+   return vertex
+end
+
+function StructureFactor(mc, layer)
+   N = 256
+   correlation = mean(mc.observables.correlation) # The correlation is measured with respect to the first spin, i.e. the i-th entry is the correlation dot(S_1,S_i). 
+   kx = collect(range(-5pi/3,5pi/3,length=N))
+   ky = collect(range(-5pi/3,5pi/3,length=N))
+   structurefactor = zeros(N,N)
+   for i in 1:N
+      for j in 1:N
+         z = 0.0
+         numBasis = length(mc.lattice.unitcell.basis)
+         # Compute Fourier transformation at momentum (kx, ky). The real-space position of the i-th spin is obtained via getSitePosition(lattice,i). 
+         for k in (layer + 1):numBasis:length(mc.lattice)
+            z += cos(dot((kx[i],ky[j]),getSitePosition(mc.lattice,k)[1:2])) * correlation[k,layer + 1]
+         end
+         structurefactor[j,i] =  numBasis * z / length(mc.lattice)
+      end
+   end
+   
+   return structurefactor 
 end
 
 
-
-function runAnneal(t0,tf,lat,thermSweeps,MeasureSweeps, coolRate, H, J2, outfile)
-   betas = 1/t0:coolRate:1/tf
+function runAnneal(t0,tf,lat,thermSweeps,MeasureSweeps, coolRate, outfile=nothing)
+   ts = [t0 * coolRate^t for t in -500:5000 if t0 >= t0 * coolRate^t >= tf]
    monte = nothing
-    for (ind,beta) in enumerate(betas) 
-        thermalizationSweeps = thermSweeps
-        measurementSweeps = 0
-        if ind == 1
-            m = MonteCarlo(lat, beta, thermalizationSweeps, measurementSweeps, reportInterval = 50000, rewrite = true);
-            run_nompi!(m)
-        else
-            if ind == length(betas)
-                thermalizationSweeps = 0
-                measurementSweeps = MeasureSweeps
+   for (ind,temp) in enumerate(ts) 
+      thermalizationSweeps = thermSweeps
+      measurementSweeps = 0
+   
+      if ind == 1
+            thermalizationSweeps = 0
+            measurementSweeps = MeasureSweeps
+            m = MonteCarlo(lat, 1/temp, thermalizationSweeps, measurementSweeps, reportInterval = MeasureSweeps, rewrite = true);
+            run!(m, disableOutput = true)
+      else
+            if (ind == length(ts)) || (ind == round(length(ts)/2)) || (ind == round(length(ts) * 0.75))
+               thermalizationSweeps = 0
+               measurementSweeps = MeasureSweeps
             end
-        m = MonteCarlo(monte.lattice, beta, thermalizationSweeps, measurementSweeps, reportInterval = 50000, rewrite = false);
+            m = MonteCarlo(monte.lattice, 1/temp, thermalizationSweeps, measurementSweeps, reportInterval = MeasureSweeps, rewrite = false);
 
-        if ind == length(betas)
-           h = round(H,sigdigits=5)
-           j2 = round(J2,sigdigits=5)
-           run_nompi!(m, outfile = outfile)
-           println(outfile)
-        else
-           run_nompi!(m)
-        end  
+            if ind != length(ts)
+               run!(m, disableOutput = true)
+            else
+               run!(m, outfile = outfile)
+            end  
       end
-      monte = deepcopy(m)
+      monte = deepcopy(m);
    end
    return monte
+end
+
+function updateSpins!(file, lat)
+   file = h5open(file)["mc"]
+   sites = parse.(Int64,collect(keys(read(file["lattice"]["spins"]))))
+   spins = collect(values(read(file["lattice"]["spins"])))
+
+   sorted = sortperm(sites)
+   lat.spins = reshape(vcat(spins[sorted]...),(3,lat.length))  
+
+   close(file)
+end
+
+function readEnergy(file)
+   file = h5open(file)["mc"]
+   energy = read(file["observables"]["energyDensity"]["mean"])
+   std = read(file["observables"]["energyDensity"]["error"])
+   close(file)
+   return [energy, std]
+end
+
+function avgSz(lat)
+   avg = 0
+   for i in 1:length(lat.sitePositions)
+      avg += lat.spins[3,i]
+   end
+   return avg/length(lat.sitePositions)
 end
