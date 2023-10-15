@@ -1,4 +1,4 @@
-using SpinMC_more_more, LinearAlgebra, Plots, ColorSchemes, PyPlot, HDF5
+using SpinMC_more_more, LinearAlgebra, HDF5
 ioff()
 
 function getSkyrmionNumber(layer,lat,vertex)
