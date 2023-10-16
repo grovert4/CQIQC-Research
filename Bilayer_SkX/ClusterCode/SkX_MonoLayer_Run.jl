@@ -88,7 +88,7 @@ for i in start_index:end_index
 
       latticeLocal = Lattice(UClocal, L)
 
-      mc = runAnneal(t0,tf,latticeLocal,thermSweeps,measureSweeps,inputFile["coolRate"], h, j2,filename);
+      mc = runAnneal(t0,tf,latticeLocal,thermSweeps,measureSweeps,inputFile["coolRate"],filename);
 
    end
 end
