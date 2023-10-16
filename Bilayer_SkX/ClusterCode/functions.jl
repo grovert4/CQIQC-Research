@@ -133,7 +133,7 @@ function runAnneal(t0,tf,lat,thermSweeps,MeasureSweeps, coolRate, outfile=nothin
             thermalizationSweeps = 0
             measurementSweeps = MeasureSweeps
             m = MonteCarlo(lat, 1/temp, thermalizationSweeps, measurementSweeps, reportInterval = MeasureSweeps, rewrite = true);
-            run!(m, disableOutput = true)
+            run_nompi!(m, disableOutput = true)
       else
             if (ind == length(ts)) || (ind == round(length(ts)/2)) || (ind == round(length(ts) * 0.75))
                thermalizationSweeps = 0
@@ -142,9 +142,9 @@ function runAnneal(t0,tf,lat,thermSweeps,MeasureSweeps, coolRate, outfile=nothin
             m = MonteCarlo(monte.lattice, 1/temp, thermalizationSweeps, measurementSweeps, reportInterval = MeasureSweeps, rewrite = false);
 
             if ind != length(ts)
-               run!(m, disableOutput = true)
+               run_nompi!(m, disableOutput = true)
             else
-               run!(m, outfile = outfile)
+               run_nompi!(m, outfile = outfile)
             end  
       end
       monte = deepcopy(m);
