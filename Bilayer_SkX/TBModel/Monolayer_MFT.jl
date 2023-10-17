@@ -55,6 +55,7 @@ s22 = sigmav(2, 2)
 intermat(s) = [dot(s, s11) dot(s, s12); dot(s, s21) dot(s, s22)]
 
 
+
 ##Adding anisotropic bonds and normalizing if needed
 CreateUnitCell!(UC, HoppingParams)
 
