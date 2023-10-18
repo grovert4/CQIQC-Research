@@ -7,9 +7,9 @@
 #SBATCH --ntasks=48
 #SBATCH --cpus-per-task=1 
 #SBATCH --account=def-aparamek
-#SBATCH --time=5:00:00
+#SBATCH --time=6:00:00
 #SBATCH --mem-per-cpu=4000MB
 #SBATCH --output=/scratch/grovert4/SLURM/slurm-%x-%j.txt
-module load julia/1.8.5
+module load julia/1.8.1
 
-srun julia SkX_BiLayer_Run.jl 14.10.2023-Bilayer
+srun julia SkX_BiLayer_Run.jl 17.10.2023-Bilayer
