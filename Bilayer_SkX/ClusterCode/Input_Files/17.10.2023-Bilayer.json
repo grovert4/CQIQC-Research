@@ -13,6 +13,6 @@
   "t_max":5,
   "t_min":1E-3,
   "coolRate":0.995,
-  "thermalizationSweeps": 7500,
+  "thermalizationSweeps": 15000,
   "measurementSweeps": 500000
 }
