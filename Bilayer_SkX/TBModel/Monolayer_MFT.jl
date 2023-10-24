@@ -14,7 +14,7 @@ const l2 = [-0.5, sqrt(3) / 2]
 const n = 10
 const kSize = 6 * n + 3
 const t = 1.0
-const JH = 0.0#1.0
+const jh = 0.0#1.0
 const U = 1.0
 U_array = collect(LinRange(0.0, 10.0, 21))
 SpinVec = SpinMats(1 // 2)
@@ -37,6 +37,7 @@ end
 ##Istrotropic bonds
 t1 = -t
 t1Param = Param(t1, 2)
+jhParam = Param(jh, 2)
 HoppingParams = [t1Param]
 
 AddIsotropicBonds!(t1Param, UC, 1.0, SpinVec[4], "t1")
@@ -71,7 +72,7 @@ for U_var in U_array
     AddIsotropicBonds!(t_s, UC, 1.0, SpinVec[4], "s Hopping") # Am I not double counting the hopping ?? 
     Dx = []
     Dy = []
-    Dz = []
+    #Dz = []
 
 
 
@@ -86,13 +87,17 @@ for U_var in U_array
         end
         push!(Dx, Param(1.0, 2))
         push!(Dy, Param(1.0, 2))
-        push!(Dz, Param(1.0, 2))
+        #push!(Dz, Param(1.0, 2))
         AddAnisotropicBond!(UC, ind, ind, [0, 0], -JH * mat, 0.0, "interaction")
         AddAnisotropicBond!(Dx[ind], UC, ind, ind, [0, 0], SpinVec[1], 0.0, "Sx-" * string(ind))
-        AddAnisotropicBond!(Dy[ind], UC, ind, ind, [0, 0], SpinVec[2], 0.0, "Sy-" * string(ind))
-        AddAnisotropicBond!(Dz[ind], UC, ind, ind, [0, 0], SpinVec[3], 0.0, "Sz-" * string(ind))
+        if ind > 1
+            AddAnisotropicBond!(Dy[ind], UC, ind, ind, [0, 0], SpinVec[2], 0.0, "Sy-" * string(ind))
+            #AddAnisotropicBond!(Dz[ind], UC, ind, ind, [0, 0], SpinVec[3], 0.0, "Sz-" * string(ind))
+            # on one site only Sx 
+        end
+
     end
-    ChiParams = vcat(t_s, Dx, Dy, Dz)
+    ChiParams = vcat(t_s, Dx, Dy)
     ChiParams = Vector{Param{2,Float64}}(ChiParams)
     ##Creating BZ and Hamiltonian Model
     bz = BZ(kSize)
@@ -105,8 +110,8 @@ for U_var in U_array
     SolveModel!(Mdl; get_gap=true)
     mft = TightBindingMFT(Mdl, ChiParams, [UParam], IntraQuarticToHopping)
     fileName = loc * "/Monolayer=$(round(filling, digits=3))_U=$(round(U_var, digits=2))_t1=$(round(t1, digits=2)).jld2"
-    SolveMFT!(mft, fileName)
-
+    SolveMFT!(mft, fileName; max_iter=200)
+    # look up the docs 
 
     ##Plotting the band structure
     bands = Plot_Band_Structure!(Mdl, [bz.HighSymPoints["G"], bz.HighSymPoints["K1"], bz.HighSymPoints["M2"]], labels=["G", "K1", "M2"], plot_legend=false)
@@ -121,3 +126,5 @@ for U_var in U_array
 
     println("Chern Number for first 12 bands: ", ChernNumber(H, collect(1:12)))
 end
+
+
