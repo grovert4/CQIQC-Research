@@ -1,6 +1,6 @@
 using Plots, LinearAlgebra, ColorSchemes
 using MeanFieldToolkit, TightBindingToolkit
-loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Monolayer_Data"
+loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Bilayer_Data"
 
 ##Triangular Lattice 
 
@@ -9,14 +9,14 @@ const a2 = [3.0, sqrt(3)]
 
 const l1 = [1.0, 0]
 const l2 = [-0.5, sqrt(3) / 2]
-UC = UnitCell([a1, a2], 2)
+UC = UnitCell([a1, a2], 4)
 
 ##Parameters
-const n = 10
+const n = 5
 const kSize = 6 * n + 3
 const t = 1.0
 const t_inter = -0.3
-const JH = -1.0
+const jh = -1.0
 const U = 1.0
 const t_density = -0.8
 U_array = collect(LinRange(0.0, 10.0, 21))
@@ -27,7 +27,7 @@ const stat = -1
 const mixingAlpha = 0.5
 const ep = 1.0
 
-tinter_param = Param(tinter, 2)
+tinter_param = Param(t_inter, 2)
 
 const t_density = -0.8
 t1 = -t
@@ -69,37 +69,45 @@ CreateUnitCell!(UC, HoppingParams)
 
 
 ##Creating BZ and Hamiltonian Model
+bz = BZ(kSize)
+FillBZ!(bz, UC)
 kSize = 6 * 12 + 3
 bz = BZ(kSize, 2)
 FillBZ!(bz, UC)
 path = CombinedBZPath(bz, [bz.HighSymPoints["G"], bz.HighSymPoints["K1"], bz.HighSymPoints["M2"]]; nearest=true)
-
-for U_var in U_array
-    # Adding MFT Parameters
-    HoppingParams = [t1Param]
-    n_up = [1.0 0.0; 0.0 0.0]
-    n_down = [0.0 0.0; 0.0 1.0]
-    Hubbard = DensityToPartonCoupling(n_up, n_down)
-    UParam = Param(U_var, 4)
-    AddIsotropicBonds!(UParam, UC, 0.0, Hubbard, "Hubbard Interaction") # Do I need to add this to all sites?
-    t_s = Param(1.0, 2)
-    AddIsotropicBonds!(t_s, UC, 1.0, SpinVec[4], "s Hopping") # Am I not double counting the hopping ?? 
-    ##Adding anisotropic bonds and normalizing if needed
-    for (ind, bas) in enumerate(UC.basis)
-        if 1 < norm(bas) < 2
-            mat = intermat(normalize(weiss0(bas) + weiss0(-bas)), normalize(weiss1(bas) + weiss1(-bas)))
-        else
-            closest = [bas, bas - a1, bas - a2]
-            clv = closest[findmin(x -> norm(x), closest)[2]]
-            mat = intermat(replace!(weiss0(clv), NaN => 0.0), replace!(weiss1(clv), NaN => 0.0))
-        end
-        AddAnisotropicBond!(jhParam, UC, ind, ind, [0, 0], mat, 0.0, "interaction")
+# Adding MFT Parameters
+HoppingParams = [t1Param]
+n_up = real.(kron([1.0 0.0; 0.0 0.0], su2spin[4]))
+n_down = real.(kron([0.0 0.0; 0.0 1.0], su2spin[4]))
+Hubbard = DensityToPartonCoupling(n_up, n_down)
+UParam = Param(1.0, 4)
+AddIsotropicBonds!(UParam, UC, 0.0, Hubbard, "Hubbard Interaction") # Do I need to add this to all sites?
+##Adding anisotropic bonds and normalizing if needed
+for (ind, bas) in enumerate(UC.basis)
+    if 1 < norm(bas) < 2
+        mat = intermat(normalize(weiss0(bas) + weiss0(-bas)), normalize(weiss1(bas) + weiss1(-bas)))
+    else
+        closest = [bas, bas - a1, bas - a2]
+        clv = closest[findmin(x -> norm(x), closest)[2]]
+        mat = intermat(replace!(weiss0(clv), NaN => 0.0), replace!(weiss1(clv), NaN => 0.0))
     end
-    ChiParams = vcat(t_s, Dx, Dy)
+    AddAnisotropicBond!(jhParam, UC, ind, ind, [0, 0], mat, 0.0, "Hunds")
+end
+
+##Creating BZ and Hamiltonian Model
+for U_var in U_array
+    Density = []
+    UParam.value = [U_var]
+
+    for (ind, bas) in enumerate(UC.basis)
+        push!(Density, Param(1.0, 2))
+        AddAnisotropicBond!(Density[ind], UC, ind, ind, [0, 0], kron(su2spin[3], su2spin[4]), 0.0, "Dens-" * string(ind))
+    end
+
+    ChiParams = vcat(Density)
     ChiParams = Vector{Param{2,Float64}}(ChiParams)
-    ##Creating BZ and Hamiltonian Model
-    bz = BZ(kSize)
-    FillBZ!(bz, UC)
+
+
     path = CombinedBZPath(bz, [bz.HighSymPoints["G"], bz.HighSymPoints["K1"], bz.HighSymPoints["M2"]]; nearest=true)
     H = Hamiltonian(UC, bz)
     DiagonalizeHamiltonian!(H)
@@ -108,13 +116,8 @@ for U_var in U_array
     SolveModel!(Mdl; get_gap=true)
     mft = TightBindingMFT(Mdl, ChiParams, [UParam], IntraQuarticToHopping)
     fileName = loc * "/Monolayer=$(round(filling, digits=3))_U=$(round(U_var, digits=2))_t1=$(round(t1, digits=2)).jld2"
-    SolveMFT!(mft, fileName; max_iter=200)
-
-
-
-
-
-
+    SolveMFT!(mft, fileName; max_iter=100, tol=1e-4)
+end
 
 
 
