@@ -1,9 +1,11 @@
-using SpinMC_more_more, LinearAlgebra, JSON, LazyGrids
-include("functions.jl")
 using MPI
 MPI.Initialized() || MPI.Init()
 commSize = MPI.Comm_size(MPI.COMM_WORLD)
 commRank = MPI.Comm_rank(MPI.COMM_WORLD)
+
+using SpinMC_more_more, LinearAlgebra, JSON, LazyGrids
+include("functions.jl")
+
 inputFile = JSON.parsefile("./Input_Files/"*ARGS[1]*".json")
 J1 = inputFile["J_1"]
 D = inputFile["D"]
