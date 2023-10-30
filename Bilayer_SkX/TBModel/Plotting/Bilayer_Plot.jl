@@ -4,7 +4,7 @@ using JLD2, Plots
 using DelimitedFiles, DataFrames
 filling = 0.5
 t1 = -1.0
-U_array_1 = collect(LinRange(0.0, 10.0, 12))
+U_array_1 = collect(LinRange(0.0, 5.0, 12))
 #U_array_2 = collect(LinRange(15, 30, 4))
 U_array = U_array_1#append!(U_array_1, U_array_2)
 U_var = U_array[end-1]

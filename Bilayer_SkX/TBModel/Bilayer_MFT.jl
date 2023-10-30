@@ -18,7 +18,7 @@ const t_inter = 0.0
 const jh = -1.0
 const U = 1.0
 const t_density = 0
-U_array = collect(LinRange(0.0, 7.0, 12))
+U_array = collect(LinRange(0.0, 5.0, 12))
 SpinVec = SpinMats(1 // 2)
 ##### Thermodynamic parameters
 const T = 0.001
@@ -108,7 +108,7 @@ for U_var in U_array
     SolveModel!(Mdl; get_gap=true)
     mft = TightBindingMFT(Mdl, ChiParams, [UParam], IntraQuarticToHopping)
     fileName = loc * "/Bilayer=$(round(filling, digits=3))_U=$(round(U_var, digits=2))_t1=$(round(t1, digits=2)).jld2"
-    @time SolveMFT!(mft, fileName; max_iter=100, tol=1e-4)#, Update=BroydenMixing)
+    @time SolveMFT!(mft, fileName; max_iter=100, tol=1e-5)#, Update=BroydenMixing)
     for i in 1:2*length(UC.basis)
         c = ChernNumber(H, [i])
         println(round(c))

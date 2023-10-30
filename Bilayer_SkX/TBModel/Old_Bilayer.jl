@@ -18,9 +18,9 @@ l2 = [-0.5, sqrt(3) / 2]
 t = -1.0
 t_param = Param(t, 2)
 
-tinter = -0.3
+tinter = 0.0
 tinter_param = Param(tinter, 2)
-
+t_density = 0.0
 t_density_param = Param(t_density, 2)
 
 jh = -1.0
@@ -69,41 +69,20 @@ CreateUnitCell!(UC, [t_param, tinter_param, jh_param, t_density_param])
 ##Plotting the unit cell
 plot_UC = Plot_UnitCell!(UC);
 
-# JH_range = collect(-1.0:-1.0)
-tinter_range = collect(-0.0:-0.2:-1.0)
-t_density_range = collect(0.0:0.2:1.0)
-gaps = []
-mus = []
-combined_Cnums = []
-individual_Cnums = []
 
 ##Creating BZ and Hamiltonian Model
-kSize = 6 * 12 + 3
+kSize = 6 * 5 + 3
 bz = BZ(kSize, 2)
 FillBZ!(bz, UC)
 path = CombinedBZPath(bz, [bz.HighSymPoints["G"], bz.HighSymPoints["K1"], bz.HighSymPoints["M2"]]; nearest=true)
 
+H = Hamiltonian(UC, bz)
+DiagonalizeHamiltonian!(H)
+Mdl = Model(UC, bz, H; filling=1 / 24)
+SolveModel!(Mdl; get_gap=true)
+bands = Plot_Band_Structure!(Mdl, [bz.HighSymPoints["G"], bz.HighSymPoints["K1"], bz.HighSymPoints["M2"]], collect(1:12), labels=["G", "K1", "M2"], plot_legend=false)
+display(bands)
+# savefig(bands,"Jh  v t-inter bands/Jh = $jh_val, t-inter = $tinter_val.png")
 
-for tdensity_val in t_density_range
-    push!(t_density_param.value, tdensity_val)
-    ModifyUnitCell!(UC, [t_density_param])
-
-    for tinter_val in tinter_range
-
-        push!(tinter_param.value, tinter_val)
-        ModifyUnitCell!(UC, [tinter_param])
-
-        global H = Hamiltonian(UC, bz)
-        DiagonalizeHamiltonian!(H)
-        global Mdl = Model(UC, bz, H; filling=1 / 24)
-        SolveModel!(Mdl; get_gap=true)
-        global bands = Plot_Band_Structure!(Mdl, [bz.HighSymPoints["G"], bz.HighSymPoints["K1"], bz.HighSymPoints["M2"]], collect(1:12), labels=["G", "K1", "M2"], plot_legend=false)
-        display(bands)
-        # savefig(bands,"Jh  v t-inter bands/Jh = $jh_val, t-inter = $tinter_val.png")
-
-        push!(combined_Cnums, ChernNumber(H, collect(1:2)))
-        push!(gaps, Mdl.gap)
-        push!(mus, Mdl.mu)
-        println(ChernNumber(H, collect(1:2)))
-    end
-end
+ChernNumber(H, collect(1:2))
+println(ChernNumber(H, collect(1:2)))
