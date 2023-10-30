@@ -108,7 +108,7 @@ for U_var in U_array
     SolveModel!(Mdl; get_gap=true)
     mft = TightBindingMFT(Mdl, ChiParams, [UParam], IntraQuarticToHopping)
     fileName = loc * "/Bilayer=$(round(filling, digits=3))_U=$(round(U_var, digits=2))_t1=$(round(t1, digits=2)).jld2"
-    @time SolveMFT!(mft, fileName; max_iter=100, tol=1e-4, Update=BroydenMixing)
+    @time SolveMFT!(mft, fileName; max_iter=100, tol=1e-4)#, Update=BroydenMixing)
     for i in 1:2*length(UC.basis)
         c = ChernNumber(H, [i])
         println(round(c))
