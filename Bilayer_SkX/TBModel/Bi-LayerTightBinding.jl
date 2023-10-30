@@ -58,7 +58,6 @@ s21 = sigmav(2, 1)
 s22 = sigmav(2, 2)
 intermat(s1, s2) = [dot(s1, s11) dot(s1, s12) 0 0; dot(s1, s21) dot(s1, s22) 0 0; 0 0 dot(s2, s11) dot(s2, s12); 0 0 dot(s2, s21) dot(s2, s22)]
 
-CreateUnitCell!(UC, HoppingParams)
 ##Creating BZ and Hamiltonian Model
 bz = BZ(kSize)
 FillBZ!(bz, UC)
@@ -74,6 +73,9 @@ for (ind, bas) in enumerate(UC.basis)
     end
     AddAnisotropicBond!(jhParam, UC, ind, ind, [0, 0], mat, 0.0, "Hunds")
 end
+
+CreateUnitCell!(UC, HoppingParams)
+
 path = CombinedBZPath(bz, [bz.HighSymPoints["G"], bz.HighSymPoints["K1"], bz.HighSymPoints["M2"]]; nearest=true)
 H = Hamiltonian(UC, bz)
 DiagonalizeHamiltonian!(H)
