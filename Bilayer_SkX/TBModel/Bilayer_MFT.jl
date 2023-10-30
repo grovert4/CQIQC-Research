@@ -69,7 +69,6 @@ bz = BZ(kSize)
 FillBZ!(bz, UC)
 path = CombinedBZPath(bz, [bz.HighSymPoints["G"], bz.HighSymPoints["K1"], bz.HighSymPoints["M2"]]; nearest=true)
 # Adding MFT Parameters
-HoppingParams = [t1Param]
 n_up = real.(kron([1.0 0.0; 0.0 0.0], su2spin[4]))
 n_down = real.(kron([0.0 0.0; 0.0 1.0], su2spin[4]))
 Hubbard = DensityToPartonCoupling(n_up, n_down)
