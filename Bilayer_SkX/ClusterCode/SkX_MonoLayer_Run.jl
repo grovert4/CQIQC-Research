@@ -1,8 +1,9 @@
 #using Pkg
 #Pkg.add(url="https://github.com/grovert4/SpinMC_more_more.jl")
-using SpinMC_more_more, LinearAlgebra, LazyGrids, JSON, MPI
+using SpinMC_more_more, LinearAlgebra, LazyGrids, JSON
 include("functions.jl")
 
+using MPI
 MPI.Init()
 commSize = MPI.Comm_size(MPI.COMM_WORLD)
 commRank = MPI.Comm_rank(MPI.COMM_WORLD)
