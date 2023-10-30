@@ -1,5 +1,5 @@
 using Plots, LinearAlgebra, ColorSchemes
-using MeanFieldToolkit, TightBindingToolkit
+using MeanFieldToolkit, TightBindingToolkit, FixedPointToolkit
 loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Bilayer_Data"
 
 ##Triangular Lattice 
@@ -10,29 +10,27 @@ const a2 = [3.0, sqrt(3)]
 const l1 = [1.0, 0]
 const l2 = [-0.5, sqrt(3) / 2]
 UC = UnitCell([a1, a2], 4)
-
 ##Parameters
 const n = 5
 const kSize = 6 * n + 3
 const t = 1.0
-const t_inter = -0.3
+const t_inter = 0.0
 const jh = -1.0
 const U = 1.0
-const t_density = -0.8
-U_array = collect(LinRange(0.0, 10.0, 21))
+const t_density = 0
+U_array = collect(LinRange(0.0, 7.0, 12))
 SpinVec = SpinMats(1 // 2)
 ##### Thermodynamic parameters
 const T = 0.001
 const stat = -1
 const mixingAlpha = 0.5
 const ep = 1.0
+filling = 0.5
 
 tinter_param = Param(t_inter, 2)
-
-const t_density = -0.8
 t1 = -t
 t1Param = Param(t1, 2)
-jhParam = Param(jh, 2)
+jhParam = Param(-1 * jh, 2)
 tdParam = Param(t_density, 2)
 tiParam = Param(t_inter, 2)
 HoppingParams = [t1Param, tdParam, tiParam]
@@ -66,13 +64,8 @@ intermat(s1, s2) = [dot(s1, s11) dot(s1, s12) 0 0; dot(s1, s21) dot(s1, s22) 0 0
 
 
 CreateUnitCell!(UC, HoppingParams)
-
-
 ##Creating BZ and Hamiltonian Model
 bz = BZ(kSize)
-FillBZ!(bz, UC)
-kSize = 6 * 12 + 3
-bz = BZ(kSize, 2)
 FillBZ!(bz, UC)
 path = CombinedBZPath(bz, [bz.HighSymPoints["G"], bz.HighSymPoints["K1"], bz.HighSymPoints["M2"]]; nearest=true)
 # Adding MFT Parameters
@@ -96,6 +89,7 @@ end
 
 ##Creating BZ and Hamiltonian Model
 for U_var in U_array
+    # add resume option. 
     Density = []
     UParam.value = [U_var]
 
@@ -111,14 +105,17 @@ for U_var in U_array
     path = CombinedBZPath(bz, [bz.HighSymPoints["G"], bz.HighSymPoints["K1"], bz.HighSymPoints["M2"]]; nearest=true)
     H = Hamiltonian(UC, bz)
     DiagonalizeHamiltonian!(H)
-    filling = 0.5
     Mdl = Model(UC, bz, H; filling=filling, T=T) # Does T matter, don't I want 0 T, or is that technically impossible? 
     SolveModel!(Mdl; get_gap=true)
     mft = TightBindingMFT(Mdl, ChiParams, [UParam], IntraQuarticToHopping)
-    fileName = loc * "/Monolayer=$(round(filling, digits=3))_U=$(round(U_var, digits=2))_t1=$(round(t1, digits=2)).jld2"
-    SolveMFT!(mft, fileName; max_iter=100, tol=1e-4)
+    fileName = loc * "/Bilayer=$(round(filling, digits=3))_U=$(round(U_var, digits=2))_t1=$(round(t1, digits=2)).jld2"
+    @time SolveMFT!(mft, fileName; max_iter=100, tol=1e-4, Update=BroydenMixing)
+    for i in 1:2*length(UC.basis)
+        c = ChernNumber(H, [i])
+        println(round(c))
+    end
 end
-
+# number of iterations for Broyden versus simple ? 
 
 
 

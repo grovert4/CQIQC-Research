@@ -37,7 +37,7 @@ end
 ##Istrotropic bonds
 t1 = -t
 t1Param = Param(t1, 2)
-jhParam = Param(jh, 2)
+jhParam = Param(-jh, 2)
 HoppingParams = [t1Param]
 
 AddIsotropicBonds!(t1Param, UC, 1.0, SpinVec[4], "t1")
@@ -88,7 +88,7 @@ for U_var in U_array
         push!(Dx, Param(1.0, 2))
         push!(Dy, Param(1.0, 2))
         #push!(Dz, Param(1.0, 2))
-        AddAnisotropicBond!(UC, ind, ind, [0, 0], -JH * mat, 0.0, "interaction")
+        AddAnisotropicBond!(jhParam, UC, ind, ind, [0, 0], mat, 0.0, "interaction")
         AddAnisotropicBond!(Dx[ind], UC, ind, ind, [0, 0], SpinVec[1], 0.0, "Sx-" * string(ind))
         if ind > 1
             AddAnisotropicBond!(Dy[ind], UC, ind, ind, [0, 0], SpinVec[2], 0.0, "Sy-" * string(ind))
@@ -110,7 +110,7 @@ for U_var in U_array
     SolveModel!(Mdl; get_gap=true)
     mft = TightBindingMFT(Mdl, ChiParams, [UParam], IntraQuarticToHopping)
     fileName = loc * "/Monolayer=$(round(filling, digits=3))_U=$(round(U_var, digits=2))_t1=$(round(t1, digits=2)).jld2"
-    SolveMFT!(mft, fileName; max_iter=200)
+    SolveMFT!(mft, fileName; max_iter=100)
     # look up the docs 
 
     ##Plotting the band structure

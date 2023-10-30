@@ -1,31 +1,39 @@
-using Plots, TightBindingToolkit, LinearAlgebra, ColorSchemes
-
-
-#Skyrmion Lattice
-# a1 = [3.0 , sqrt(3)]
-# a2 = [3.0 , -sqrt(3)
-
-
-a1 = [-3.0, sqrt(3)]
-a2 = [3.0, sqrt(3)]
-UC = UnitCell([a1, a2], 4)
+using Plots, LinearAlgebra, ColorSchemes
+using MeanFieldToolkit, TightBindingToolkit, FixedPointToolkit
+loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Bilayer_Data"
 
 ##Triangular Lattice 
-l1 = [1.0, 0]
-l2 = [-0.5, sqrt(3) / 2]
 
+const a1 = [-3.0, sqrt(3)]
+const a2 = [3.0, sqrt(3)]
+
+const l1 = [1.0, 0]
+const l2 = [-0.5, sqrt(3) / 2]
+UC = UnitCell([a1, a2], 4)
 ##Parameters
-t = -1.0
-t_param = Param(t, 2)
+const n = 5
+const kSize = 6 * n + 3
+const t = 1.0
+const t_inter = 0.0
+const jh = -1.0
+const U = 1.0
+const t_density = 0
+U_array = collect(LinRange(0.0, 7.0, 12))
+SpinVec = SpinMats(1 // 2)
+##### Thermodynamic parameters
+const T = 0.001
+const stat = -1
+const mixingAlpha = 0.5
+const ep = 1.0
+filling = 0.5
 
-tinter = -0.3
-tinter_param = Param(tinter, 2)
-
-t_density = -0.8
-t_density_param = Param(t_density, 2)
-
-jh = -1.0
-jh_param = Param(jh, 2)
+tinter_param = Param(t_inter, 2)
+t1 = -t
+t1Param = Param(t1, 2)
+jhParam = Param(-1 * jh, 2)
+tdParam = Param(t_density, 2)
+tiParam = Param(t_inter, 2)
+HoppingParams = [t1Param, tdParam, tiParam]
 
 su2spin = SpinMats(1 // 2)
 su4spin = SpinMats(3 // 2)
@@ -36,7 +44,6 @@ for j = 1:2
         AddBasisSite!(UC, i .* l1 + j .* l2)
     end
 end
-
 ##Istrotropic bonds
 AddIsotropicBonds!(t_param, UC, 1.0, su4spin[4], "iso", checkOffsetRange=1)
 AddIsotropicBonds!(tinter_param, UC, 0.0, 2 * kron(su2spin[1], su2spin[4]), "isoHop")
@@ -79,32 +86,22 @@ combined_Cnums = []
 individual_Cnums = []
 
 ##Creating BZ and Hamiltonian Model
-kSize = 6 * 12 + 3
 bz = BZ(kSize, 2)
 FillBZ!(bz, UC)
 path = CombinedBZPath(bz, [bz.HighSymPoints["G"], bz.HighSymPoints["K1"], bz.HighSymPoints["M2"]]; nearest=true)
 
 
-for tdensity_val in t_density_range
-    push!(t_density_param.value, tdensity_val)
-    ModifyUnitCell!(UC, [t_density_param])
-
-    for tinter_val in tinter_range
-
-        push!(tinter_param.value, tinter_val)
-        ModifyUnitCell!(UC, [tinter_param])
-
-        global H = Hamiltonian(UC, bz)
-        DiagonalizeHamiltonian!(H)
-        global Mdl = Model(UC, bz, H; filling=1 / 24)
-        SolveModel!(Mdl; get_gap=true)
-        global bands = Plot_Band_Structure!(Mdl, [bz.HighSymPoints["G"], bz.HighSymPoints["K1"], bz.HighSymPoints["M2"]], collect(1:12), labels=["G", "K1", "M2"], plot_legend=false)
-        display(bands)
-        # savefig(bands,"Jh  v t-inter bands/Jh = $jh_val, t-inter = $tinter_val.png")
-
-        push!(combined_Cnums, ChernNumber(H, collect(1:2)))
-        push!(gaps, Mdl.gap)
-        push!(mus, Mdl.mu)
-        println(ChernNumber(H, collect(1:2)))
-    end
+H = Hamiltonian(UC, bz)
+DiagonalizeHamiltonian!(H)
+Mdl = Model(UC, bz, H; filling=filling, T=T) # Does T matter, don't I want 0 T, or is that technically impossible? 
+SolveModel!(Mdl; get_gap=true)
+##Plotting the band structure
+bands = Plot_Band_Structure!(Mdl, [bz.HighSymPoints["G"], bz.HighSymPoints["K1"], bz.HighSymPoints["M2"]], labels=["G", "K1", "M2"], plot_legend=false)
+# plot!(bands, legend = false);
+display(bands)
+savefig(bands, loc * "Bilayer_MFT_Results_U=$(round(U_var, digits=2)).png")
+#Calculating Chern Numbers for bands
+for i in 1:2*length(UC.basis)
+    c = ChernNumber(H, [i])
+    println(round(c))
 end
