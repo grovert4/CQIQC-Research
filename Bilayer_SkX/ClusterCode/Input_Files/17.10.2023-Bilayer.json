@@ -4,7 +4,7 @@
   "A_ion":0.2,
   "System_Size":36,
   "H_min":0.0,
-  "H_max":0.1,
+  "H_max":1.0,
   "J_perp": -0.2,
   "H_length":31,
   "J2_min":0.0,
