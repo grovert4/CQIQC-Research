@@ -11,7 +11,7 @@ const l1 = [1.0, 0]
 const l2 = [-0.5, sqrt(3) / 2]
 UC = UnitCell([a1, a2], 4)
 ##Parameters
-const n = 5
+const n = 10
 const kSize = 6 * n + 3
 const t = 1.0
 const t_inter = 0.0
@@ -21,11 +21,8 @@ const t_density = 0
 U_array = collect(LinRange(0.0, 7.0, 12))
 SpinVec = SpinMats(1 // 2)
 ##### Thermodynamic parameters
-const T = 0.001
-const stat = -1
-const mixingAlpha = 0.5
-const ep = 1.0
 filling = 0.5
+const T = 0.001
 
 tinter_param = Param(t_inter, 2)
 t1 = -t
@@ -33,7 +30,7 @@ t1Param = Param(t1, 2)
 jhParam = Param(jh, 2)
 tdParam = Param(t_density, 2)
 tiParam = Param(t_inter, 2)
-HoppingParams = [t1Param, tdParam, tiParam]
+HoppingParams = [t1Param, tdParam, tiParam, jhParam]
 
 su2spin = SpinMats(1 // 2)
 su4spin = SpinMats(3 // 2)
@@ -60,8 +57,6 @@ s12 = sigmav(1, 2)
 s21 = sigmav(2, 1)
 s22 = sigmav(2, 2)
 intermat(s1, s2) = [dot(s1, s11) dot(s1, s12) 0 0; dot(s1, s21) dot(s1, s22) 0 0; 0 0 dot(s2, s11) dot(s2, s12); 0 0 dot(s2, s21) dot(s2, s22)]
-
-
 
 CreateUnitCell!(UC, HoppingParams)
 ##Creating BZ and Hamiltonian Model
