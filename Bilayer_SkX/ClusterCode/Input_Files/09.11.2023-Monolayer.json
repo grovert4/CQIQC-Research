@@ -2,7 +2,7 @@
   "J_1":1.0,
   "D":0.25,
   "A_ion":0.2,
-  "System_Size":36,
+  "System_Size":24,
   "H_min":0.0,
   "H_max":1.0,
   "H_length":31,
