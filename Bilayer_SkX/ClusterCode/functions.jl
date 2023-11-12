@@ -122,7 +122,7 @@ function StructureFactor(mc, layer)
 end
 
 
-function runAnneal(t0,tf,lat,thermSweeps,MeasureSweeps, coolRate, outfile=nothing)
+function runAnneal(t0,tf,lat,thermSweeps,MeasureSweeps, coolRate, outfile=nothing, init_rewrite=true)
    ts = [t0 * coolRate^t for t in -500:5000 if t0 >= t0 * coolRate^t >= tf]
    monte = nothing
    for (ind,temp) in enumerate(ts) 
@@ -132,7 +132,7 @@ function runAnneal(t0,tf,lat,thermSweeps,MeasureSweeps, coolRate, outfile=nothin
       if ind == 1
             thermalizationSweeps = 0
             measurementSweeps = MeasureSweeps
-            m = MonteCarlo(lat, 1/temp, thermalizationSweeps, measurementSweeps, reportInterval = MeasureSweeps, rewrite = true);
+            m = MonteCarlo(lat, 1/temp, thermalizationSweeps, measurementSweeps, reportInterval = MeasureSweeps, rewrite = init_rewrite);
             run_nompi!(m, disableOutput = true)
       else
             if (ind == length(ts)) || (ind == round(length(ts)/2)) 
