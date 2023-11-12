@@ -89,7 +89,7 @@ for i in start_index:end_index
 
       latticeLocal = Lattice(UClocal, L)
       updateSpins!(old_filename, latticeLocal)
-      mc = runAnneal(t0,tf,latticeLocal,thermSweeps,measureSweeps,inputFile["coolRate"],new_filename);
+      mc = runAnneal(t0,tf,latticeLocal,thermSweeps,measureSweeps,inputFile["coolRate"],new_filename,false);
 
    end
 end
