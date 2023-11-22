@@ -55,6 +55,8 @@ addInteraction!(UCglobal, 1, 1, Dex(D3v), (-1,-1)) #
 
 L = (inputFile["System_Size"], inputFile["System_Size"])
 
+vertex = getVertex(Lattice(UCglobal,L))
+
 (Harr,J2arr) = ndgrid(range(inputFile["H_min"],inputFile["H_max"],inputFile["H_length"]),range(inputFile["J2_min"],inputFile["J2_max"],inputFile["J2_length"]) )
 Hs = collect(Iterators.flatten(Harr))
 J2s = collect(Iterators.flatten(J2arr))
@@ -89,8 +91,14 @@ for i in start_index:end_index
 
       latticeLocal = Lattice(UClocal, L)
       updateSpins!(old_filename, latticeLocal)
-      mc = runAnneal(t0,tf,latticeLocal,thermSweeps,measureSweeps,inputFile["coolRate"],new_filename,false);
-
+      
+      temp_nums = []
+      mcs = []
+      for j in 1:3
+         mcs[j] = runAnneal(t0,tf,latticeLocal,thermSweeps,measureSweeps,inputFile["coolRate"], init_rewrite = false);
+         temp_nums[j] = getSkyrmionNumber(0, mcs[j].lattice, vertex)
+      end
+      writeMonteCarlo(new_filename, mcs[findmin(temp_nums)[2]])
    end
 end
 
