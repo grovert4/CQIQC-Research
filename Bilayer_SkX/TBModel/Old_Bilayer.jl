@@ -71,7 +71,7 @@ plot_UC = Plot_UnitCell!(UC);
 
 
 ##Creating BZ and Hamiltonian Model
-kSize = 6 * 5 + 3
+kSize = 6 * 12 + 3
 bz = BZ(kSize, 2)
 FillBZ!(bz, UC)
 path = CombinedBZPath(bz, [bz.HighSymPoints["G"], bz.HighSymPoints["K1"], bz.HighSymPoints["M2"]]; nearest=true)
