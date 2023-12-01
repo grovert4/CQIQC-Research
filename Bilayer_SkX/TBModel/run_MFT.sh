@@ -11,4 +11,4 @@
 #SBATCH --output=/scratch/andykh/SLURMOutputs/slurm-%x-%j.txt
 module load julia/1.8.5
 
-srun julia MFT_wrapper 17.10.2023-Bilayer
+srun julia MFT_wrapper.jl 17.10.2023-Bilayer
