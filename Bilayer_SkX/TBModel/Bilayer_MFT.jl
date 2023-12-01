@@ -1,7 +1,7 @@
 using Plots, LinearAlgebra, ColorSchemes
 using MeanFieldToolkit, TightBindingToolkit, FixedPointToolkit
 loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Bilayer_Data"
-function MFT(params)
+function MFT(params, filename)
     ##Triangular Lattice 
 
     a1 = [-3.0, sqrt(3)]
@@ -11,7 +11,8 @@ function MFT(params)
     l2 = [-0.5, sqrt(3) / 2]
     UC = UnitCell([a1, a2], 4)
     ##Parameters
-    n = params["n"]
+    n = params["n"] # add default values 
+    n = get("n", params, 10)
     kSize = 6 * n + 3
     t = params["t"]
     t_inter = params["t_inter"]
@@ -99,6 +100,7 @@ function MFT(params)
     Mdl = Model(UC, bz, H; filling=filling, T=T) # Does T matter, don't I want 0 T, or is that technically impossible? 
     SolveModel!(Mdl; get_gap=true)
     mft = TightBindingMFT(Mdl, ChiParams, [UParam], IntraQuarticToHopping)
+    # add filename to input 
     fileName = loc * "/Bilayer_11.09.2023=$(round(filling, digits=3))_U=$(round(U, digits=2))_t1=$(round(t1, digits=2)).jld2"
     @time SolveMFT!(mft, fileName; max_iter=200, tol=1e-6)#, Update=BroydenMixing)
     for i in 1:2*length(UC.basis)
