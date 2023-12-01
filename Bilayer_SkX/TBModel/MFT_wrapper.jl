@@ -7,7 +7,7 @@ commSize = MPI.Comm_size(MPI.COMM_WORLD)
 commRank = MPI.Comm_rank(MPI.COMM_WORLD)
 println(filename)
 println("Hello from $(commRank) of $(commSize)")
-params = YAML.load_file(filename)
+params = YAML.load_file("$(filename).yml")
 
 (Uarr, fillingarr) = ndgrid(range(params["U_min"], params["U_max"], params["U_length"]), range(params["filling_min"], params["filling_max"], params["filling_length"]))
 Us = collect(Iterators.flatten(Uarr))
