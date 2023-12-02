@@ -1,6 +1,6 @@
 using Plots, LinearAlgebra, ColorSchemes
 using MeanFieldToolkit, TightBindingToolkit, FixedPointToolkit
-loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Bilayer_Data"
+loc = "/scratch/a/aparamek/andykh/Data/Bilayer_Data"
 function MFT(params, filename)
     ##Triangular Lattice 
 
