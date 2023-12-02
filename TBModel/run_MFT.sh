@@ -4,8 +4,9 @@
 #SBATCH --mail-type=BEGIN
 #SBATCH --mail-type=END
 #SBATCH --mail-type=FAIL
-#SBATCH --ntasks=40
-#SBATCH --cpus-per-task=1 
+#SBATCH --ntasks=20
+#SBATCH --cpus-per-task=2
+#SBATCH --nodes=1
 #SBATCH --account=rrg-aparamek
 #SBATCH --time=10:00:00
 #SBATCH --output=/scratch/a/aparamek/andykh/SLURMOutputs/slurm-%x-%j.txt
