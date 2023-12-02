@@ -9,5 +9,6 @@
 #SBATCH --account=rrg-aparamek
 #SBATCH --time=10:00:00
 #SBATCH --output=/scratch/a/aparamek/andykh/SLURMOutputs/slurm-%x-%j.txt
-module load julia/1.8.5
-mpirun julia MFT_wrapper.jl 17.10.2023-Bilayer
+module load julia/1.9.1
+module load intelmpi
+mpirun julia MFT_wrapper.jl 11.27.2023_Bilayer
