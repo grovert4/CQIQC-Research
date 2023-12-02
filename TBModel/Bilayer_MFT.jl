@@ -9,20 +9,23 @@ function MFT(params, filename)
 
     l1 = [1.0, 0]
     l2 = [-0.5, sqrt(3) / 2]
+    println("have I gotten this far?")
+
     UC = UnitCell([a1, a2], 4)
     ##Parameters
-    n = params["n"] # add default values 
-    n = get("n", params, 10)
+    println("How about this far")
+
+    n = get!(params, "n", 10)
     kSize = 6 * n + 3
-    t = params["t"]
-    t_inter = params["t_inter"]
-    jh = params["jh"]
-    U = params["U"]
-    t_density = 0
+    t = get!(params, "t", 1.0)
+    t_inter = get!(params, "t_inter", 0.0)
+    jh = get!(params, "jh", 1.0)
+    U = get!(params, "U", 0.0)
+    t_density = get!(params, "t_density", 0.0)
     SpinVec = SpinMats(1 // 2)
     ##### Thermodynamic parameters
     filling = params["filling"]
-    T = 0.001
+    T = get!(params, "T", 0.0)
 
     tinter_param = Param(t_inter, 2)
     t1 = -t
@@ -77,7 +80,6 @@ function MFT(params, filename)
         end
         AddAnisotropicBond!(jhParam, UC, ind, ind, [0, 0], mat, 0.0, "Hunds")
     end
-
     CreateUnitCell!(UC, HoppingParams)
 
     ##Creating BZ and Hamiltonian Model
