@@ -1,16 +1,22 @@
 using TightBindingToolkit
 using MeanFieldToolkit, LaTeXStrings
-using JLD2, Plots
+using JLD2, Plots, LinearAlgebra, YAML
 using DelimitedFiles, DataFrames
 filling = 0.5
 t1 = -1.0
-U_array = collect(LinRange(0.0, 7.0, 15))
-U_array = collect(LinRange(0.0, 6.0, 18))
+filename = "11.27.2023_Bilayer"
+cd(@__DIR__)
+println(pwd())
+println(@__DIR__)
+params = YAML.load_file("../Input/$(filename).yml")
+filename = "Bilayer_11.09.2023"
+
+U_array = collect(LinRange(params["U_min"], params["U_max"], params["U_length"]))
 U_arr = U_array#append!(U_array_1, U_array_2)
-U_var = U_array[end-1]
+#U_var = U_array[end-1]
 #loc = "/Users/ahardy/Library/CloudStorage/GoogleDrive-ahardy@flatironinstitute.org/My Drive/Skyrmion/Bilayer_SkX/TBModel/Monolayer"
 loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Bilayer_Data/"
-date = "11.09.2023"
+#date = "11.09.2023"
 type = "_Uniform"
 gap_array = zeros((length(U_array), 2))
 
@@ -25,7 +31,7 @@ UC = UnitCell([a1, a2], 4)
 order_parameter = Array{Float64}(undef, 24)
 for (ind, U_var) in enumerate(U_arr)
     println(U_var)
-    fileName = "$(loc)Bilayer_$(date)=$(round(filling, digits=3))_U=$(round(U_var, digits=2))_t1=$(round(t1, digits=2)).jld2"
+    fileName = loc * "$(filename)=$(round(filling, digits=3))_U=$(round(U_var, digits=2))_t1=$(round(t1, digits=2)).jld2"
     TBResults = MeanFieldToolkit.MFTResume.ReadMFT(fileName)
     TBModel = TBResults["MFT"].model
     plot = Plot_Band_Structure!(TBModel, [TBModel.bz.HighSymPoints["G"], TBModel.bz.HighSymPoints["M2"], TBModel.bz.HighSymPoints["M3"]]; labels=[L"\Gamma", L"M_2", L"M_3"])

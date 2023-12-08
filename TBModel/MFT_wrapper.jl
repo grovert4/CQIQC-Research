@@ -1,13 +1,13 @@
 using YAML, LazyGrids
 using MPI
 include("./Bilayer_MFT.jl")
-filename = "./Input/$(ARGS[1])"
+filename = "$(ARGS[1])"
 MPI.Init()
 commSize = MPI.Comm_size(MPI.COMM_WORLD)
 commRank = MPI.Comm_rank(MPI.COMM_WORLD)
 println(filename)
 println("Hello from $(commRank) of $(commSize)")
-params = YAML.load_file("$(filename).yml")
+params = YAML.load_file("./Input/$(filename).yml")
 
 (Uarr, fillingarr) = ndgrid(range(params["U_min"], params["U_max"], params["U_length"]), range(params["filling_min"], params["filling_max"], params["filling_length"]))
 Us = collect(Iterators.flatten(Uarr))

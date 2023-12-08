@@ -103,7 +103,7 @@ function MFT(params, filename)
     SolveModel!(Mdl; get_gap=true)
     mft = TightBindingMFT(Mdl, ChiParams, [UParam], IntraQuarticToHopping)
     # add filename to input 
-    fileName = loc * "/Bilayer_11.09.2023=$(round(filling, digits=3))_U=$(round(U, digits=2))_t1=$(round(t1, digits=2)).jld2"
+    fileName = loc * "/$(filename)_p=$(round(filling, digits=3))_U=$(round(U, digits=2))_t1=$(round(t1, digits=2)).jld2"
     GC.gc()
     @time SolveMFT!(mft, fileName; max_iter=200, tol=1e-6)#, Update=BroydenMixing)
     GC.gc()
