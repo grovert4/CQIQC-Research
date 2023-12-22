@@ -15,8 +15,8 @@ function extract_data!(folderpath::String, substring::String=".jld2")
                 dict["Hopping Block"] = data_entry["function args"][1].HoppingOrders
                 TBModel = data_entry["function args"][1].model
                 path = [TBModel.bz.HighSymPoints["G"], TBModel.bz.HighSymPoints["M2"], TBModel.bz.HighSymPoints["M3"]]
-                bzpath     = CombinedBZPath(TBModel.bz, path ; nearest = nearest, closed = closed)
-                path_index = GetQIndex.(bzpath, Ref(TBModel.bz) ; nearest = nearest)
+                bzpath     = CombinedBZPath(TBModel.bz, path ; nearest = true, closed = true)
+                path_index = GetQIndex.(bzpath, Ref(TBModel.bz) ; nearest = true)
                 bands_from_index = getindex.(Ref(TBModel.Ham.bands), CartesianIndex.(Tuple.(path_index)))
                 label_indices    = getindex.(findmin.([norm.(Ref(ReduceQ(x,TBModel.bz)).-bzpath) for x in path]) , 2)
                 #Can you save these data arrays? 
