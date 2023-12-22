@@ -1,7 +1,5 @@
-include("../src/MeanFieldToolkit.jl")
-using .MeanFieldToolkit
-
-using LinearAlgebra, TightBindingToolkit, Distributions, Base.Threads
+using MeanFieldToolkit, TightBindingToolkit, FixedPointToolkit
+using LinearAlgebra, Distributions, Distributions, LaTeXStrings,Base.Threads
 
 ##### Square lattice
 const a1  =   [0.0, 1.0]

@@ -105,7 +105,7 @@ function MFT(params, filename)
     # add filename to input 
     fileName = loc * "/$(filename)_p=$(round(filling, digits=3))_U=$(round(U, digits=2))_t1=$(round(t1, digits=2)).jld2"
     GC.gc()
-    @time SolveMFT!(mft, fileName; max_iter=200, tol=1e-6)#, Update=BroydenMixing)
+    @time ResumeMFT!(mft, fileName; max_iter=200, tol=1e-6)#, Update=BroydenMixing)
     GC.gc()
     for i in 1:2*length(UC.basis)
         c = ChernNumber(H, [i])

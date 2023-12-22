@@ -74,7 +74,7 @@ fileName = loc * "Bilayer_Uniform_11.06.2023=$(round(filling, digits=3))_U=$(rou
 TBResults = MeanFieldToolkit.MFTResume.ReadMFT(fileName)
 TBModel = TBResults["MFT"].model
 c_arr = Array{Float64}(undef, (length(U_array), 2 * length(TBModel.uc.basis)))
-
+T
 for (ind, U_var) in enumerate(U_array)
     c = readdlm(loc * "chern_$(round(U_var, digits=2)).csv")
     c_arr[ind, :] = c
