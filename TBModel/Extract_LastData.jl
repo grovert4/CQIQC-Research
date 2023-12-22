@@ -28,7 +28,7 @@ function extract_data!(folderpath::String, substring::String=".jld2")
                     for i in 1:2*length(TBModel.uc.basis)
                         c[i] = ChernNumber(TBModel.Ham, collect(1:i))
                         println(round(c[i]), "Chern")
-                        c_fill = FilledChernNumber(TBModel.Ham, TBModel.mu)
+                        c_fill = PartialChernNumber(TBModel.Ham, TBModel.mu)
                     end
                     dict["Bands"] = bands_from_index
                     dict["Labels"] = label_indices
