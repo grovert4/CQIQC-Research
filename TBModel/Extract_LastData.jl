@@ -8,7 +8,7 @@ function extract_data!(folderpath::String, substring::String=".jld2")
             try
                 println("TRYING TO LOAD " * folderpath * "/" * string(file))
                 data_entry = load(folderpath * "/" * string(file))
-                println("LOADED " * folderpath * "/" * string(file))
+                println("SUCCESFULLY LOADED " * folderpath * "/" * string(file))
                 dict = Dict()
                 dict["Iterations"] = data_entry["Self-consistency params"][:iter]
                 dict["MFT Energy"] = data_entry["function args"][1].MFTEnergy
@@ -43,7 +43,7 @@ function extract_data!(folderpath::String, substring::String=".jld2")
     end
 end
 pwd()
-extract_data!(pwd())
+extract_data!("/scratch/a/aparamek/andykh/Data/Bilayer_Data")
 #dict["Gr"] = data_entry["function args"][1].model.Gr
 #dict["Convergence"] = [maximum(norm.(data_entry["outputs"][i] - data_entry["inputs"][i])) for i in 1:length(data_entry["inputs"])]
 #dict["Pairing Block"] = Lookup(data_entry["function args"][1].PairingOrders)
