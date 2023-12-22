@@ -26,9 +26,9 @@ function extract_data!(folderpath::String, substring::String=".jld2")
                     #Can you save these data arrays? 
                     c = Array{Float32}(undef, 2 * length(TBModel.uc.basis))
                     for i in 1:2*length(TBModel.uc.basis)
-                        c[i] = ChernNumber(TBModel.Ham, collect(1:i))
+                        c[i] = PartialChernNumber(TBModel.Ham, i, TBModel.mu)
                         println(round(c[i]), "Chern")
-                        c_fill = PartialChernNumber(TBModel.Ham, TBModel.mu)
+                        c_fill = FilledChernNumber(TBModel.Ham, TBModel.mu)
                     end
                     dict["Bands"] = bands_from_index
                     dict["Labels"] = label_indices
