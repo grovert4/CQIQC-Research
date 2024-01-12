@@ -1,7 +1,6 @@
-using TightBindingToolkit
-using MeanFieldToolkit, LaTeXStrings
-using JLD2, Plots, LinearAlgebra, YAML
-using DelimitedFiles, DataFrames
+using TightBindingToolkit, MeanFieldToolkit
+using LaTeXStrings, Plots, LinearAlgebra, YAML
+using DelimitedFiles, DataFrames, JLD2
 filling = 0.5
 t1 = -1.0
 filename = "11.27.2023_Bilayer"
@@ -18,9 +17,38 @@ U_arr = U_array#append!(U_array_1, U_array_2)
 loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Bilayer_Data/"
 #date = "11.09.2023"
 type = "_Uniform"
+#############################
+function Plot_Band_Data!(TBResults, labels, closed::Bool=true, nearest::Bool=true, plot_legend::Bool=true, framestyle::Symbol=:box, guidefontsize::Int64=14, tickfontsize::Int64=12,
+    font::String="Helvetica", plot_title::Bool=true)
+    bands = TBResults["Bands"]
+    label_indices = TBResults["Labels"]
+    bzpath = TBResults["BZ_Path"]
+    mu = TBResults["mu"]
+    plt = plot(grid=false, legend=plot_legend, bg_legend=:transparent,
+        framestyle=framestyle, guidefontsize=guidefontsize, tickfontsize=tickfontsize)
+    for (i, band) in enumerate(bands)
+
+        plot!(band, labels=L"Band : %$i", lw=2.0)
+    end
+    #hline!([mu], linestyle=:dash, label=L"\mu", lw=0.5, linecolor=:black)
+    if !closed
+        xticks!(label_indices, labels)
+        vline!(label_indices, linestyle=:dash, linecolor=:indigo, label="", lw=0.5)
+    else
+        xticks!(vcat(label_indices, [length(bzpath)]), vcat(labels, [labels[begin]]))
+        vline!(label_indices, linestyle=:dash, linecolor=:indigo, label="", lw=0.5)
+    end
+    ylabel!("Energy", guidefontsize=guidefontsize, guidefont=font)
+    if plot_title
+        xlabel!("Path", guidefontsize=guidefontsize, guidefont=font)
+        title!("Band Structure along path", titlefontsize=12, guidefont=font)
+    end
+
+    return plt
+end
+
+#############################
 gap_array = zeros((length(U_array), 2))
-
-
 const a1 = [-3.0, sqrt(3)]
 const a2 = [3.0, sqrt(3)]
 
@@ -30,9 +58,12 @@ const l2 = [-0.5, sqrt(3) / 2]
 UC = UnitCell([a1, a2], 4)
 order_parameter = Array{Float64}(undef, 24)
 c_arr = Array{Float64}(undef, (length(U_array), 24))
+
+
 for (ind, U_var) in enumerate(U_arr)
-    println(U_var)
+
     fileName = loc * "Last_Itr/Last_Itr_$(filename)=$(round(filling, digits=3))_U=$(round(U_var, digits=2))_t1=$(round(t1, digits=2)).jld2"
+    println(fileName)
     TBResults = load(fileName) #MeanFieldToolkit.MFTResume.ReadMFT(fileName)
 
     gap_array[ind, 1] = U_var
@@ -55,8 +86,10 @@ for (ind, U_var) in enumerate(U_arr)
     #     println(round(c[i]), "Chern")
     # end
     #TBModel = TBResults["MFT"].model
+
+    plot = Plot_Band_Data!(TBResults, [L"\Gamma", L"M_2", L"M_3"])
     #plot = Plot_Band_Structure!(TBModel, [TBModel.bz.HighSymPoints["G"], TBModel.bz.HighSymPoints["M2"], TBModel.bz.HighSymPoints["M3"]]; labels=[L"\Gamma", L"M_2", L"M_3"])
-    #display(plot)
+    display(plot)
     #display(TBModel.gap
 
     #display(TBResults["Convergence"]) # This is currently missing from the sort I just did, but will add it back in later.
@@ -85,7 +118,7 @@ savefig(loc * "gap.png")
 # end
 x = scatter(U_arr, c_arr)
 display(x)
-scatter(U_arr, [abs.(c_arr[:, 2]), abs.(c_arr[:, 6])], label=["Chern ( first 2 bands)" "Chern ( first 6 bands)"])
+scatter(U_arr, [abs.(c_arr[:, 1]), abs.(c_arr[:, 4])], label=["Chern ( first 2 bands)" "Chern ( first 6 bands)"])
 #It's uncertain of what Chern number to use?
 xlabel!("U")
 # plot the bands color code by sign of Chern # 

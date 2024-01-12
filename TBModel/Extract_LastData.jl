@@ -33,6 +33,7 @@ function extract_data!(folderpath::String, substring::String=".jld2")
                     dict["Bands"] = bands_from_index
                     println(bands_from_index)
                     dict["Labels"] = label_indices
+                    dict["BZ_Path"] = bzpath
                     dict["UC"] = TBModel.uc
                     dict["Gap"] = TBModel.gap # I seem to have done this wrong? 
                     dict["mu"] = TBModel.mu
