@@ -8,7 +8,7 @@ commRank = MPI.Comm_rank(MPI.COMM_WORLD)
 using SpinMC_more_more, LinearAlgebra, LazyGrids, JSON
 include("functions.jl")
 
-inputFile = JSON.parsefile("./Input_Files/"*ARGS[1]*".json")
+# inputFile = JSON.parsefile("./Input_Files/"*ARGS[1]*".json")
 
 #Parameters
 
