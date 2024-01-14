@@ -68,8 +68,8 @@ L = (24, 24)
 # end_index = start_index + elements_per_process - 1 + (commRank < remainder ? 1 : 0)
 
 # for i in start_index:end_index
-h = round(Hs[i],sigdigits=5)
-j2 = round(J2s[i],sigdigits=5)
+h = 0.1
+j2 = -0.43333
 filename = "/scratch/grovert4/Data/single_runs/"*ARGS[1]*"_H=$h,J2=$j2.h5"
 
 if isfile(filename) 
