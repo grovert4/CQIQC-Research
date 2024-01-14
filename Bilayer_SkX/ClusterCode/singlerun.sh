@@ -10,6 +10,6 @@
 #SBATCH --time=1:00:00
 #SBATCH --mem-per-cpu=4000MB
 #SBATCH --output=/scratch/grovert4/SLURM/slurm-%x-%j.txt
-module load julia/1.8.5
+module load julia/1.8.1
 
 srun julia Single_Run_Monolayer.jl 13.01.2023-Monolayer
