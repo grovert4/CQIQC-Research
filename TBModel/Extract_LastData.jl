@@ -23,13 +23,13 @@ function extract_data!(folderpath::String, substring::String=".jld2")
                     path_index = GetQIndex.(bzpath, Ref(TBModel.bz); nearest=true)
                     bands_from_index = getindex.(Ref(TBModel.Ham.bands), CartesianIndex.(Tuple.(path_index)))
                     label_indices = getindex.(findmin.([norm.(Ref(ReduceQ(x, TBModel.bz)) .- bzpath) for x in path]), 2)
-                    #Can you save these data arrays? 
                     c = Array{Float32}(undef, 2 * length(TBModel.uc.basis))
                     for i in 1:2*length(TBModel.uc.basis)
                         c[i] = PartialChernNumber(TBModel.Ham, i, TBModel.mu)
                         println(round(c[i]), "Chern")
-                        c_fill = FilledChernNumber(TBModel.Ham, TBModel.mu)
                     end
+                    c_fill = FilledChernNumber(TBModel.Ham, TBModel.mu)
+
                     dict["Bands"] = bands_from_index
                     println(bands_from_index)
                     dict["Labels"] = label_indices
@@ -39,8 +39,8 @@ function extract_data!(folderpath::String, substring::String=".jld2")
                     dict["mu"] = TBModel.mu
                     dict["Outputs"] = data_entry["outputs"][end]
                     #plot = Plot_Band_Structure!(TBModel, [TBModel.bz.HighSymPoints["G"], TBModel.bz.HighSymPoints["M2"], TBModel.bz.HighSymPoints["M3"]]; labels=[L"\Gamma", L"M_2", L"M_3"])
-
                     dict["Chern"] = c
+                    dict["Chern Fill"] = c_fill
                     save(folderpath * "/Last_Itr/Last_Itr_" * string(file), dict)
                 catch e
                     println("Error Loading $file")
