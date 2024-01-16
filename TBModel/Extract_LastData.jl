@@ -17,7 +17,10 @@ function extract_data!(folderpath::String, substring::String=".jld2")
                     dict["Iterations"] = data_entry["Self-consistency params"][:iter]
                     dict["MFT Energy"] = data_entry["function args"][1].MFTEnergy
                     dict["Hopping Block"] = data_entry["function args"][1].HoppingOrders
+                    order_param = last.(getproperty.(dict["Hopping Block"], :value))
+                    dict["Order Parameter"] = order_param
                     TBModel = data_entry["function args"][1].model
+                    SolveModel!(TBModel; get_gap=true)
                     path = [TBModel.bz.HighSymPoints["G"], TBModel.bz.HighSymPoints["M2"], TBModel.bz.HighSymPoints["M3"]]
                     bzpath = CombinedBZPath(TBModel.bz, path; nearest=true, closed=true)
                     path_index = GetQIndex.(bzpath, Ref(TBModel.bz); nearest=true)

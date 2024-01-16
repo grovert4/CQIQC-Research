@@ -1,6 +1,7 @@
 using Plots, LinearAlgebra, ColorSchemes
 using MeanFieldToolkit, TightBindingToolkit, FixedPointToolkit
 loc = "/scratch/a/aparamek/andykh/Data/Bilayer_Data"
+loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Bilayer_Data"
 function MFT(params, filename)
     ##Triangular Lattice 
 
@@ -105,8 +106,24 @@ function MFT(params, filename)
     # add filename to input 
     fileName = loc * "/$(filename)_p=$(round(filling, digits=3))_U=$(round(U, digits=2))_t1=$(round(t1, digits=2)).jld2"
     GC.gc()
-    @time ResumeMFT!(mft, fileName; max_iter=200, tol=1e-6)#, Update=BroydenMixing)
-    GC.gc()
+    if isfile(fileName)
+        println("TRYING TO LOAD " * fileName)
+        try
+            println("SUCCESFULLY LOADED " * fileName)
+            ResumeMFT!(mft, fileName; max_iter=200, tol=1e-6)#, Update=BroydenMixing)
+            GC.gc()
+            for i in 1:2*length(UC.basis)
+                c = ChernNumber(H, [i])
+                println(round(c))
+
+            end
+        catch e
+            println("Error Loading $file")
+        end
+
+    else
+        Solve!(mft; max_iter=200, tol=1e-6)#, Update=BroydenMixing)
+    end
     for i in 1:2*length(UC.basis)
         c = ChernNumber(H, [i])
         println(round(c))

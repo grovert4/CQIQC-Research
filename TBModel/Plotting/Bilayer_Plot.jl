@@ -12,6 +12,7 @@ params = YAML.load_file("../Input/$(filename).yml")
 filename = "Bilayer_11.09.2023"
 
 U_array = collect(LinRange(params["U_min"], params["U_max"], params["U_length"]))
+U_array = [8.0]
 U_arr = U_array#append!(U_array_1, U_array_2)
 #U_var = U_array[end-1]
 #loc = "/Users/ahardy/Library/CloudStorage/GoogleDrive-ahardy@flatironinstitute.org/My Drive/Skyrmion/Bilayer_SkX/TBModel/Monolayer"
@@ -70,7 +71,7 @@ end
 gap_plot = scatter(gap_array[:, 1], gap_array[:, 2], xlabel="U", ylabel="Δ")
 display(gap_plot)
 savefig(loc * "gap.png")
-fileName = loc * "Bilayer_Uniform_11.06.2023=$(round(filling, digits=3))_U=$(round(0, digits=2))_t1=$(round(t1, digits=2)).jld2"
+fileName = loc * "Bilayer_11.09.2023=$(round(filling, digits=3))_U=$(round(8, digits=2))_t1=$(round(t1, digits=2)).jld2"
 TBResults = MeanFieldToolkit.MFTResume.ReadMFT(fileName)
 TBModel = TBResults["MFT"].model
 c_arr = Array{Float64}(undef, (length(U_array), 2 * length(TBModel.uc.basis)))

@@ -1,7 +1,7 @@
 using TightBindingToolkit, MeanFieldToolkit
 using LaTeXStrings, Plots, LinearAlgebra, YAML
 using DelimitedFiles, DataFrames, JLD2
-filling = 0.5
+filling = 0.232
 t1 = -1.0
 filename = "11.27.2023_Bilayer"
 cd(@__DIR__)
@@ -26,11 +26,12 @@ function Plot_Band_Data!(TBResults, labels, closed::Bool=true, nearest::Bool=tru
     mu = TBResults["mu"]
     plt = plot(grid=false, legend=plot_legend, bg_legend=:transparent,
         framestyle=framestyle, guidefontsize=guidefontsize, tickfontsize=tickfontsize)
-    for (i, band) in enumerate(bands)
-
-        plot!(band, labels=L"Band : %$i", lw=2.0)
+    println(size(bands))
+    for (i, band) in enumerate(bands[1:48])
+        println(i)
+        plot!(getindex.(bands, i), labels=L"Band : %$i", lw=2.0)
     end
-    #hline!([mu], linestyle=:dash, label=L"\mu", lw=0.5, linecolor=:black)
+    hline!([mu], linestyle=:dash, label=L"\mu", lw=0.5, linecolor=:black)
     if !closed
         xticks!(label_indices, labels)
         vline!(label_indices, linestyle=:dash, linecolor=:indigo, label="", lw=0.5)
@@ -58,6 +59,7 @@ const l2 = [-0.5, sqrt(3) / 2]
 UC = UnitCell([a1, a2], 4)
 order_parameter = Array{Float64}(undef, 24)
 c_arr = Array{Float64}(undef, (length(U_array), 24))
+c_fill = Array{Float64}(undef, (length(U_array)))
 
 
 for (ind, U_var) in enumerate(U_arr)
@@ -65,11 +67,13 @@ for (ind, U_var) in enumerate(U_arr)
     fileName = loc * "Last_Itr/Last_Itr_$(filename)=$(round(filling, digits=3))_U=$(round(U_var, digits=2))_t1=$(round(t1, digits=2)).jld2"
     println(fileName)
     TBResults = load(fileName) #MeanFieldToolkit.MFTResume.ReadMFT(fileName)
+    println(keys(TBResults))
 
     gap_array[ind, 1] = U_var
     gap_array[ind, 2] = TBResults["Gap"]
-    c_arr[ind, :] = TBResults["Chern"]
-
+    print(TBResults["Gap"])
+    c_arr[ind, :] = abs.(TBResults["Chern"])
+    c_fill[ind] = abs.(TBResults["Chern Fill"])
     # writedlm(loc * "chern_$(round(U_var, digits=2)).csv", c)
     # #f string formatting ? 
     # println("Convergence ", U_var)
@@ -108,6 +112,7 @@ end
 gap_plot = scatter(gap_array[:, 1], gap_array[:, 2], xlabel="U", ylabel="Δ")
 display(gap_plot)
 savefig(loc * "gap.png")
+
 #fileName = loc * "Bilayer_Uniform_11.06.2023=$(round(filling, digits=3))_U=$(round(0, digits=2))_t1=$(round(t1, digits=2)).jld2"
 #TBResults = MeanFieldToolkit.MFTResume.ReadMFT(fileName)
 #TBModel = TBResults["MFT"].model
@@ -121,5 +126,9 @@ display(x)
 scatter(U_arr, [abs.(c_arr[:, 1]), abs.(c_arr[:, 4])], label=["Chern ( first 2 bands)" "Chern ( first 6 bands)"])
 #It's uncertain of what Chern number to use?
 xlabel!("U")
+
+C_plot = scatter(U_arr, c_fill, xlabel="U", ylabel="σ")
+display(C_plot)
+savefig(loc * "Chern.png")
 # plot the bands color code by sign of Chern # 
 # or which layer 
