@@ -73,7 +73,9 @@ display(gap_plot)
 savefig(loc * "gap.png")
 fileName = loc * "Bilayer_11.09.2023=$(round(filling, digits=3))_U=$(round(8, digits=2))_t1=$(round(t1, digits=2)).jld2"
 TBResults = MeanFieldToolkit.MFTResume.ReadMFT(fileName)
+ResumeMFT!(fileName; max_iter=200, tol=1e-6)
 TBModel = TBResults["MFT"].model
+SolveModel!(TBModel; get_gap=true)
 c_arr = Array{Float64}(undef, (length(U_array), 2 * length(TBModel.uc.basis)))
 T
 for (ind, U_var) in enumerate(U_array)

@@ -1,7 +1,8 @@
+# package activate skyrmion syntax
 using TightBindingToolkit, MeanFieldToolkit
 using LaTeXStrings, Plots, LinearAlgebra, YAML
 using DelimitedFiles, DataFrames, JLD2
-filling = 0.232
+filling = 0.5
 t1 = -1.0
 filename = "11.27.2023_Bilayer"
 cd(@__DIR__)
@@ -49,7 +50,8 @@ function Plot_Band_Data!(TBResults, labels, closed::Bool=true, nearest::Bool=tru
 end
 
 #############################
-gap_array = zeros((length(U_array), 2))
+
+
 const a1 = [-3.0, sqrt(3)]
 const a2 = [3.0, sqrt(3)]
 
@@ -61,6 +63,8 @@ order_parameter = Array{Float64}(undef, 24)
 c_arr = Array{Float64}(undef, (length(U_array), 24))
 c_fill = Array{Float64}(undef, (length(U_array)))
 
+gap_array = zeros((length(U_array), 2))
+ord_array = Array{Float64}(undef, (length(U_array)))
 
 for (ind, U_var) in enumerate(U_arr)
 
@@ -74,6 +78,7 @@ for (ind, U_var) in enumerate(U_arr)
     print(TBResults["Gap"])
     c_arr[ind, :] = abs.(TBResults["Chern"])
     c_fill[ind] = abs.(TBResults["Chern Fill"])
+    ord_arr = abs.(TBResults["Order Parameter"])
     # writedlm(loc * "chern_$(round(U_var, digits=2)).csv", c)
     # #f string formatting ? 
     # println("Convergence ", U_var)
@@ -123,6 +128,8 @@ savefig(loc * "gap.png")
 # end
 x = scatter(U_arr, c_arr)
 display(x)
+ords = scatter(U_arr, ord_array)
+display(ords)
 scatter(U_arr, [abs.(c_arr[:, 1]), abs.(c_arr[:, 4])], label=["Chern ( first 2 bands)" "Chern ( first 6 bands)"])
 #It's uncertain of what Chern number to use?
 xlabel!("U")
