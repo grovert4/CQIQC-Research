@@ -103,7 +103,7 @@ function MFT(params, filename)
         try
             println("SUCCESFULLY LOADED " * fileName)
             ResumeMFT!(fileName; max_iter=params["max_iter"], tol=params["tol"])#, Update=BroydenMixing)
-            end
+        end
         catch e
             println("Error Loading $file")
             Solve!(mft, fileName; max_iter=params["max_iter"], tol=params["tol"])
