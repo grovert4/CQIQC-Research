@@ -27,7 +27,6 @@ function MFT(params, filename)
     ##### Thermodynamic parameters
     filling = params["filling"]
     T = get!(params, "T", 0.0)
-
     tinter_param = Param(t_inter, 2)
     t1 = -t
     t1Param = Param(t1, 2)
@@ -35,10 +34,8 @@ function MFT(params, filename)
     tdParam = Param(t_density, 2)
     tiParam = Param(t_inter, 2)
     HoppingParams = [t1Param, tdParam, tiParam, jhParam]
-
     su2spin = SpinMats(1 // 2)
     su4spin = SpinMats(3 // 2)
-
     ##Adding inner-hexagon structure  
     for j = 1:2
         for i = -1:4
@@ -82,21 +79,16 @@ function MFT(params, filename)
         AddAnisotropicBond!(jhParam, UC, ind, ind, [0, 0], mat, 0.0, "Hunds")
     end
     CreateUnitCell!(UC, HoppingParams)
-
     ##Creating BZ and Hamiltonian Model
     # add resume option. 
     Density = []
     UParam.value = [U]
-
     for (ind, bas) in enumerate(UC.basis)
         push!(Density, Param(1.0, 2))
         AddAnisotropicBond!(Density[ind], UC, ind, ind, [0, 0], kron(su2spin[3], su2spin[4]), 0.0, "Dens-" * string(ind))
     end
-
     ChiParams = vcat(Density)
     ChiParams = Vector{Param{2,Float64}}(ChiParams)
-
-
     path = CombinedBZPath(bz, [bz.HighSymPoints["G"], bz.HighSymPoints["K1"], bz.HighSymPoints["M2"]]; nearest=true)
     H = Hamiltonian(UC, bz)
     DiagonalizeHamiltonian!(H)
@@ -110,19 +102,14 @@ function MFT(params, filename)
         println("TRYING TO LOAD " * fileName)
         try
             println("SUCCESFULLY LOADED " * fileName)
-            ResumeMFT!(mft, fileName; max_iter=200, tol=1e-6)#, Update=BroydenMixing)
-            GC.gc()
-            for i in 1:2*length(UC.basis)
-                c = ChernNumber(H, [i])
-                println(round(c))
-
+            ResumeMFT!(fileName; max_iter=params["max_iter"], tol=params["tol"])#, Update=BroydenMixing)
             end
         catch e
             println("Error Loading $file")
+            Solve!(mft, fileName; max_iter=params["max_iter"], tol=params["tol"])
         end
-
     else
-        Solve!(mft; max_iter=200, tol=1e-6)#, Update=BroydenMixing)
+        Solve!(mft, fileName; max_iter=params["max_iter"], tol=params["tol"])
     end
     for i in 1:2*length(UC.basis)
         c = ChernNumber(H, [i])

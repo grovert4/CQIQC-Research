@@ -2,7 +2,10 @@
 using TightBindingToolkit, MeanFieldToolkit
 using LaTeXStrings, Plots, LinearAlgebra, YAML
 using DelimitedFiles, DataFrames, JLD2
-filling = 0.5
+
+
+using Statistics
+filling = 0.232
 t1 = -1.0
 filename = "11.27.2023_Bilayer"
 cd(@__DIR__)
@@ -27,9 +30,9 @@ function Plot_Band_Data!(TBResults, labels, closed::Bool=true, nearest::Bool=tru
     mu = TBResults["mu"]
     plt = plot(grid=false, legend=plot_legend, bg_legend=:transparent,
         framestyle=framestyle, guidefontsize=guidefontsize, tickfontsize=tickfontsize)
-    println(size(bands))
+    #println(size(bands))
     for (i, band) in enumerate(bands[1:48])
-        println(i)
+        #println(i)
         plot!(getindex.(bands, i), labels=L"Band : %$i", lw=2.0)
     end
     hline!([mu], linestyle=:dash, label=L"\mu", lw=0.5, linecolor=:black)
@@ -59,7 +62,7 @@ const l1 = [1.0, 0]
 const l2 = [-0.5, sqrt(3) / 2]
 
 UC = UnitCell([a1, a2], 4)
-order_parameter = Array{Float64}(undef, 24)
+order_parameter = Array{Float64}(undef, (length(U_array), 12))
 c_arr = Array{Float64}(undef, (length(U_array), 24))
 c_fill = Array{Float64}(undef, (length(U_array)))
 
@@ -75,10 +78,15 @@ for (ind, U_var) in enumerate(U_arr)
 
     gap_array[ind, 1] = U_var
     gap_array[ind, 2] = TBResults["Gap"]
-    print(TBResults["Gap"])
+    println(TBResults["Gap"])
     c_arr[ind, :] = abs.(TBResults["Chern"])
     c_fill[ind] = abs.(TBResults["Chern Fill"])
     ord_arr = abs.(TBResults["Order Parameter"])
+    ords = TBResults["Outputs"]
+    order_parameter[ind, :] = TBResults["Outputs"]
+    ord_array[ind] = (mean(abs.(ords)))
+    println(size(ords))
+    println(ords)
     # writedlm(loc * "chern_$(round(U_var, digits=2)).csv", c)
     # #f string formatting ? 
     # println("Convergence ", U_var)
@@ -130,6 +138,8 @@ x = scatter(U_arr, c_arr)
 display(x)
 ords = scatter(U_arr, ord_array)
 display(ords)
+ords2 = scatter(U_arr, abs.(order_parameter))
+display(ords2)
 scatter(U_arr, [abs.(c_arr[:, 1]), abs.(c_arr[:, 4])], label=["Chern ( first 2 bands)" "Chern ( first 6 bands)"])
 #It's uncertain of what Chern number to use?
 xlabel!("U")

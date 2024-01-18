@@ -9,7 +9,7 @@ println(filename)
 println("Hello from $(commRank) of $(commSize)")
 params = YAML.load_file("./Input/$(filename).yml")
 
-(Uarr, fillingarr) = ndgrid(range(params["U_min"], params["U_max"], params["U_length"]), range(params["filling_min"], params["filling_max"], params["filling_length"]))
+(Uarr, fillingarr) = ndgrid(range(params["U_min"], params["U_max"], params["U_length"]), range(params["filling_min"], params["filling_max"], params["filling_length"])//24)
 Us = collect(Iterators.flatten(Uarr))
 fillings = collect(Iterators.flatten(fillingarr))
 
