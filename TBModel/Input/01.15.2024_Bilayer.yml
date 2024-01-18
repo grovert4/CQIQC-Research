@@ -2,7 +2,7 @@
 n : 10
 T : 0.001
 max_iter : 300
-tolerance : 1e-06
+tol : 1e-06
 # physical parameters
 t : 1.0
 t_inter : 0.0
