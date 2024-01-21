@@ -94,9 +94,9 @@ for i in start_index:end_index
       setInteractionOnsite!(UClocal, 1, aion * Sz)
 
       ##DM interaction
-      addInteraction!(UClocal, 1, 1, Dex(D1v, D), (1,0))
-      addInteraction!(UClocal, 1, 1, Dex(D2v, D), (0,1)) #(0,1)
-      addInteraction!(UClocal, 1, 1, Dex(D3v, D), (-1,-1)) #
+      addInteraction!(UClocal, 1, 1, Dex(D1v, d), (1,0))
+      addInteraction!(UClocal, 1, 1, Dex(D2v, d), (0,1)) #(0,1)
+      addInteraction!(UClocal, 1, 1, Dex(D3v, d), (-1,-1)) #
       
       latticeLocal = Lattice(UClocal, L)
 
