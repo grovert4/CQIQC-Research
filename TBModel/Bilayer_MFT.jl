@@ -106,10 +106,10 @@ function MFT(params, filename)
             ResumeMFT!(fileName; max_iter=params["max_iter"], tol=params["tol"])#, Update=BroydenMixing)
         catch e
             println("Error Loading $fileName")
-            SolveMFT!(mft, fileName; Initial = init_guess, max_iter=params["max_iter"], tol=params["tol"])
+            SolveMFT!(mft, init_guess, fileName;  max_iter=params["max_iter"], tol=params["tol"])
         end
     else
-        SolveMFT!(mft, fileName; Initial = init_guess, max_iter=params["max_iter"], tol=params["tol"])
+        SolveMFT!(mft,init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
     end
     for i in 1:2*length(UC.basis)
         c = ChernNumber(H, [i])
