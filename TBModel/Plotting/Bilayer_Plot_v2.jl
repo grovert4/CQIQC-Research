@@ -5,22 +5,21 @@ using DelimitedFiles, DataFrames, JLD2
 
 
 using Statistics
-filling = 0.232
 t1 = -1.0
-filename = "11.27.2023_Bilayer"
+filename = "01.15.2024_Bilayer"
 cd(@__DIR__)
 println(pwd())
-println(@__DIR__)
+#println(@__DIR__)
 params = YAML.load_file("../Input/$(filename).yml")
-filename = "Bilayer_11.09.2023"
+#filename = "Bilayer_01.15.2024"
 
 U_array = collect(LinRange(params["U_min"], params["U_max"], params["U_length"]))
-U_arr = U_array#append!(U_array_1, U_array_2)
+filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / 24
+filling = filling_arr[12]
+println(filling, "filling")
 #U_var = U_array[end-1]
 #loc = "/Users/ahardy/Library/CloudStorage/GoogleDrive-ahardy@flatironinstitute.org/My Drive/Skyrmion/Bilayer_SkX/TBModel/Monolayer"
 loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Bilayer_Data/"
-#date = "11.09.2023"
-type = "_Uniform"
 #############################
 function Plot_Band_Data!(TBResults, labels, closed::Bool=true, nearest::Bool=true, plot_legend::Bool=true, framestyle::Symbol=:box, guidefontsize::Int64=14, tickfontsize::Int64=12,
     font::String="Helvetica", plot_title::Bool=true)
@@ -68,25 +67,28 @@ c_fill = Array{Float64}(undef, (length(U_array)))
 
 gap_array = zeros((length(U_array), 2))
 ord_array = Array{Float64}(undef, (length(U_array)))
+eng_array = Array{Float64}(undef, (length(U_array)))
 
-for (ind, U_var) in enumerate(U_arr)
+for (ind, U_var) in enumerate(U_array)
 
-    fileName = loc * "Last_Itr/Last_Itr_$(filename)=$(round(filling, digits=3))_U=$(round(U_var, digits=2))_t1=$(round(t1, digits=2)).jld2"
+    fileName = loc * "Last_Itr/Last_Itr_$(filename)_p=$(round(filling, digits=3))_U=$(round(U_var, digits=2))_t1=$(round(t1, digits=2)).jld2"
     println(fileName)
     TBResults = load(fileName) #MeanFieldToolkit.MFTResume.ReadMFT(fileName)
-    println(keys(TBResults))
+    #println(keys(TBResults))
 
     gap_array[ind, 1] = U_var
     gap_array[ind, 2] = TBResults["Gap"]
-    println(TBResults["Gap"])
+    println(TBResults["MFT Energy"])
+    eng_array[ind] = TBResults["MFT Energy"][end]
+    #println(TBResults["Gap"])
     c_arr[ind, :] = abs.(TBResults["Chern"])
     c_fill[ind] = abs.(TBResults["Chern Fill"])
-    ord_arr = abs.(TBResults["Order Parameter"])
+    ord_arr = abs.(TBResults["Order_Parameter"])
     ords = TBResults["Outputs"]
     order_parameter[ind, :] = TBResults["Outputs"]
     ord_array[ind] = (mean(abs.(ords)))
-    println(size(ords))
-    println(ords)
+    #println(size(ords))
+    #println(ords)
     # writedlm(loc * "chern_$(round(U_var, digits=2)).csv", c)
     # #f string formatting ? 
     # println("Convergence ", U_var)
@@ -134,17 +136,19 @@ savefig(loc * "gap.png")
 #     c = readdlm(loc * "chern_$(round(U_var, digits=2)).csv")
 #     c_arr[ind, :] = c
 # end
-x = scatter(U_arr, c_arr)
+x = scatter(U_array, c_arr)
 display(x)
-ords = scatter(U_arr, ord_array)
+ords = scatter(U_array, ord_array)
 display(ords)
-ords2 = scatter(U_arr, abs.(order_parameter))
+energy_plot = scatter(U_array, eng_array)
+display(energy_plot)
+ords2 = scatter(U_array, abs.(order_parameter))
 display(ords2)
-scatter(U_arr, [abs.(c_arr[:, 1]), abs.(c_arr[:, 4])], label=["Chern ( first 2 bands)" "Chern ( first 6 bands)"])
+scatter(U_array, [abs.(c_arr[:, 1]), abs.(c_arr[:, 4])], label=["Chern ( first 2 bands)" "Chern ( first 6 bands)"])
 #It's uncertain of what Chern number to use?
 xlabel!("U")
 
-C_plot = scatter(U_arr, c_fill, xlabel="U", ylabel="σ")
+C_plot = scatter(U_array, c_fill, xlabel="U", ylabel="σ")
 display(C_plot)
 savefig(loc * "Chern.png")
 # plot the bands color code by sign of Chern # 

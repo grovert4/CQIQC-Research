@@ -98,6 +98,7 @@ function MFT(params, filename)
     # add filename to input 
     fileName = loc * "/$(filename)_p=$(round(filling, digits=3))_U=$(round(U, digits=2))_t1=$(round(t1, digits=2)).jld2"
     GC.gc()
+    init_guess = fill(0.25,12)
     if isfile(fileName)
         println("TRYING TO LOAD " * fileName)
         try
@@ -105,10 +106,10 @@ function MFT(params, filename)
             ResumeMFT!(fileName; max_iter=params["max_iter"], tol=params["tol"])#, Update=BroydenMixing)
         catch e
             println("Error Loading $fileName")
-            SolveMFT!(mft, fileName; max_iter=params["max_iter"], tol=params["tol"])
+            SolveMFT!(mft, fileName; Initial = init_guess, max_iter=params["max_iter"], tol=params["tol"])
         end
     else
-        SolveMFT!(mft, fileName; max_iter=params["max_iter"], tol=params["tol"])
+        SolveMFT!(mft, fileName; Initial = init_guess, max_iter=params["max_iter"], tol=params["tol"])
     end
     for i in 1:2*length(UC.basis)
         c = ChernNumber(H, [i])

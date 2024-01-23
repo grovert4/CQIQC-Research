@@ -15,7 +15,7 @@ function extract_data!(folderpath::String, substring::String=".jld2")
                     println("SUCCESFULLY LOADED " * folderpath * "/" * string(file))
                     dict = Dict()
                     dict["Iterations"] = data_entry["Self-consistency params"][:iter]
-                    dict["MFT Energy"] = data_entry["function args"][1].MFTEnergy
+                    dict["MFT_Energy"] = data_entry["function args"][1].MFTEnergy
                     dict["Hopping_Block"] = data_entry["function args"][1].HoppingOrders
                     dict["Expectations"] = data_entry["outputs"][end]
                     order_param = last.(getproperty.(dict["Hopping Block"], :value))
@@ -45,6 +45,8 @@ function extract_data!(folderpath::String, substring::String=".jld2")
                     #plot = Plot_Band_Structure!(TBModel, [TBModel.bz.HighSymPoints["G"], TBModel.bz.HighSymPoints["M2"], TBModel.bz.HighSymPoints["M3"]]; labels=[L"\Gamma", L"M_2", L"M_3"])
                     dict["Chern"] = c
                     dict["Chern Fill"] = c_fill
+                    dict["Convergence"] = norm(data_entry["inputs"][end] - data_entry["outputs"][end]) #[maximum(norm.(data_entry["outputs"][i] - data_entry["inputs"][i])) for i in 1:length(data_entry["inputs"])]#
+                    # save convergences
                     save(folderpath * "/Last_Itr/Last_Itr_" * string(file), dict)
                 catch e
                     println("Error Loading $file")
