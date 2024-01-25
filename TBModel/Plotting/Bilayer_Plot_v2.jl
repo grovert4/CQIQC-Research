@@ -6,7 +6,7 @@ using DelimitedFiles, DataFrames, JLD2
 
 using Statistics
 t1 = -1.0
-filename = "01.15.2024_Bilayer"
+filename = "01.25.2024_Bilayer"
 cd(@__DIR__)
 println(pwd())
 #println(@__DIR__)
@@ -15,7 +15,7 @@ params = YAML.load_file("../Input/$(filename).yml")
 
 U_array = collect(LinRange(params["U_min"], params["U_max"], params["U_length"]))
 filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / 24
-filling = filling_arr[12]
+filling = filling_arr[5]
 println(filling, "filling")
 #U_var = U_array[end-1]
 #loc = "/Users/ahardy/Library/CloudStorage/GoogleDrive-ahardy@flatironinstitute.org/My Drive/Skyrmion/Bilayer_SkX/TBModel/Monolayer"
@@ -78,8 +78,8 @@ for (ind, U_var) in enumerate(U_array)
 
     gap_array[ind, 1] = U_var
     gap_array[ind, 2] = TBResults["Gap"]
-    println(TBResults["MFT Energy"])
-    eng_array[ind] = TBResults["MFT Energy"][end]
+    println(TBResults["MFT_Energy"])
+    eng_array[ind] = TBResults["MFT_Energy"][end]
     #println(TBResults["Gap"])
     c_arr[ind, :] = abs.(TBResults["Chern"])
     c_fill[ind] = abs.(TBResults["Chern Fill"])
