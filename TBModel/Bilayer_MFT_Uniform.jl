@@ -96,7 +96,7 @@ function MFT(params, filename)
     # add filename to input 
     fileName = loc * "/$(filename)_UNIFORM_p=$(round(filling, digits=3))_U=$(round(U, digits=2))_t1=$(round(t1, digits=2)).jld2"
     GC.gc()
-    init_guess = fill(0.25,12)
+    init_guess = fill(0.2,1)
     if isfile(fileName)
         println("TRYING TO LOAD " * fileName)
         try
