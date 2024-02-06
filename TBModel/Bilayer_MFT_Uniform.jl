@@ -4,6 +4,16 @@ loc = "/scratch/a/aparamek/andykh/Data/Bilayer_Data"
 #loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Bilayer_Data"
 function MFT(params, filename)
  ##Parameters
+    ##Triangular Lattice 
+
+    a1 = [-3.0, sqrt(3)]
+    a2 = [3.0, sqrt(3)]
+
+    l1 = [1.0, 0]
+    l2 = [-0.5, sqrt(3) / 2]
+
+    UC = UnitCell([a1, a2], 4)
+    ##Parameters
 
     n = get!(params, "n", 10)
     kSize = 6 * n + 3
