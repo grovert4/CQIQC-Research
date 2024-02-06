@@ -15,7 +15,7 @@ params = YAML.load_file("../Input/$(filename).yml")
 
 U_array = collect(LinRange(params["U_min"], params["U_max"], params["U_length"]))
 filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / 24
-filling = filling_arr[5]
+filling = filling_arr[2]
 println(filling, "filling")
 #U_var = U_array[end-1]
 #loc = "/Users/ahardy/Library/CloudStorage/GoogleDrive-ahardy@flatironinstitute.org/My Drive/Skyrmion/Bilayer_SkX/TBModel/Monolayer"

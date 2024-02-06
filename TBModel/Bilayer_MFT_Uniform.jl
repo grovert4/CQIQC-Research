@@ -3,16 +3,7 @@ using MeanFieldToolkit, TightBindingToolkit, FixedPointToolkit
 loc = "/scratch/a/aparamek/andykh/Data/Bilayer_Data"
 #loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Bilayer_Data"
 function MFT(params, filename)
-    ##Triangular Lattice 
-
-    a1 = [-3.0, sqrt(3)]
-    a2 = [3.0, sqrt(3)]
-
-    l1 = [1.0, 0]
-    l2 = [-0.5, sqrt(3) / 2]
-
-    UC = UnitCell([a1, a2], 4)
-    ##Parameters
+ ##Parameters
 
     n = get!(params, "n", 10)
     kSize = 6 * n + 3
@@ -76,15 +67,14 @@ function MFT(params, filename)
         end
         AddAnisotropicBond!(jhParam, UC, ind, ind, [0, 0], mat, 0.0, "Hunds")
     end
+
     CreateUnitCell!(UC, HoppingParams)
-    ##Creating BZ and Hamiltonian Model
-    # add resume option. 
+
     Density = []
     UParam.value = [U]
-    for (ind, bas) in enumerate(UC.basis)
-        push!(Density, Param(1.0, 2))
-        AddAnisotropicBond!(Density[ind], UC, ind, ind, [0, 0], kron(su2spin[3], su2spin[4]), 0.0, "Dens-" * string(ind))
-    end
+    push!(Density, Param(1.0, 2))
+    AddIsotropicBonds!(Density[1], UC, 0.0, kron(su2spin[3], su2spin[4]), "Dens")
+
     ChiParams = vcat(Density)
     ChiParams = Vector{Param{2,Float64}}(ChiParams)
     path = CombinedBZPath(bz, [bz.HighSymPoints["G"], bz.HighSymPoints["K1"], bz.HighSymPoints["M2"]]; nearest=true)
@@ -94,7 +84,7 @@ function MFT(params, filename)
     SolveModel!(Mdl; get_gap=true)
     mft = TightBindingMFT(Mdl, ChiParams, [UParam], IntraQuarticToHopping)
     # add filename to input 
-    fileName = loc * "/$(filename)_p=$(round(filling, digits=3))_U=$(round(U, digits=2))_t1=$(round(t1, digits=2)).jld2"
+    fileName = loc * "/$(filename)_UNIFORM_p=$(round(filling, digits=3))_U=$(round(U, digits=2))_t1=$(round(t1, digits=2)).jld2"
     GC.gc()
     init_guess = fill(0.25,12)
     if isfile(fileName)

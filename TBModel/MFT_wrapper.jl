@@ -1,6 +1,6 @@
 using YAML, LazyGrids
 using MPI
-include("./Bilayer_MFT.jl")
+include("./Bilayer_MFT_Uniform.jl")
 filename = "$(ARGS[1])"
 MPI.Init()
 commSize = MPI.Comm_size(MPI.COMM_WORLD)
