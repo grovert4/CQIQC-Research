@@ -7,11 +7,12 @@ using DelimitedFiles, DataFrames, JLD2
 using Statistics
 t1 = -1.0
 filename = "01.25.2024_Bilayer"
+filename = "02.05.2024_Bilayer"
+
 cd(@__DIR__)
 println(pwd())
 #println(@__DIR__)
 params = YAML.load_file("../Input/$(filename).yml")
-#filename = "Bilayer_01.15.2024"
 
 U_array = collect(LinRange(params["U_min"], params["U_max"], params["U_length"]))
 filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / 24
@@ -59,9 +60,14 @@ const a2 = [3.0, sqrt(3)]
 
 const l1 = [1.0, 0]
 const l2 = [-0.5, sqrt(3) / 2]
+Uniform_Status = true
 
 UC = UnitCell([a1, a2], 4)
-order_parameter = Array{Float64}(undef, (length(U_array), 12))
+if Uniform_Status
+    order_parameter = Array{Float64}(undef, (length(U_array), 1))
+else
+    order_parameter = Array{Float64}(undef, (length(U_array), 12))
+end
 c_arr = Array{Float64}(undef, (length(U_array), 24))
 c_fill = Array{Float64}(undef, (length(U_array)))
 
@@ -70,8 +76,11 @@ ord_array = Array{Float64}(undef, (length(U_array)))
 eng_array = Array{Float64}(undef, (length(U_array)))
 
 for (ind, U_var) in enumerate(U_array)
-
-    fileName = loc * "Last_Itr/Last_Itr_$(filename)_p=$(round(filling, digits=3))_U=$(round(U_var, digits=2))_t1=$(round(t1, digits=2)).jld2"
+    if Uniform_Status == true
+        fileName = loc * "Last_Itr/Last_Itr_$(filename)_UNIFORM_p=$(round(filling, digits=3))_U=$(round(U_var, digits=2))_t1=$(round(t1, digits=2)).jld2"
+    else
+        fileName = loc * "Last_Itr/Last_Itr_$(filename)_p=$(round(filling, digits=3))_U=$(round(U_var, digits=2))_t1=$(round(t1, digits=2)).jld2"
+    end
     println(fileName)
     TBResults = load(fileName) #MeanFieldToolkit.MFTResume.ReadMFT(fileName)
     #println(keys(TBResults))
