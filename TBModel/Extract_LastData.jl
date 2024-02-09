@@ -1,5 +1,36 @@
 using FixedPointToolkit, JLD2, MeanFieldToolkit, TightBindingToolkit, LinearAlgebra
 ##Script that reads in a jld2 MFT data file and extracts the last of iteration of the data
+function KuboChern(Ham::Hamiltonian, bz::BZ, mu::Float64)
+
+    Vx = conj.(permutedims.(Ham.states)) .* Ham.velocity[1] .* Ham.states
+    Vy = conj.(permutedims.(Ham.states)) .* Ham.velocity[2] .* Ham.states
+
+    chern = 0.0 + im * 0.0
+    for k in eachindex(Ham.bands)
+        Es = Ham.bands[k]
+        vx = Vx[k]
+        vy = Vy[k]
+
+        ind = searchsortedfirst(Es, mu)
+        if ind == 1 || ind == length(Es)
+            continue
+        else
+            for i in 1:ind-1
+                for j in ind:length(Es)
+                    chern += (vx[i, j] * vy[j, i] - vx[j, i] * vy[i, j]) / ((Es[j] - Es[i])^2)
+                end
+            end
+        end
+
+    end
+
+    b1 = [bz.basis[1]; 0.0]
+    b2 = [bz.basis[2]; 0.0]
+    bzUnitArea = cross(b1, b2)[3] / (4 * pi^2)
+
+    return imag(chern) * bzUnitArea * 2 * pi / length(Ham.bands)
+
+end
 
 function extract_data!(folderpath::String, substring::String=".jld2")
     file_list = sort(readdir(folderpath))
@@ -32,8 +63,8 @@ function extract_data!(folderpath::String, substring::String=".jld2")
                         c[i] = PartialChernNumber(TBModel.Ham, i, TBModel.mu)
                         println(round(c[i]), "Chern")
                     end
-                    c_fill = FilledChernNumber(TBModel.Ham, TBModel.mu)
-
+                    GetVelocity!(TBModel.Ham, TBModel.bz)
+                    c_fill = KuboChern(TBModel.Ham, TBModel.bz, TBModel.mu)
                     dict["Bands"] = bands_from_index
                     println(bands_from_index)
                     dict["Labels"] = label_indices
