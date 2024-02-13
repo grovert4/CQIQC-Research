@@ -1,0 +1,17 @@
+# numerical parameters
+n : 5
+T : 0.0005
+max_iter : 500
+tol : 1e-08
+# physical parameters
+t : 1.0
+t_inter : 0.0
+jh : -1.0
+U : 1.0
+t_density : 0
+U_min : 0.0
+U_max : 6.0
+U_length : 25
+filling_min : 2
+filling_max : 24
+filling_length : 12

@@ -1,7 +1,8 @@
 using YAML, LazyGrids
 using MPI
-include("./Bilayer_MFT_Uniform.jl")
 filename = "$(ARGS[1])"
+include("$(ARGS[2])")
+
 MPI.Init()
 commSize = MPI.Comm_size(MPI.COMM_WORLD)
 commRank = MPI.Comm_rank(MPI.COMM_WORLD)
