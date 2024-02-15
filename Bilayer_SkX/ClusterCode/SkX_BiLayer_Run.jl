@@ -74,7 +74,7 @@ for i in start_index:end_index
    j2 = round(J2s[i],sigdigits=5)
 
    #println("Rank " , commRank , " working on h = " , h, " working on j2 = ", j2) 
-   filename = "/scratch/grovert4/Data/partial_bilayer/"*ARGS[1]*"_Jperp=$jperp,J2=$j2.h5"
+   filename = "/scratch/grovert4/Data/partial_bilayer/nofield"*ARGS[1]*"_Jperp=$jperp,J2=$j2.h5"
    #println(filename)
    if isfile(filename) 
       println("Already Completed "*filename)
