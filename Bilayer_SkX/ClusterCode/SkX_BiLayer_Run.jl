@@ -36,7 +36,6 @@ D3v = D .* [-1/2, -sqrt(3)/2, 0]
 
 ExchangeD(v) = [0 -v[3] v[2]; v[3] 0 -v[1]; -v[2] v[1] 0]
 
-addInteraction!(UCglobal, b1, b2, -J_ll * Sz , (0,0,0))
 
 ##Same layer interactions
 for i in 1:length(UCglobal.basis)
@@ -45,10 +44,10 @@ for i in 1:length(UCglobal.basis)
     addInteraction!(UCglobal, i, i, -J1 * I, (0,1,0))
     addInteraction!(UCglobal, i, i, -J1 * I, (-1,-1,0))
 
+    setField!(UClocal, i, [0,0,-h])
 
     ##onsite anisotropy
     setInteractionOnsite!(UCglobal, i, A_ion * Sz)
-
 
     ##DM interaction
     addInteraction!(UCglobal, i, i, (-1)^(i+1) * ExchangeD(D1v), (1,0,0))
@@ -57,13 +56,13 @@ for i in 1:length(UCglobal.basis)
 end
 
 
-(Harr,J2arr) = ndgrid(range(inputFile["H_min"],inputFile["H_max"],inputFile["H_length"]),range(inputFile["J2_min"],inputFile["J2_max"],inputFile["J2_length"]) )
-Hs = collect(Iterators.flatten(Harr))
+(Jperparr,J2arr) = ndgrid(range(inputFile["Jperp_min"],inputFile["Jperp_max"],inputFile["Jperp_length"]),range(inputFile["J2_min"],inputFile["J2_max"],inputFile["J2_length"]) )
+Jperps = collect(Iterators.flatten(Harr))
 J2s = collect(Iterators.flatten(J2arr))
 
 
 L = (inputFile["System_Size"], inputFile["System_Size"], 1)
-gridsize =inputFile["H_length"]*inputFile["J2_length"]
+gridsize =inputFile["Jperp_length"]*inputFile["J2_length"]
 
 elements_per_process = div(gridsize, commSize)
 remainder = rem(gridsize, commSize)
@@ -73,11 +72,11 @@ end_index = start_index + elements_per_process - 1 + (commRank < remainder ? 1 :
 
 #println(commSize, " commSize?")
 for i in start_index:end_index
-   h = round(Hs[i],sigdigits=5)
+   jperp = round(Hs[i],sigdigits=5)
    j2 = round(J2s[i],sigdigits=5)
 
    #println("Rank " , commRank , " working on h = " , h, " working on j2 = ", j2) 
-   filename = "/scratch/grovert4/Data/partial_bilayer/"*ARGS[1]*"_H=$h,J2=$j2.h5"
+   filename = "/scratch/grovert4/Data/partial_bilayer/"*ARGS[1]*"_Jperp=$jperp,J2=$j2.h5"
    #println(filename)
    if isfile(filename) 
       println("Already Completed "*filename)
@@ -89,10 +88,10 @@ for i in start_index:end_index
          addInteraction!(UClocal, i, i, -j2 * I, (1,2,0))
          addInteraction!(UClocal, i, i, -j2 * I, (2,1,0))
          
-         #Local Magnetic field
-         setField!(UClocal, i, [0,0,-h])
+         addInteraction!(UCglobal, b1, b2, -J_ll * Sz , (0,0,0))
+
       end
       latticeLocal = Lattice(UClocal, L)
-      mc = runAnneal(t0,tf,latticeLocal,thermSweeps,measureSweeps,inputFile["coolRate"],filename);
+      mc = runAnneal(t0,tf,latticeLocal,thermSweeps,measureSweeps,inputFile["coolRate"],filename,true);
    end
 end
