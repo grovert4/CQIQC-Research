@@ -122,17 +122,23 @@ function StructureFactor(mc, layer)
 end
 
 
-function runAnneal(t0,tf,lat,thermSweeps,MeasureSweeps, coolRate, outfile=nothing, init_rewrite=true)
+function runAnneal(t0,tf,lat,thermSweeps,MeasureSweeps, coolRate, outfile=nothing, init_rewrite=true, extfiled)
    ts = [t0 * coolRate^t for t in -500:5000 if t0 >= t0 * coolRate^t >= tf]
    monte = nothing
    for (ind,temp) in enumerate(ts) 
       thermalizationSweeps = thermSweeps
       measurementSweeps = 0
-   
+      h = lattice.unitcell.interactionsField[1][3]
+        
       if ind == 1
             thermalizationSweeps = 0
             measurementSweeps = MeasureSweeps
             m = MonteCarlo(lat, 1/temp, thermalizationSweeps, measurementSweeps, reportInterval = MeasureSweeps, rewrite = init_rewrite);
+            if extfield
+                m.lattice.interactionField[1:2:end] = repeat([(0.0, 0.0, h)], length(m.lattice.interactionField[1:2:end]))
+                m.lattice.interactionField[2:2:end] = repeat([(0.0, 0.0, -h)], length(m.lattice.interactionField[1:2:end]))
+            end
+
             run_nompi!(m, disableOutput = true)
       else
             if (ind == length(ts)) || (ind == round(length(ts)/2)) 
@@ -141,11 +147,15 @@ function runAnneal(t0,tf,lat,thermSweeps,MeasureSweeps, coolRate, outfile=nothin
             end
             m = MonteCarlo(monte.lattice, 1/temp, thermalizationSweeps, measurementSweeps, reportInterval = MeasureSweeps, rewrite = false);
 
+            m.lattice.interactionField[1:2:end] = repeat([(0.0, 0.0, coolRate^(ind) * h)], length(m.lattice.interactionField[1:2:end]))
+            m.lattice.interactionField[2:2:end] = repeat([(0.0, 0.0, -coolRate^(ind) * h)], length(m.lattice.interactionField[2:2:end]))                 
+
             if ind != length(ts)
                run_nompi!(m, disableOutput = true)
             else
                run_nompi!(m, outfile = outfile)
             end  
+
       end
       monte = deepcopy(m);
    end
