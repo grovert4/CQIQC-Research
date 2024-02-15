@@ -14,7 +14,6 @@ t0 = inputFile["t_max"]
 tf = inputFile["t_min"]
 thermSweeps = inputFile["thermalizationSweeps"]
 measureSweeps = inputFile["measurementSweeps"]
-J_ll = inputFile["J_perp"]
 
 #Unit Cell Construction
 a1 = (1.0 , 0.0, 0.0)  #-
@@ -43,8 +42,6 @@ for i in 1:length(UCglobal.basis)
     addInteraction!(UCglobal, i, i, -J1 * I, (1,0,0))
     addInteraction!(UCglobal, i, i, -J1 * I, (0,1,0))
     addInteraction!(UCglobal, i, i, -J1 * I, (-1,-1,0))
-
-    setField!(UClocal, i, [0,0,-h])
 
     ##onsite anisotropy
     setInteractionOnsite!(UCglobal, i, A_ion * Sz)
@@ -88,8 +85,9 @@ for i in start_index:end_index
          addInteraction!(UClocal, i, i, -j2 * I, (1,2,0))
          addInteraction!(UClocal, i, i, -j2 * I, (2,1,0))
          
-         addInteraction!(UCglobal, b1, b2, -J_ll * Sz , (0,0,0))
+         addInteraction!(UCglobal, b1, b2, -jperp * Sz , (0,0,0))
 
+         setField!(UClocal, i, [0,0,jperp/4])
       end
       latticeLocal = Lattice(UClocal, L)
       mc = runAnneal(t0,tf,latticeLocal,thermSweeps,measureSweeps,inputFile["coolRate"],filename,true);
