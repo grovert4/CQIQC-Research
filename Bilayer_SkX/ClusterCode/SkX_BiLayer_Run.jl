@@ -14,6 +14,7 @@ t0 = inputFile["t_max"]
 tf = inputFile["t_min"]
 thermSweeps = inputFile["thermalizationSweeps"]
 measureSweeps = inputFile["measurementSweeps"]
+extfield = inputFile["extfield"]
 
 #Unit Cell Construction
 a1 = (1.0 , 0.0, 0.0)  #-
@@ -90,6 +91,6 @@ for i in start_index:end_index
          setField!(UClocal, i, [0,0,jperp/4])
       end
       latticeLocal = Lattice(UClocal, L)
-      mc = runAnneal(t0,tf,latticeLocal,thermSweeps,measureSweeps,inputFile["coolRate"],filename,true);
+      mc = runAnneal(t0,tf,latticeLocal,thermSweeps,measureSweeps,inputFile["coolRate"],filename,true, extfield);
    end
 end
