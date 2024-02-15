@@ -1,0 +1,17 @@
+{
+  "J_1":1.0,
+  "D":0.25,
+  "A_ion":0.2,
+  "System_Size":24,
+  "Jperp_min":0.0,
+  "Jperp_max":-1.5,
+  "Jperp_length":16,
+  "J2_min":0.0,
+  "J2_max":-0.4,
+  "J2_length":11,
+  "t_max":5,
+  "t_min":1E-3,
+  "coolRate":0.995,
+  "thermalizationSweeps": 5000,
+  "measurementSweeps": 500000
+}
