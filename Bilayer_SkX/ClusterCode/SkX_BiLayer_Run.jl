@@ -74,7 +74,7 @@ for i in start_index:end_index
    j2 = round(J2s[i],sigdigits=5)
 
    #println("Rank " , commRank , " working on h = " , h, " working on j2 = ", j2) 
-   filename = "/scratch/grovert4/Data/partial_bilayer/nofield/"*ARGS[1]*"_Jperp=$jperp,J2=$j2.h5"
+   filename = "/scratch/grovert4/Data/partial_bilayer/decreasingfield/"*ARGS[1]*"_Jperp=$jperp,J2=$j2.h5"
    #println(filename)
    if isfile(filename) 
       println("Already Completed "*filename)
@@ -88,7 +88,7 @@ for i in start_index:end_index
          
          addInteraction!(UCglobal, b1, b2, -jperp * Sz , (0,0,0))
 
-         setField!(UClocal, i, [0,0,0])
+         setField!(UClocal, i, [0,0,(-1)^(i) * jperp/4])
       end
       latticeLocal = Lattice(UClocal, L)
       mc = runAnneal(t0,tf,latticeLocal,thermSweeps,measureSweeps,inputFile["coolRate"],filename,true, extfield);
