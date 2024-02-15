@@ -147,9 +147,11 @@ function runAnneal(t0,tf,lat,thermSweeps,MeasureSweeps, coolRate, outfile=nothin
             end
             m = MonteCarlo(monte.lattice, 1/temp, thermalizationSweeps, measurementSweeps, reportInterval = MeasureSweeps, rewrite = false);
 
-            m.lattice.interactionField[1:2:end] = repeat([(0.0, 0.0, coolRate^(ind) * h)], length(m.lattice.interactionField[1:2:end]))
-            m.lattice.interactionField[2:2:end] = repeat([(0.0, 0.0, -coolRate^(ind) * h)], length(m.lattice.interactionField[2:2:end]))                 
-
+            if extfield
+                m.lattice.interactionField[1:2:end] = repeat([(0.0, 0.0, coolRate^(ind) * h)], length(m.lattice.interactionField[1:2:end]))
+                m.lattice.interactionField[2:2:end] = repeat([(0.0, 0.0, -coolRate^(ind) * h)], length(m.lattice.interactionField[2:2:end]))                 
+            end
+            
             if ind != length(ts)
                run_nompi!(m, disableOutput = true)
             else
