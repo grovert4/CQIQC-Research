@@ -12,4 +12,4 @@
 #SBATCH --output=/scratch/grovert4/SLURM/slurm-%x-%j.txt
 module load julia/1.8.5
 
-srun julia SkX_BiLayer_Run.jl 14.02.2024-Bilayer-nofield
+srun julia SkX_BiLayer_Run.jl 14.02.2024-Bilayer-decreasingfield
