@@ -14,5 +14,5 @@
   "coolRate":0.995,
   "thermalizationSweeps": 5000,
   "measurementSweeps": 500000,
-  "extfield": False
+  "extfield": false
 }
