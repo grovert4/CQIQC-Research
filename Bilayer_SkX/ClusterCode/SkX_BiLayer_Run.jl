@@ -88,7 +88,7 @@ for i in start_index:end_index
 
          setField!(UClocal, i, [0,0,(-1)^(i) * jperp/4])
       end
-      addInteraction!(UCglobal, b1, b2, -jperp * Sz , (0,0,0))
+      addInteraction!(UClocal, b1, b2, -jperp * Sz , (0,0,0))
       latticeLocal = Lattice(UClocal, L)
       mc = runAnneal(t0,tf,latticeLocal,thermSweeps,measureSweeps,inputFile["coolRate"],filename,true, extfield);
    end
