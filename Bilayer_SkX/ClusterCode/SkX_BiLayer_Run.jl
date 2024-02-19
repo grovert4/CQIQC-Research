@@ -70,7 +70,7 @@ end_index = start_index + elements_per_process - 1 + (commRank < remainder ? 1 :
 
 #println(commSize, " commSize?")
 for i in start_index:end_index
-   jperp = round(Hs[i],sigdigits=5)
+   jperp = round(Jperps[i],sigdigits=5)
    j2 = round(J2s[i],sigdigits=5)
 
    #println("Rank " , commRank , " working on h = " , h, " working on j2 = ", j2) 
@@ -85,11 +85,10 @@ for i in start_index:end_index
          addInteraction!(UClocal, i, i, -j2 * I, (-1,1,0))
          addInteraction!(UClocal, i, i, -j2 * I, (1,2,0))
          addInteraction!(UClocal, i, i, -j2 * I, (2,1,0))
-         
-         addInteraction!(UCglobal, b1, b2, -jperp * Sz , (0,0,0))
 
          setField!(UClocal, i, [0,0,(-1)^(i) * jperp/4])
       end
+      addInteraction!(UCglobal, b1, b2, -jperp * Sz , (0,0,0))
       latticeLocal = Lattice(UClocal, L)
       mc = runAnneal(t0,tf,latticeLocal,thermSweeps,measureSweeps,inputFile["coolRate"],filename,true, extfield);
    end
