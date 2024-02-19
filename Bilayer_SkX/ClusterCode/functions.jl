@@ -128,7 +128,7 @@ function runAnneal(t0,tf,lat,thermSweeps,MeasureSweeps, coolRate, outfile=nothin
    for (ind,temp) in enumerate(ts) 
       thermalizationSweeps = thermSweeps
       measurementSweeps = 0
-      h = lattice.unitcell.interactionsField[1][3]
+      h = lat.unitcell.interactionsField[1][3]
         
       if ind == 1
             thermalizationSweeps = 0
