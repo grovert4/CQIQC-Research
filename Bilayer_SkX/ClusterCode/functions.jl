@@ -122,7 +122,7 @@ function StructureFactor(mc, layer)
 end
 
 
-function runAnneal(t0,tf,lat,thermSweeps,MeasureSweeps, coolRate, outfile=nothing, init_rewrite=true, extfiled)
+function runAnneal(t0,tf,lat,thermSweeps,MeasureSweeps, coolRate, outfile=nothing, init_rewrite=true, extfiled = false)
    ts = [t0 * coolRate^t for t in -500:5000 if t0 >= t0 * coolRate^t >= tf]
    monte = nothing
    for (ind,temp) in enumerate(ts) 
