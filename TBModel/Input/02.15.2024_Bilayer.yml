@@ -11,7 +11,7 @@ U : 1.0
 t_density : 0
 U_min : 0.0
 U_max : 6.0
-U_length : 25
+U_length : 20
 filling_min : 2
 filling_max : 24
 filling_length : 12

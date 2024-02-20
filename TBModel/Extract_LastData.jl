@@ -31,7 +31,7 @@ function KuboChern(Ham::Hamiltonian, bz::BZ, mu::Float64)
     return imag(chern) * bzUnitArea * 2 * pi / length(Ham.bands)
 
 end
-
+# how to make this MPI compatible ? 
 function extract_data!(folderpath::String, substring::String=".jld2")
     file_list = sort(readdir(folderpath))
     for file in file_list
