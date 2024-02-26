@@ -58,7 +58,7 @@ const a2 = [3.0, sqrt(3)]
 
 const l1 = [1.0, 0]
 const l2 = [-0.5, sqrt(3) / 2]
-Uniform_Status = true
+Uniform_Status = false
 UC = UnitCell([a1, a2], 4)
 if Uniform_Status
     order_parameter = Array{Float64}(undef, (length(U_array), 1))
@@ -104,12 +104,15 @@ savefig(loc * "gap.png")
 
 x = scatter(U_array, c_arr)
 display(x)
-ords = scatter(U_array, ord_array, xlabel="U", ylabel="ΔP")
+ords = scatter(U_array, ord_array, xlabel="U", ylabel="ΔP", ylims=(0.0, 0.1))
+println(ord_array)
 display(ords)
 energy_plot = scatter(U_array, eng_array, xlabel="U", ylabel="Energy")
 display(energy_plot)
 ords2 = scatter(U_array, abs.(order_parameter), xlabel="U", ylabel="ΔP")
 display(ords2)
+println("ords2")
+
 scatter(U_array, [abs.(c_arr[:, 1]), abs.(c_arr[:, 4])], label=["Chern ( first 2 bands)" "Chern ( first 6 bands)"], ylabel="C")
 #It's uncertain of what Chern number to use?
 xlabel!("U")
