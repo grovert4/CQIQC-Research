@@ -88,7 +88,7 @@ function extract_data!(folderpath::String, substring::String=".jld2")
                 catch e
                     println("Error Loading $file")
                     println(e)
-                    rethrow(e)
+                    #rethrow(e)
                 end
             end
         end
