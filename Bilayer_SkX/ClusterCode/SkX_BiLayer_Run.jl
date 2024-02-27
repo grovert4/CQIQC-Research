@@ -68,9 +68,9 @@ remainder = rem(gridsize, commSize)
 start_index = commRank * elements_per_process + min(commRank, remainder) + 1
 end_index = start_index + elements_per_process - 1 + (commRank < remainder ? 1 : 0)
 
-path = "/home/grovert4/scratch/Data/Monolayer_Runs_Take2/13.10.2024-Monolayer_"
-Hs = collect(range(0,1.0, 31))
-J2s2 = collect(range(0,-0.5,31))
+# path = "/home/grovert4/scratch/Data/Monolayer_Runs_Take2/13.10.2024-Monolayer_"
+# Hs = collect(range(0,1.0, 31))
+# J2s2 = collect(range(0,-0.5,31))
 
 #println(commSize, " commSize?")
 for i in start_index:end_index
@@ -78,7 +78,7 @@ for i in start_index:end_index
    j2 = round(J2s[i],sigdigits=5)
 
    #println("Rank " , commRank , " working on h = " , h, " working on j2 = ", j2) 
-   filename = "/scratch/grovert4/Data/partial_bilayer/usingguess/"*ARGS[1]*"_Jperp=$jperp,J2=$j2.h5"
+   filename = "/scratch/grovert4/Data/Bilayer_Runs2/noguess/"*ARGS[1]*"_Jperp=$jperp,J2=$j2.h5"
    #println(filename)
    if isfile(filename) 
       println("Already Completed "*filename)
