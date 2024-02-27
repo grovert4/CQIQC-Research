@@ -62,7 +62,7 @@ function extract_data!(folderpath::String, substring::String=".jld2")
                     kSize = 6 * n + 3
                     TBModel.bz = BZ(kSize)
                     FillBZ!(TBModel.bz, TBModel.uc)
-                    TBModel.Ham = Hamiltonian(UC, bz)
+                    TBModel.Ham = Hamiltonian(TBModel.uc, TBModel.bz)
                     SolveModel!(TBModel; get_gap=true)
                     c = Array{Float32}(undef, 2 * length(TBModel.uc.basis))
                     for i in 1:2*length(TBModel.uc.basis)
