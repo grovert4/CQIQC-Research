@@ -95,17 +95,17 @@ for i in start_index:end_index
       addInteraction!(UClocal, b1, b2, -jperp * Sz , (0,0,0))
       latticeLocal = Lattice(UClocal, L)
 
-      temph = findmin(abs.(jperp .+ Hs))[2] 
-      tempj = findmin(abs.(j2 .- J2s))[2]
-      file = h5open(path * "H=$(Hs[temph]),J2=$(J2s2[tempj]).h5")["mc"]
-      sites = parse.(Int64,collect(keys(read(file["lattice"]["spins"]))))
-      spins = collect(values(read(file["lattice"]["spins"])))
-      sorted = sortperm(sites)
-      sortedspins = reshape(vcat(spins[sorted]...),(3,latticeLocal.length./2))
-      latticeLocal[1:2:end] = sortedspins
-      sortedspins[3,:] = -1 .* sortedspins[3,:]
-      latticeLocal[2:2:end] = sortedspins
-      # mc = runAnneal(t0,tf,latticeLocal,thermSweeps,measureSweeps,inputFile["coolRate"],filename,true, extfield);
-      mc = runAnneal(t0,tf,latticeLocal,thermSweeps,measureSweeps,inputFile["coolRate"],filename,false, extfield);
+      # temph = findmin(abs.(jperp .+ Hs))[2] 
+      # tempj = findmin(abs.(j2 .- J2s))[2]
+      # file = h5open(path * "H=$(Hs[temph]),J2=$(J2s2[tempj]).h5")["mc"]
+      # sites = parse.(Int64,collect(keys(read(file["lattice"]["spins"]))))
+      # spins = collect(values(read(file["lattice"]["spins"])))
+      # sorted = sortperm(sites)
+      # sortedspins = reshape(vcat(spins[sorted]...),(3,latticeLocal.length./2))
+      # latticeLocal[1:2:end] = sortedspins
+      # sortedspins[3,:] = -1 .* sortedspins[3,:]
+      # latticeLocal[2:2:end] = sortedspins
+      mc = runAnneal(t0,tf,latticeLocal,thermSweeps,measureSweeps,inputFile["coolRate"],filename,true, extfield);
+      # mc = runAnneal(t0,tf,latticeLocal,thermSweeps,measureSweeps,inputFile["coolRate"],filename,false, extfield);
    end
 end
