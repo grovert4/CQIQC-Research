@@ -35,7 +35,6 @@ end
 function extract_data!(folderpath::String, substring::String=".jld2")
     file_list = sort(readdir(folderpath))
     for file in file_list
-        success = false
         if occursin(substring, string(file))
             if isfile(folderpath * "/Last_Itr/Last_Itr_" * string(file))
                 println("FILE EXISTS : " * folderpath * "/Last_Itr/Last_Itr_" * string(file))
@@ -46,13 +45,6 @@ function extract_data!(folderpath::String, substring::String=".jld2")
                     data_entry = load(folderpath * "/" * string(file))
                     println("SUCCESFULLY LOADED " * folderpath * "/" * string(file))
                     dict = Dict()
-                    success = true
-                catch e
-                    println("Error Loading $file")
-                    continue
-                    println(e)
-                end
-                if success
                     dict["Iterations"] = data_entry["Self-consistency params"][:iter]
                     dict["MFT_Energy"] = data_entry["function args"][1].MFTEnergy
                     dict["Hopping_Block"] = data_entry["function args"][1].HoppingOrders
@@ -93,6 +85,10 @@ function extract_data!(folderpath::String, substring::String=".jld2")
                     dict["Convergence"] = norm(data_entry["inputs"][end] - data_entry["outputs"][end]) #[maximum(norm.(data_entry["outputs"][i] - data_entry["inputs"][i])) for i in 1:length(data_entry["inputs"])]#
                     # save convergences
                     save(folderpath * "/Last_Itr/Last_Itr_" * string(file), dict)
+                catch e
+                    println("Error Loading $file")
+                    continue
+                    println(e)
                 end
             end
         end
