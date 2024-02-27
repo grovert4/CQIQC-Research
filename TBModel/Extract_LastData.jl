@@ -47,7 +47,7 @@ function extract_data!(folderpath::String, substring::String=".jld2")
                     dict = Dict()
                 catch e
                     println("Error Loading $file")
-                    rethrow(e)
+                    #rethrow(e)
                 dict["Iterations"] = data_entry["Self-consistency params"][:iter]
                 dict["MFT_Energy"] = data_entry["function args"][1].MFTEnergy
                 dict["Hopping_Block"] = data_entry["function args"][1].HoppingOrders
