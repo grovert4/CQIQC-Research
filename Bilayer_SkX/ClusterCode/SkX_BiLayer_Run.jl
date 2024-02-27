@@ -78,7 +78,7 @@ for i in start_index:end_index
    j2 = round(J2s[i],sigdigits=5)
 
    #println("Rank " , commRank , " working on h = " , h, " working on j2 = ", j2) 
-   filename = "/scratch/grovert4/Data/Bilayer_Runs2/noguess/"*ARGS[1]*"_Jperp=$jperp,J2=$j2.h5"
+   filename = "/scratch/grovert4/Data/Bilayer_Runs2/constantfield/"*ARGS[1]*"_Jperp=$jperp,J2=$j2.h5"
    #println(filename)
    if isfile(filename) 
       println("Already Completed "*filename)
@@ -90,7 +90,7 @@ for i in start_index:end_index
          addInteraction!(UClocal, i, i, -j2 * I, (1,2,0))
          addInteraction!(UClocal, i, i, -j2 * I, (2,1,0))
 
-         # setField!(UClocal, i, [0,0,(-1)^(i + 1) * jperp/4])
+         setField!(UClocal, i, [0,0,(-1)^(i + 1) * jperp/4])
       end
       addInteraction!(UClocal, b1, b2, -jperp * Sz , (0,0,0))
       latticeLocal = Lattice(UClocal, L)
