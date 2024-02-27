@@ -33,9 +33,9 @@ function KuboChern(Ham::Hamiltonian, bz::BZ, mu::Float64)
 end
 # how to make this MPI compatible ? 
 function extract_data!(folderpath::String, substring::String=".jld2")
-    success = false
     file_list = sort(readdir(folderpath))
     for file in file_list
+        success = false
         if occursin(substring, string(file))
             if isfile(folderpath * "/Last_Itr/Last_Itr_" * string(file))
                 println("FILE EXISTS : " * folderpath * "/Last_Itr/Last_Itr_" * string(file))
