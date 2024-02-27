@@ -8,11 +8,11 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --nodes=1
 #SBATCH --account=rrg-aparamek
-#SBATCH --time=23:00:00
+#SBATCH --time=2:00:00
 #SBATCH --output=/scratch/a/aparamek/andykh/SLURMOutputs/slurm-%x-%j.txt
 module load CCEnv
 module load StdEnv/2023
 module load julia/1.10.0
 module load intel/2023.2.1
 module load intelmpi
-mpirun julia --project=../. --heap-size-hint=1G Extract_LastData.jl
+julia --project=../. --heap-size-hint=1G Extract_LastData.jl
