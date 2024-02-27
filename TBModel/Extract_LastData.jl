@@ -87,7 +87,6 @@ function extract_data!(folderpath::String, substring::String=".jld2")
                     save(folderpath * "/Last_Itr/Last_Itr_" * string(file), dict)
                 catch e
                     println("Error Loading $file")
-                    continue
                     println(e)
                 end
             end
