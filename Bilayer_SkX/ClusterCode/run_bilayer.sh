@@ -4,12 +4,12 @@
 #SBATCH --mail-type=BEGIN
 #SBATCH --mail-type=END
 #SBATCH --mail-type=FAIL
-#SBATCH --ntasks=250
+#SBATCH --ntasks=350
 #SBATCH --cpus-per-task=1 
 #SBATCH --account=def-aparamek
-#SBATCH --time=12:00:00
+#SBATCH --time=16:00:00
 #SBATCH --mem-per-cpu=4000MB
 #SBATCH --output=/scratch/grovert4/SLURM/slurm-%x-%j.txt
 module load julia/1.8.5
 
-srun julia SkX_BiLayer_Run.jl 27.02.2024-Bilayer-constantfield
+srun julia SkX_BiLayer_Run.jl 1.01.2024-Bilayer-nofield
