@@ -8,7 +8,7 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --nodes=1
 #SBATCH --account=rrg-aparamek
-#SBATCH --time=2:00:00
+#SBATCH --time=4:30:00
 #SBATCH --output=/scratch/a/aparamek/andykh/SLURMOutputs/slurm-%x-%j.txt
 module load CCEnv
 module load StdEnv/2023

@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Bilayer_Data/"
 t1 = -1.0
-filename = "02.15.2024_Bilayer"
+filename = "02.28.2024_Bilayer"
 plt.style.use("lake.mplstyle")
 plt.rcParams.update({"text.usetex": True})
 
