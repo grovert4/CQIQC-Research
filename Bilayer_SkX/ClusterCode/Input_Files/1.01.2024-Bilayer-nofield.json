@@ -2,7 +2,7 @@
   "J_1":1.0,
   "D":0.5,
   "A_ion":0.2,
-  "System_Size":24,
+  "System_Size":36,
   "Jperp_min":0.0,
   "Jperp_max":-1.2,
   "Jperp_length":13,
