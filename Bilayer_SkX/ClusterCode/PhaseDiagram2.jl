@@ -36,7 +36,6 @@ D3v = D .* [-1/2, -sqrt(3)/2, 0]
 
 ExchangeD(v) = [0 -v[3] v[2]; v[3] 0 -v[1]; -v[2] v[1] 0]
 
-
 ##Same layer interactions
 for i in 1:length(UCglobal.basis)
     #1nd NN ferromagnetic interaction
@@ -53,9 +52,9 @@ for i in 1:length(UCglobal.basis)
     addInteraction!(UCglobal, i, i, (-1)^(i+1) * ExchangeD(D3v), (-1,-1,0)) #
 
     #Add J2 2NN AF interaction 
-    addInteraction!(UCglobal, i, i, -j2 * I, (-1,1,0))
-    addInteraction!(UCglobal, i, i, -j2 * I, (1,2,0))
-    addInteraction!(UCglobal, i, i, -j2 * I, (2,1,0))
+    addInteraction!(UCglobal, i, i, -J2 * I, (-1,1,0))
+    addInteraction!(UCglobal, i, i, -J2 * I, (1,2,0))
+    addInteraction!(UCglobal, i, i, -J2 * I, (2,1,0))
 end
 
 
