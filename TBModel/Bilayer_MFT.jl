@@ -23,7 +23,7 @@ function MFT(params, filename)
     t_density = get!(params, "t_density", 0.0)
     SpinVec = SpinMats(1 // 2)
     ##### Thermodynamic parameters
-    filling = params["filling"]
+    filling = get!(params, "filling", 0.5)
     T = get!(params, "T", 0.0)
     tinter_param = Param(t_inter, 2)
     t1 = -t
@@ -96,7 +96,7 @@ function MFT(params, filename)
     # add filename to input 
     fileName = loc * "/$(filename)_p=$(round(filling, digits=3))_U=$(round(U, digits=2))_t1=$(round(t1, digits=2)).jld2"
     GC.gc()
-    init_guess = fill(0.25,12)
+    init_guess = fill(0.25, 12)
     if isfile(fileName)
         println("TRYING TO LOAD " * fileName)
         try
@@ -104,10 +104,10 @@ function MFT(params, filename)
             ResumeMFT!(fileName; max_iter=params["max_iter"], tol=params["tol"])#, Update=BroydenMixing)
         catch e
             println("Error Loading $fileName")
-            SolveMFT!(mft, init_guess, fileName;  max_iter=params["max_iter"], tol=params["tol"])
+            SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
         end
     else
-        SolveMFT!(mft,init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
+        SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
     end
     for i in 1:2*length(UC.basis)
         c = ChernNumber(H, [i])

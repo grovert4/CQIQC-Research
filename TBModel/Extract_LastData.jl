@@ -1,4 +1,5 @@
 using FixedPointToolkit, JLD2, MeanFieldToolkit, TightBindingToolkit, LinearAlgebra
+using MPI
 ##Script that reads in a jld2 MFT data file and extracts the last of iteration of the data
 function KuboChern(Ham::Hamiltonian, bz::BZ, mu::Float64)
 
@@ -33,8 +34,18 @@ function KuboChern(Ham::Hamiltonian, bz::BZ, mu::Float64)
 end
 # how to make this MPI compatible ? 
 function extract_data!(folderpath::String, substring::String=".jld2")
+    MPI.Init()
+    comm = MPI.COMM_WORLD
+    rank = MPI.Comm_rank(comm)
+    size = MPI.Comm_size(comm)
     file_list = sort(readdir(folderpath))
-    for file in file_list
+    file_list = sort(readdir(folderpath))
+    files_per_process = length(file_list) ÷ size
+    start_index = rank * files_per_process + 1
+    end_index = (rank == size - 1) ? length(file_list) : start_index + files_per_process - 1
+
+    for i in start_index:end_index
+        file = file_list[i]
         if occursin(substring, string(file))
             if isfile(folderpath * "/Last_Itr/Last_Itr_" * string(file))
                 println("FILE EXISTS : " * folderpath * "/Last_Itr/Last_Itr_" * string(file))
@@ -93,6 +104,7 @@ function extract_data!(folderpath::String, substring::String=".jld2")
             end
         end
     end
+    MPI.Finalize()
 end
 pwd()
 extract_data!("/scratch/a/aparamek/andykh/Data/Bilayer_Data")
