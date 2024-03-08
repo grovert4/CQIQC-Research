@@ -102,9 +102,9 @@ for i in start_index:end_index
       spins = collect(values(read(file["lattice"]["spins"])))
       sorted = sortperm(sites)
       sortedspins = reshape(vcat(spins[sorted]...),(3,Int(latticeLocal.length./2)))
-      latticeLocal[1:2:end] = deepcopy(sortedspins)
+      latticeLocal.spins[:,1:2:end] = deepcopy(sortedspins)
       sortedspins[3,:] = -1 .* sortedspins[3,:]
-      latticeLocal[2:2:end] = sortedspins
+      latticeLocal.spins[:, 2:2:end] = sortedspins
       # mc = runAnneal(t0,tf,latticeLocal,thermSweeps,measureSweeps,inputFile["coolRate"],filename,true, extfield);
       mc = runAnneal(t0,tf,latticeLocal,thermSweeps,measureSweeps,inputFile["coolRate"],filename,false, extfield);
    end
