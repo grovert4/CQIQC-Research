@@ -95,8 +95,8 @@ for i in start_index:end_index
       addInteraction!(UClocal, b1, b2, -jperp * Sz , (0,0,0))
       latticeLocal = Lattice(UClocal, L)
 
-      temph = round(Hs[findmin(abs.(jperp .+ Hs))[1]], sigdigits=5) 
-      tempj = round(J2s2[findmin(abs.(j2 .- J2s2))[1]], sigdigits=5)
+      temph = round(Hs[findmin(abs.(jperp .+ Hs))[2]], sigdigits=5) 
+      tempj = round(J2s2[findmin(abs.(j2 .- J2s2))[2]], sigdigits=5)
       println("$(temph)  $(tempj)" )
       file = h5open(path * "H=$(temph),J2=$(tempj).h5")["mc"]
       sites = parse.(Int64,collect(keys(read(file["lattice"]["spins"]))))
