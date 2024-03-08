@@ -97,6 +97,7 @@ for i in start_index:end_index
 
       temph = round(Hs[findmin(abs.(jperp .+ Hs))[1]], sigdigits=5) 
       tempj = round(J2s2[findmin(abs.(j2 .- J2s2))[1]], sigdigits=5)
+      println("$(temph)  $(tempj)" )
       file = h5open(path * "H=$(temph),J2=$(tempj).h5")["mc"]
       sites = parse.(Int64,collect(keys(read(file["lattice"]["spins"]))))
       spins = collect(values(read(file["lattice"]["spins"])))
