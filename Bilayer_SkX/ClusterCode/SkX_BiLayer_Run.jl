@@ -25,7 +25,6 @@ UCglobal = UnitCell(a1, a2, a3)
 b1 = addBasisSite!(UCglobal, (0.0, 0.0, 0.0)) ##layer A (z = 0)
 b2 = addBasisSite!(UCglobal, (0.0, 0.0, 1.0)) ##layer A  (z = 1)
 
-
 #Helpful Matrices
 I = [1.0 0.0 0.0; 0.0 1.0 0.0; 0.0 0.0 1.0]
 Sz = [0.0 0.0 0.0; 0.0 0.0 0.0; 0.0 0.0 1.0]
@@ -68,9 +67,9 @@ remainder = rem(gridsize, commSize)
 start_index = commRank * elements_per_process + min(commRank, remainder) + 1
 end_index = start_index + elements_per_process - 1 + (commRank < remainder ? 1 : 0)
 
-path = "/home/grovert4/scratch/Data/Monolayer_Runs_Take2/13.10.2024-Monolayer_"
-Hs = collect(range(0,1.0, 31))
-J2s2 = collect(range(0,-0.5,31))
+# path = "/home/grovert4/scratch/Data/Monolayer_Runs_Take2/13.10.2024-Monolayer_"
+# Hs = collect(range(0,1.0, 31))
+# J2s2 = collect(range(0,-0.5,31))
 
 #println(commSize, " commSize?")
 for i in start_index:end_index
@@ -78,7 +77,7 @@ for i in start_index:end_index
    j2 = round(J2s[i],sigdigits=5)
 
    #println("Rank " , commRank , " working on h = " , h, " working on j2 = ", j2) 
-   filename = "/scratch/grovert4/Data/partial_bilayer/usingguess/"*ARGS[1]*"_Jperp=$(jperp),J2=$(j2).h5"
+   filename = "/scratch/grovert4/Data/Bilayer_Runs2/decreasingfieldtry/"*ARGS[1]*"_Jperp=$(jperp),J2=$(j2).h5"
    #println(filename)
    if isfile(filename) 
       println("Already Completed "*filename)
@@ -90,22 +89,22 @@ for i in start_index:end_index
          addInteraction!(UClocal, i, i, -j2 * I, (1,2,0))
          addInteraction!(UClocal, i, i, -j2 * I, (2,1,0))
 
-         # setField!(UClocal, i, [0,0,0.0])
+         setField!(UClocal, i, [0,0,-jperp/(5 * inputFile["Jperp_max"]) ])
       end
       addInteraction!(UClocal, b1, b2, -jperp * Sz , (0,0,0))
       latticeLocal = Lattice(UClocal, L)
 
-      temph = round(Hs[findmin(abs.(jperp .+ Hs))[2]], sigdigits=5) 
-      tempj = round(J2s2[findmin(abs.(j2 .- J2s2))[2]], sigdigits=5)
-      file = h5open(path * "H=$(temph),J2=$(tempj).h5")["mc"]
-      sites = parse.(Int64,collect(keys(read(file["lattice"]["spins"]))))
-      spins = collect(values(read(file["lattice"]["spins"])))
-      sorted = sortperm(sites)
-      sortedspins = reshape(vcat(spins[sorted]...),(3,Int(latticeLocal.length./2)))
-      latticeLocal.spins[:,1:2:end] = deepcopy(sortedspins)
-      sortedspins[3,:] = -1 .* sortedspins[3,:]
-      latticeLocal.spins[:, 2:2:end] = sortedspins
-      # mc = runAnneal(t0,tf,latticeLocal,thermSweeps,measureSweeps,inputFile["coolRate"],filename,true, extfield);
-      mc = runAnneal(t0,tf,latticeLocal,thermSweeps,measureSweeps,inputFile["coolRate"],filename,false, extfield);
+      # temph = round(Hs[findmin(abs.(jperp .+ Hs))[2]], sigdigits=5) 
+      # tempj = round(J2s2[findmin(abs.(j2 .- J2s2))[2]], sigdigits=5)
+      # file = h5open(path * "H=$(temph),J2=$(tempj).h5")["mc"]
+      # sites = parse.(Int64,collect(keys(read(file["lattice"]["spins"]))))
+      # spins = collect(values(read(file["lattice"]["spins"])))
+      # sorted = sortperm(sites)
+      # sortedspins = reshape(vcat(spins[sorted]...),(3,Int(latticeLocal.length./2)))
+      # latticeLocal.spins[:,1:2:end] = deepcopy(sortedspins)
+      # sortedspins[3,:] = -1 .* sortedspins[3,:]
+      # latticeLocal.spins[:, 2:2:end] = sortedspins
+      mc = runAnneal(t0,tf,latticeLocal,thermSweeps,measureSweeps,inputFile["coolRate"],filename,true, extfield);
+      # mc = runAnneal(t0,tf,latticeLocal,thermSweeps,measureSweeps,inputFile["coolRate"],filename,false, extfield);
    end
 end
