@@ -77,8 +77,8 @@ function MFT(params, filename)
     AddIsotropicBonds!(UParam, UC, 0.0, Hubbard, "Hubbard Interaction") # Do I need to add this to all sites?
     t_s = Param(1.0, 2)
     AddIsotropicBonds!(t_s, UC, 1.0, SpinVec[4], "s Hopping") # Am I not double counting the hopping ?? 
-    Dx = []
-    Dy = []
+    Nu = []
+    Nd = []
     #Dz = []
     UParam.value = [U]
 
@@ -91,19 +91,16 @@ function MFT(params, filename)
             replace!(spn, NaN => 0.0)
             mat = intermat(spn)
         end
-        push!(Dx, Param(1.0, 2))
-        push!(Dy, Param(1.0, 2))
+        push!(nup, Param(1.0, 2))
+        push!(ndown, Param(1.0, 2))
         #push!(Dz, Param(1.0, 2))
         AddAnisotropicBond!(jhParam, UC, ind, ind, [0, 0], mat, 0.0, "interaction")
-        AddAnisotropicBond!(Dx[ind], UC, ind, ind, [0, 0], SpinVec[1], 0.0, "Sx-" * string(ind))
-        if ind > 1
-            AddAnisotropicBond!(Dy[ind], UC, ind, ind, [0, 0], SpinVec[2], 0.0, "Sy-" * string(ind))
-            #AddAnisotropicBond!(Dz[ind], UC, ind, ind, [0, 0], SpinVec[3], 0.0, "Sz-" * string(ind))
-            # on one site only Sx 
+        AddAnisotropicBond!(Nu[ind], UC, ind, ind, [0, 0], n_up, 0.0, "Nup-" * string(ind))
+        AddAnisotropicBond!(Nd[ind], UC, ind, ind, [0, 0], n_down, 0.0, "Ndown-" * string(ind))
         end
 
     end
-    ChiParams = vcat(t_s, Dx, Dy)
+    ChiParams = vcat(t_s, Nu, Nd)
     ChiParams = Vector{Param{2,Float64}}(ChiParams)
     ##Creating BZ and Hamiltonian Model
     bz = BZ(kSize)
