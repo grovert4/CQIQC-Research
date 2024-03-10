@@ -66,11 +66,12 @@ function MFT(params, filename)
     Hubbard = DensityToPartonCoupling(n_up, n_down)
     UParam = Param(1.0, 4)
     AddIsotropicBonds!(UParam, UC, 0.0, Hubbard, "Hubbard Interaction") # Do I need to add this to all sites?
-    tParam = Param(1.0, 2)
+
     AddIsotropicBonds!(t_s, UC, 1.0, SpinVec[4], "s Hopping") # Am I not double counting the hopping ?? 
     Nu = []
     Nd = []
-    #Dz = []
+    tParam = []
+    push!(tParam, Param(1.0, 2))
     UParam.value = [U]
 
     for (ind, bas) in enumerate(UC.basis)
