@@ -77,8 +77,6 @@ function MFT(params, filename)
         AddAnisotropicBond!(jhParam, UC, ind, ind, [0, 0], mat, 0.0, "Hunds")
     end
     CreateUnitCell!(UC, HoppingParams)
-    ##Creating BZ and Hamiltonian Model
-    # add resume option. 
     Density = []
     UParam.value = [U]
     for (ind, bas) in enumerate(UC.basis)

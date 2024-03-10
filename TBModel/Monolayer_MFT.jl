@@ -35,9 +35,7 @@ function MFT(params, filename)
             AddBasisSite!(UC, i .* l1 + j .* l2)
         end
     end
-
     AddIsotropicBonds!(t1Param, UC, 1.0, SpinVec[4], "t1")
-
     ##Functions that will be useful for adding anisotropic bonds
     weiss1(v) = [sin(pi * (1 - norm(v) / 2)) * v[1] / norm(v), sin(pi * (1 - norm(v) / 2)) * v[2] / norm(v), cos(pi * (1 - norm(v) / 2))]
     weiss2(v) = [0, 0, 1]
@@ -54,26 +52,7 @@ function MFT(params, filename)
     bz = BZ(kSize)
     FillBZ!(bz, UC)
     path = CombinedBZPath(bz, [bz.HighSymPoints["G"], bz.HighSymPoints["K1"], bz.HighSymPoints["M2"]]; nearest=true)
-
     ##Adding anisotropic bonds and normalizing if needed
-    CreateUnitCell!(UC, HoppingParams)
-
-
-    # Adding MFT Parameters
-    HoppingParams = [t1Param]
-    n_up = [1.0 0.0; 0.0 0.0]
-    n_down = [0.0 0.0; 0.0 1.0]
-    Hubbard = DensityToPartonCoupling(n_up, n_down)
-    UParam = Param(1.0, 4)
-    AddIsotropicBonds!(UParam, UC, 0.0, Hubbard, "Hubbard Interaction") # Do I need to add this to all sites?
-
-    AddIsotropicBonds!(t_s, UC, 1.0, SpinVec[4], "s Hopping") # Am I not double counting the hopping ?? 
-    Nu = []
-    Nd = []
-    tParam = []
-    push!(tParam, Param(1.0, 2))
-    UParam.value = [U]
-
     for (ind, bas) in enumerate(UC.basis)
         if 1 < norm(bas) < 2
             mat = intermat(normalize(weiss(bas) + weiss(-bas)))
@@ -83,12 +62,26 @@ function MFT(params, filename)
             replace!(spn, NaN => 0.0)
             mat = intermat(spn)
         end
+    end
+    CreateUnitCell!(UC, HoppingParams)
+    # Adding MFT Parameters
+    HoppingParams = [t1Param]
+    n_up = [1.0 0.0; 0.0 0.0]
+    n_down = [0.0 0.0; 0.0 1.0]
+    Hubbard = DensityToPartonCoupling(n_up, n_down)
+    UParam = Param(1.0, 4)
+    Nu = []
+    Nd = []
+    tParam = []
+    push!(tParam, Param(1.0, 2))
+    UParam.value = [U]
+    AddIsotropicBonds!(UParam, UC, 0.0, Hubbard, "Hubbard Interaction") # Do I need to add this to all sites?
+    AddIsotropicBonds!(tParam, UC, 1.0, SpinVec[4], "s Hopping") # Am I not double counting the hopping ?? 
+    for (ind, bas) in enumerate(UC.basis)
         push!(Nu, Param(1.0, 2))
         push!(Nd, Param(1.0, 2))
         AddAnisotropicBond!(Nu[ind], UC, ind, ind, [0, 0], n_up, 0.0, "Nup-" * string(ind))
         AddAnisotropicBond!(Nd[ind], UC, ind, ind, [0, 0], n_down, 0.0, "Ndown-" * string(ind))
-        end
-
     end
     println(Nu)
     println(tParam)
