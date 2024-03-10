@@ -27,10 +27,7 @@ function MFT(params, filename)
     tinter_param = Param(t_inter, 2)
     t1 = -t
     t1Param = Param(t1, 2)
-    jhParam = Param(jh, 2)
-    tdParam = Param(t_density, 2)
-    tiParam = Param(t_inter, 2)
-    HoppingParams = [t1Param, tdParam, tiParam, jhParam]
+    HoppingParams = [t1Param]
 
     ##Adding inner-hexagon structure  
     for j = 1:2
@@ -38,12 +35,6 @@ function MFT(params, filename)
             AddBasisSite!(UC, i .* l1 + j .* l2)
         end
     end
-
-    ##Istrotropic bonds
-    t1 = -t
-    t1Param = Param(t1, 2)
-    jhParam = Param(-jh, 2)
-    HoppingParams = [t1Param]
 
     AddIsotropicBonds!(t1Param, UC, 1.0, SpinVec[4], "t1")
 
@@ -75,7 +66,7 @@ function MFT(params, filename)
     Hubbard = DensityToPartonCoupling(n_up, n_down)
     UParam = Param(1.0, 4)
     AddIsotropicBonds!(UParam, UC, 0.0, Hubbard, "Hubbard Interaction") # Do I need to add this to all sites?
-    t_s = Param(1.0, 2)
+    tParam = Param(1.0, 2)
     AddIsotropicBonds!(t_s, UC, 1.0, SpinVec[4], "s Hopping") # Am I not double counting the hopping ?? 
     Nu = []
     Nd = []
@@ -91,8 +82,8 @@ function MFT(params, filename)
             replace!(spn, NaN => 0.0)
             mat = intermat(spn)
         end
-        push!(nup, Param(1.0, 2))
-        push!(ndown, Param(1.0, 2))
+        push!(Nu, Param(1.0, 2))
+        push!(Nd, Param(1.0, 2))
         #push!(Dz, Param(1.0, 2))
         AddAnisotropicBond!(jhParam, UC, ind, ind, [0, 0], mat, 0.0, "interaction")
         AddAnisotropicBond!(Nu[ind], UC, ind, ind, [0, 0], n_up, 0.0, "Nup-" * string(ind))
@@ -100,7 +91,7 @@ function MFT(params, filename)
         end
 
     end
-    ChiParams = vcat(t_s, Nu, Nd)
+    ChiParams = vcat(tParam, Nu, Nd)
     ChiParams = Vector{Param{2,Float64}}(ChiParams)
     ##Creating BZ and Hamiltonian Model
     bz = BZ(kSize)
