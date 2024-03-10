@@ -71,16 +71,14 @@ function MFT(params, filename)
     end
     CreateUnitCell!(UC, HoppingParams)
     AddIsotropicBonds!(tParam, UC, 1.0, su2spin[4], "s Hopping") # Am I not double counting the hopping ?? 
-    # for (ind, bas) in enumerate(UC.basis)
-    #     push!(Nu, Param(1.0, 2))
-    #     push!(Nd, Param(1.0, 2))
-    #     AddAnisotropicBond!(Nu[ind], UC, ind, ind, [0, 0], n_up, 0.0, "Nup-" * string(ind))
-    #     AddAnisotropicBond!(Nd[ind], UC, ind, ind, [0, 0], n_down, 0.0, "Ndown-" * string(ind))
-    # end
-    # println(Nu)
-    # println(tParam)
-    ChiParams = vcat(tParam)
-    # ChiParams = vcat(Nu, Nd)
+    for (ind, bas) in enumerate(UC.basis)
+        push!(Nu, Param(1.0, 2))
+        push!(Nd, Param(1.0, 2))
+        AddAnisotropicBond!(Nu[ind], UC, ind, ind, [0, 0], n_up, 0.0, "Nup-" * string(ind))
+        AddAnisotropicBond!(Nd[ind], UC, ind, ind, [0, 0], n_down, 0.0, "Ndown-" * string(ind))
+    end
+
+    ChiParams = vcat(TParam, Nu, Nd)
     ChiParams = Vector{Param{2,Float64}}(ChiParams)
     ##Creating BZ and Hamiltonian Model
     bz = BZ(kSize)
