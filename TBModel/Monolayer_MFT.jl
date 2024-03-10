@@ -85,8 +85,6 @@ function MFT(params, filename)
         end
         push!(Nu, Param(1.0, 2))
         push!(Nd, Param(1.0, 2))
-        #push!(Dz, Param(1.0, 2))
-        AddAnisotropicBond!(jhParam, UC, ind, ind, [0, 0], mat, 0.0, "interaction")
         AddAnisotropicBond!(Nu[ind], UC, ind, ind, [0, 0], n_up, 0.0, "Nup-" * string(ind))
         AddAnisotropicBond!(Nd[ind], UC, ind, ind, [0, 0], n_down, 0.0, "Ndown-" * string(ind))
         end
