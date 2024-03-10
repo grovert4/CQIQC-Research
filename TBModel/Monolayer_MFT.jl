@@ -11,7 +11,7 @@ function MFT(params, filename)
     l1 = [1.0, 0]
     l2 = [-0.5, sqrt(3) / 2]
 
-    UC = UnitCell([a1, a2], 4)
+    UC = UnitCell([a1, a2], 2)
     ##Parameters
     n = get!(params, "n", 10)
     kSize = 6 * n + 3
