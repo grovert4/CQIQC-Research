@@ -70,7 +70,7 @@ function MFT(params, filename)
         AddAnisotropicBond!(jhParam, UC, ind, ind, [0, 0], mat, 0.0, "Hunds")
     end
     CreateUnitCell!(UC, HoppingParams)
-    AddIsotropicBonds!(tParam, UC, 1.0, SpinVec[4], "s Hopping") # Am I not double counting the hopping ?? 
+    AddIsotropicBonds!(tParam, UC, 1.0, su2spin[4], "s Hopping") # Am I not double counting the hopping ?? 
     # for (ind, bas) in enumerate(UC.basis)
     #     push!(Nu, Param(1.0, 2))
     #     push!(Nd, Param(1.0, 2))
