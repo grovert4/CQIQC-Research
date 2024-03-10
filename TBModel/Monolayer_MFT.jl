@@ -21,7 +21,6 @@ function MFT(params, filename)
     ##### Thermodynamic parameters
     filling = get!(params, "filling", 0.5)
     T = get!(params, "T", 0.0)
-    tinter_param = Param(t_inter, 2)
     t1 = -t
     t1Param = Param(t1, 2)
     HoppingParams = [t1Param]
