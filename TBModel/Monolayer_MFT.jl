@@ -58,19 +58,19 @@ function MFT(params, filename)
     tParam =  Param(1.0, 2)
     UParam.value = [U]
     AddIsotropicBonds!(UParam, UC, 0.0, Hubbard, "Hubbard Interaction") # Do I need to add this to all sites?
-    # for (ind, bas) in enumerate(UC.basis)
-    #     if 1 < norm(bas) < 2
-    #         mat = intermat(normalize(weiss1(bas) + weiss1(-bas))) 
-    #     else 
-    #         closest = [bas, bas-a1, bas-a2]
-    #         spn = weiss1( closest[findmin(x -> norm(x), closest)[2]] )
-    #         replace!(spn, NaN=> 0.0)
-    #         mat = intermat(spn)
-    #     end
-    #     AddAnisotropicBond!(jhParam, UC, ind, ind, [0, 0], mat, 0.0, "Hunds")
-    # end
-    # CreateUnitCell!(UC, HoppingParams)
-    #AddIsotropicBonds!(tParam, UC, 1.0, SpinVec[4], "s Hopping") # Am I not double counting the hopping ?? 
+    for (ind, bas) in enumerate(UC.basis)
+        if 1 < norm(bas) < 2
+            mat = intermat(normalize(weiss1(bas) + weiss1(-bas))) 
+        else 
+            closest = [bas, bas-a1, bas-a2]
+            spn = weiss1( closest[findmin(x -> norm(x), closest)[2]] )
+            replace!(spn, NaN=> 0.0)
+            mat = intermat(spn)
+        end
+        AddAnisotropicBond!(jhParam, UC, ind, ind, [0, 0], mat, 0.0, "Hunds")
+    end
+    CreateUnitCell!(UC, HoppingParams)
+    AddIsotropicBonds!(tParam, UC, 1.0, SpinVec[4], "s Hopping") # Am I not double counting the hopping ?? 
     # for (ind, bas) in enumerate(UC.basis)
     #     push!(Nu, Param(1.0, 2))
     #     push!(Nd, Param(1.0, 2))
@@ -79,8 +79,9 @@ function MFT(params, filename)
     # end
     # println(Nu)
     # println(tParam)
+    ChiParams = vcat(tParam)
     # ChiParams = vcat(Nu, Nd)
-    # ChiParams = Vector{Param{2,Float64}}(ChiParams)
+    ChiParams = Vector{Param{2,Float64}}(ChiParams)
     ##Creating BZ and Hamiltonian Model
     bz = BZ(kSize)
     FillBZ!(bz, UC)
@@ -88,7 +89,7 @@ function MFT(params, filename)
     H = Hamiltonian(UC, bz)
     DiagonalizeHamiltonian!(H)
     Mdl = Model(UC, bz, H; filling=filling, T=T) # Does T matter, don't I want 0 T, or is that technically impossible? 
-    #mft = TightBindingMFT(Mdl, ChiParams, [UParam], IntraQuarticToHopping)
+    mft = TightBindingMFT(Mdl, ChiParams, [UParam], IntraQuarticToHopping)
     # add filename to input 
     fileName = loc * "/$(filename)_p=$(round(filling, digits=3))_U=$(round(U, digits=2))_t1=$(round(t1, digits=2)).jld2"
     GC.gc()
