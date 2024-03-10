@@ -90,7 +90,9 @@ function MFT(params, filename)
         end
 
     end
-    ChiParams = vcat(tParam, Nu, Nd)
+    println(Nu)
+    println(tParam)
+    ChiParams = vcat(Nu, Nd)
     ChiParams = Vector{Param{2,Float64}}(ChiParams)
     ##Creating BZ and Hamiltonian Model
     bz = BZ(kSize)
