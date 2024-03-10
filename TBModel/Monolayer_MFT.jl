@@ -72,11 +72,10 @@ function MFT(params, filename)
     UParam = Param(1.0, 4)
     Nu = []
     Nd = []
-    tParam = []
-    push!(tParam, Param(1.0, 2))
+    tParam =  Param(1.0, 2)
     UParam.value = [U]
     AddIsotropicBonds!(UParam, UC, 0.0, Hubbard, "Hubbard Interaction") # Do I need to add this to all sites?
-    AddIsotropicBonds!(tParam[1], UC, 1.0, SpinVec[4], "s Hopping") # Am I not double counting the hopping ?? 
+    #AddIsotropicBonds!(tParam, UC, 1.0, SpinVec[4], "s Hopping") # Am I not double counting the hopping ?? 
     for (ind, bas) in enumerate(UC.basis)
         push!(Nu, Param(1.0, 2))
         push!(Nd, Param(1.0, 2))
