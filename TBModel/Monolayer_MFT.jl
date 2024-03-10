@@ -16,6 +16,7 @@ function MFT(params, filename)
     n = get!(params, "n", 10)
     kSize = 6 * n + 3
     t = get!(params, "t", 1.0)
+    jh = get!(params, "jh", 1.0)
     U = get!(params, "U", 0.0)
     SpinVec = SpinMats(1 // 2)
     ##### Thermodynamic parameters
@@ -23,7 +24,8 @@ function MFT(params, filename)
     T = get!(params, "T", 0.0)
     t1 = -t
     t1Param = Param(t1, 2)
-    HoppingParams = [t1Param]
+    jhParam = Param(jh, 2)
+    HoppingParams = [t1Param, jhParam]
 
     ##Adding inner-hexagon structure  
     for j = 1:2
@@ -51,13 +53,13 @@ function MFT(params, filename)
     ##Adding anisotropic bonds and normalizing if needed
     for (ind, bas) in enumerate(UC.basis)
         if 1 < norm(bas) < 2
-            mat = intermat(normalize(weiss(bas) + weiss(-bas)))
+            mat = intermat(normalize(weiss0(bas) + weiss0(-bas)), normalize(weiss1(bas) + weiss1(-bas)))
         else
             closest = [bas, bas - a1, bas - a2]
-            spn = weiss(closest[findmin(x -> norm(x), closest)[2]])
-            replace!(spn, NaN => 0.0)
-            mat = intermat(spn)
+            clv = closest[findmin(x -> norm(x), closest)[2]]
+            mat = intermat(replace!(weiss0(clv), NaN => 0.0), replace!(weiss1(clv), NaN => 0.0))
         end
+        AddAnisotropicBond!(jhParam, UC, ind, ind, [0, 0], mat, 0.0, "Hunds")
     end
     CreateUnitCell!(UC, HoppingParams)
     # Adding MFT Parameters
