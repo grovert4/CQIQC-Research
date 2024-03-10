@@ -18,7 +18,6 @@ function MFT(params, filename)
     t = get!(params, "t", 1.0)
     jh = get!(params, "jh", 1.0)
     U = get!(params, "U", 0.0)
-    su2spin = SpinMats(1 // 2)
     ##### Thermodynamic parameters
     filling = get!(params, "filling", 0.5)
     T = get!(params, "T", 0.0)
@@ -26,6 +25,7 @@ function MFT(params, filename)
     t1Param = Param(t1, 2)
     jhParam = Param(jh, 2)
     HoppingParams = [t1Param, jhParam]
+    su2spin = SpinMats(1 // 2)
 
     ##Adding inner-hexagon structure  
     for j = 1:2
@@ -46,20 +46,7 @@ function MFT(params, filename)
 
     bz = BZ(kSize)
     FillBZ!(bz, UC)
-    path = CombinedBZPath(bz, [bz.HighSymPoints["G"], bz.HighSymPoints["K1"], bz.HighSymPoints["M2"]]; nearest=true)
     ##Adding anisotropic bonds and normalizing if needed
-    for (ind, bas) in enumerate(UC.basis)
-        if 1 < norm(bas) < 2
-            mat = intermat(normalize(weiss1(bas) + weiss1(-bas))) 
-        else 
-            closest = [bas, bas-a1, bas-a2]
-            spn = weiss1( closest[findmin(x -> norm(x), closest)[2]] )
-            replace!(spn, NaN=> 0.0)
-            mat = intermat(spn)
-        end
-        AddAnisotropicBond!(jhParam, UC, ind, ind, [0, 0], mat, 0.0, "Hunds")
-    end
-    CreateUnitCell!(UC, HoppingParams)
     # Adding MFT Parameters
     HoppingParams = [t1Param]
     n_up = [1.0 0.0; 0.0 0.0]
@@ -71,6 +58,18 @@ function MFT(params, filename)
     tParam =  Param(1.0, 2)
     UParam.value = [U]
     AddIsotropicBonds!(UParam, UC, 0.0, Hubbard, "Hubbard Interaction") # Do I need to add this to all sites?
+    # for (ind, bas) in enumerate(UC.basis)
+    #     if 1 < norm(bas) < 2
+    #         mat = intermat(normalize(weiss1(bas) + weiss1(-bas))) 
+    #     else 
+    #         closest = [bas, bas-a1, bas-a2]
+    #         spn = weiss1( closest[findmin(x -> norm(x), closest)[2]] )
+    #         replace!(spn, NaN=> 0.0)
+    #         mat = intermat(spn)
+    #     end
+    #     AddAnisotropicBond!(jhParam, UC, ind, ind, [0, 0], mat, 0.0, "Hunds")
+    # end
+    # CreateUnitCell!(UC, HoppingParams)
     #AddIsotropicBonds!(tParam, UC, 1.0, SpinVec[4], "s Hopping") # Am I not double counting the hopping ?? 
     # for (ind, bas) in enumerate(UC.basis)
     #     push!(Nu, Param(1.0, 2))
