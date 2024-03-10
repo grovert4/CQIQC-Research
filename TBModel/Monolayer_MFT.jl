@@ -18,7 +18,7 @@ function MFT(params, filename)
     t = get!(params, "t", 1.0)
     jh = get!(params, "jh", 1.0)
     U = get!(params, "U", 0.0)
-    SpinVec = SpinMats(1 // 2)
+    su2spin = SpinMats(1 // 2)
     ##### Thermodynamic parameters
     filling = get!(params, "filling", 0.5)
     T = get!(params, "T", 0.0)
@@ -33,19 +33,17 @@ function MFT(params, filename)
             AddBasisSite!(UC, i .* l1 + j .* l2)
         end
     end
-    AddIsotropicBonds!(t1Param, UC, 1.0, SpinVec[4], "t1")
+    AddIsotropicBonds!(t1Param, UC, 1.0, su2spin[4], "t1", checkOffsetRange=1)
     ##Functions that will be useful for adding anisotropic bonds
-    weiss1(v) = [sin(pi * (1 - norm(v) / 2)) * v[1] / norm(v), sin(pi * (1 - norm(v) / 2)) * v[2] / norm(v), cos(pi * (1 - norm(v) / 2))]
-    weiss2(v) = [0, 0, 1]
-    #weiss(v) = ep .* weiss1(v) .+ (1 - ep) .* weiss2(v)
-    weiss(v) = weiss1(v)
-    sigmav(i, j) = 2 .* [SpinVec[1][i, j], SpinVec[2][i, j], SpinVec[3][i, j]]
-    s11 = sigmav(1, 1)
-    s12 = sigmav(1, 2)
-    s21 = sigmav(2, 1)
-    s22 = sigmav(2, 2)
-
-    intermat(s) = [dot(s, s11) dot(s, s12); dot(s, s21) dot(s, s22)]
+    weiss0(v) = [sin(pi * (1 - norm(v) / 2)) * v[1] / norm(v), sin(pi * (1 - norm(v) / 2)) * v[2] / norm(v), cos(pi * (1 - norm(v) / 2))]
+    weiss1(v) = [sin(pi * (1 - norm(v) / 2)) * v[1] / norm(v), sin(pi * (1 - norm(v) / 2)) * v[2] / norm(v), -cos(pi * (1 - norm(v) / 2))]
+    sigmav(i, j) = 2 .* [su2spin[1][i, j], su2spin[2][i, j], su2spin[3][i, j]]
+    s11 = sigmav(1,1)
+    s12 = sigmav(1,2)
+    s21 = sigmav(2,1)
+    s22 = sigmav(2,2)
+    
+    intermat(s) = [dot(s, s11) dot(s, s12);dot(s, s21) dot(s, s22)]
 
     bz = BZ(kSize)
     FillBZ!(bz, UC)

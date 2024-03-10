@@ -21,7 +21,6 @@ function MFT(params, filename)
     jh = get!(params, "jh", 1.0)
     U = get!(params, "U", 0.0)
     t_density = get!(params, "t_density", 0.0)
-    SpinVec = SpinMats(1 // 2)
     ##### Thermodynamic parameters
     filling = get!(params, "filling", 0.5)
     T = get!(params, "T", 0.0)
