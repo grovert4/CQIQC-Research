@@ -35,8 +35,7 @@ function MFT(params, filename)
     end
     AddIsotropicBonds!(t1Param, UC, 1.0, su2spin[4], "t1", checkOffsetRange=1)
     ##Functions that will be useful for adding anisotropic bonds
-    weiss0(v) = [sin(pi * (1 - norm(v) / 2)) * v[1] / norm(v), sin(pi * (1 - norm(v) / 2)) * v[2] / norm(v), cos(pi * (1 - norm(v) / 2))]
-    weiss1(v) = [sin(pi * (1 - norm(v) / 2)) * v[1] / norm(v), sin(pi * (1 - norm(v) / 2)) * v[2] / norm(v), -cos(pi * (1 - norm(v) / 2))]
+    weiss1(v) = [sin(pi * (1 - norm(v)/2)) * v[1]/norm(v), sin(pi * (1 - norm(v)/2 )) * v[2]/norm(v), cos(pi * (1 - norm(v)/2 ))]
     sigmav(i, j) = 2 .* [su2spin[1][i, j], su2spin[2][i, j], su2spin[3][i, j]]
     s11 = sigmav(1,1)
     s12 = sigmav(1,2)
@@ -51,11 +50,12 @@ function MFT(params, filename)
     ##Adding anisotropic bonds and normalizing if needed
     for (ind, bas) in enumerate(UC.basis)
         if 1 < norm(bas) < 2
-            mat = intermat(normalize(weiss0(bas) + weiss0(-bas)), normalize(weiss1(bas) + weiss1(-bas)))
-        else
-            closest = [bas, bas - a1, bas - a2]
-            clv = closest[findmin(x -> norm(x), closest)[2]]
-            mat = intermat(replace!(weiss0(clv), NaN => 0.0), replace!(weiss1(clv), NaN => 0.0))
+            mat = intermat(normalize(weiss1(bas) + weiss1(-bas))) 
+        else 
+            closest = [bas, bas-a1, bas-a2]
+            spn = weiss1( closest[findmin(x -> norm(x), closest)[2]] )
+            replace!(spn, NaN=> 0.0)
+            mat = intermat(spn)
         end
         AddAnisotropicBond!(jhParam, UC, ind, ind, [0, 0], mat, 0.0, "Hunds")
     end
