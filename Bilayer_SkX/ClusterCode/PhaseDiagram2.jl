@@ -88,10 +88,10 @@ for i in start_index:end_index
    else
       UClocal = deepcopy(UCglobal)
       for i in 1:length(UClocal.basis)
-        setField!(UClocal, i, [0,0,h])
+        setField!(UClocal, i, [0,0,-(1)^(i) * jperp/(5 * inputFile["Jperp_max"]])
       end
       addInteraction!(UClocal, b1, b2, -jperp * Sz , (0,0,0))
       latticeLocal = Lattice(UClocal, L)
-      mc = runAnneal(t0,tf,latticeLocal,thermSweeps,measureSweeps,inputFile["coolRate"],filename,true, extfield);
+      mc = runAnneal(H, t0,tf,latticeLocal,thermSweeps,measureSweeps,inputFile["coolRate"],filename,true, extfield);
    end
 end
