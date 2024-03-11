@@ -171,6 +171,57 @@ function runAnneal(t0,tf,lat,thermSweeps,MeasureSweeps, coolRate, outfile=nothin
    return monte
 end
 
+##Below annealing function for H vs Jperp phase diagram
+function runAnneal2(H, t0,tf,lat,thermSweeps,MeasureSweeps, coolRate, outfile=nothing, init_rewrite=true, extfiled = false)
+   ts = [t0 * coolRate^t for t in -500:5000 if t0 >= t0 * coolRate^t >= tf]
+   monte = nothing
+   for (ind,temp) in enumerate(ts) 
+      thermalizationSweeps = thermSweeps
+      measurementSweeps = 0
+      h = lat.unitcell.interactionsField[1][3]
+        
+      if ind == 1
+            thermalizationSweeps = 0
+            measurementSweeps = MeasureSweeps
+            m = MonteCarlo(lat, 1/temp, thermalizationSweeps, measurementSweeps, reportInterval = MeasureSweeps, rewrite = init_rewrite);
+            if extfield
+                m.lattice.interactionField[1:2:end] = repeat([(0.0, 0.0, h + H)], length(m.lattice.interactionField[1:2:end]))
+                m.lattice.interactionField[2:2:end] = repeat([(0.0, 0.0, -h + H)], length(m.lattice.interactionField[1:2:end]))
+            end
+
+            run_nompi!(m, disableOutput = true)
+      else
+            if (ind == length(ts)) || (ind == round(length(ts)/2)) 
+               thermalizationSweeps = 0
+               measurementSweeps = MeasureSweeps
+            end
+            m = MonteCarlo(monte.lattice, 1/temp, thermalizationSweeps, measurementSweeps, reportInterval = MeasureSweeps, rewrite = false);
+
+            if extfield
+                # m.lattice.interactionField[1:2:end] = repeat([(0.0, 0.0, coolRate^(ind) * h)], length(m.lattice.interactionField[1:2:end]))
+                # m.lattice.interactionField[2:2:end] = repeat([(0.0, 0.0, -coolRate^(ind) * h)], length(m.lattice.interactionField[2:2:end]))
+                if 2 * length(ts)/5 >= ind > length(ts)/2
+                    m.lattice.interactionField[1:2:end] = repeat([(0.0, 0.0, h/2 + H)], length(m.lattice.interactionField[1:2:end]))
+                    m.lattice.interactionField[2:2:end] = repeat([(0.0, 0.0, -h/2 + H)], length(m.lattice.interactionField[2:2:end]))
+                elseif ind > 2 * length(ts)/5
+                    m.lattice.interactionField[1:2:end] = repeat([(0.0, 0.0, 0.0)], length(m.lattice.interactionField[1:2:end]))
+                    m.lattice.interactionField[2:2:end] = repeat([(0.0, 0.0, 0.0)], length(m.lattice.interactionField[2:2:end]))
+                end
+            end
+            
+            if ind != length(ts)
+               run_nompi!(m, disableOutput = true)
+            else
+               run_nompi!(m, outfile = outfile)
+            end 
+
+      end
+      monte = deepcopy(m);
+   end
+   return monte
+end
+
+
 function updateSpins!(file, lat)
    file = h5open(file)["mc"]
    sites = parse.(Int64,collect(keys(read(file["lattice"]["spins"]))))
