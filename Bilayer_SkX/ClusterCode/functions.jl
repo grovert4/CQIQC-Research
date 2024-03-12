@@ -204,8 +204,8 @@ function runAnneal2(H, t0,tf,lat,thermSweeps,MeasureSweeps, coolRate, outfile=no
                     m.lattice.interactionField[1:2:end] = repeat([(0.0, 0.0, h/2 + H)], length(m.lattice.interactionField[1:2:end]))
                     m.lattice.interactionField[2:2:end] = repeat([(0.0, 0.0, -h/2 + H)], length(m.lattice.interactionField[2:2:end]))
                 elseif ind > 2 * length(ts)/5
-                    m.lattice.interactionField[1:2:end] = repeat([(0.0, 0.0, 0.0)], length(m.lattice.interactionField[1:2:end]))
-                    m.lattice.interactionField[2:2:end] = repeat([(0.0, 0.0, 0.0)], length(m.lattice.interactionField[2:2:end]))
+                    m.lattice.interactionField[1:2:end] = repeat([(0.0, 0.0, H)], length(m.lattice.interactionField[1:2:end]))
+                    m.lattice.interactionField[2:2:end] = repeat([(0.0, 0.0, H)], length(m.lattice.interactionField[2:2:end]))
                 end
             end
             
