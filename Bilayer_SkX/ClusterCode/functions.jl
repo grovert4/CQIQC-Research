@@ -194,16 +194,19 @@ function runAnneal2(H, t0,tf,lat,thermSweeps,MeasureSweeps, coolRate, outfile=no
             if (ind == length(ts)) || (ind == round(length(ts)/2)) 
                thermalizationSweeps = 0
                measurementSweeps = MeasureSweeps
-            end
+                
             m = MonteCarlo(monte.lattice, 1/temp, thermalizationSweeps, measurementSweeps, reportInterval = MeasureSweeps, rewrite = false);
 
             if extfield
                 # m.lattice.interactionField[1:2:end] = repeat([(0.0, 0.0, coolRate^(ind) * h)], length(m.lattice.interactionField[1:2:end]))
                 # m.lattice.interactionField[2:2:end] = repeat([(0.0, 0.0, -coolRate^(ind) * h)], length(m.lattice.interactionField[2:2:end]))
-                if 2 * length(ts)/5 >= ind > length(ts)/2
+                if length(ts)/2 > ind > length(ts)/4
                     m.lattice.interactionField[1:2:end] = repeat([(0.0, 0.0, h/2 + H)], length(m.lattice.interactionField[1:2:end]))
                     m.lattice.interactionField[2:2:end] = repeat([(0.0, 0.0, -h/2 + H)], length(m.lattice.interactionField[2:2:end]))
-                elseif ind > 2 * length(ts)/5
+                elseif 3  * length(ts)/4 > ind >= length(ts)/2
+                    m.lattice.interactionField[1:2:end] = repeat([(0.0, 0.0, h/2 + H)], length(m.lattice.interactionField[1:2:end]))
+                    m.lattice.interactionField[2:2:end] = repeat([(0.0, 0.0, -h/2 + H)], length(m.lattice.interactionField[2:2:end]))
+                elseif ind >= 3 * length(ts)/4
                     m.lattice.interactionField[1:2:end] = repeat([(0.0, 0.0, H)], length(m.lattice.interactionField[1:2:end]))
                     m.lattice.interactionField[2:2:end] = repeat([(0.0, 0.0, H)], length(m.lattice.interactionField[2:2:end]))
                 end
