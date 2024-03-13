@@ -194,7 +194,7 @@ function runAnnealTWO(H, t0,tf,lat,thermSweeps,MeasureSweeps, coolRate, outfile=
             if (ind == length(ts)) || (ind == round(length(ts)/2)) 
                thermalizationSweeps = 0
                measurementSweeps = MeasureSweeps
-                
+            end
             m = MonteCarlo(monte.lattice, 1/temp, thermalizationSweeps, measurementSweeps, reportInterval = MeasureSweeps, rewrite = false);
 
             if extfield
