@@ -1,11 +1,15 @@
 import h5py as h5
 import yaml as yml
 from pathlib import Path
+import os,sys
 import numpy as np
 import matplotlib.pyplot as plt
 loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Bilayer_Data/"
 t1 = -1.0
-filename = "03.03.2024_Bilayer"
+filename = "03.03.2024_Monolayer"
+os.chdir("/home/andrewhardy/Documents/Graduate/Codes/Skyrmion/TBModel/Plotting")
+os.getcwd()
+sys.path.append(os.getcwd())
 plt.style.use("lake.mplstyle")
 plt.rcParams.update({"text.usetex": True})
 
@@ -16,7 +20,7 @@ params = yml.safe_load(Path(f"../Input/{filename}.yml").read_text())
 U_array = np.linspace(params["U_min"], params["U_max"], params["U_length"])
 filling_arr = np.linspace(params["filling_min"], params["filling_max"], params["filling_length"]) / 48
 filling = filling_arr[6]
-Uniform_Status = True
+Uniform_Status = False
 polarization = np.zeros((len(U_array), len(filling_arr)))
 energy = np.zeros((len(U_array), len(filling_arr)))
 conduct = np.zeros((len(U_array), len(filling_arr)))

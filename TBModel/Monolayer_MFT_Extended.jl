@@ -25,14 +25,14 @@ function MFT(params, filename)
     su2spin = SpinMats(1 // 2)
 
     ##Adding inner-hexagon structure  
-    for j = 1:2
-        for i = -1:4
+    for j = 1:3
+        for i = 1:9
             AddBasisSite!(UC, i .* l1 + j .* l2)
         end
     end
     AddIsotropicBonds!(t1Param, UC, 1.0, su2spin[4], "t1", checkOffsetRange=1)
     ##Functions that will be useful for adding anisotropic bonds
-    weiss1(v) = [sin(pi * (1 - norm(v) / 2)) * v[1] / norm(v), sin(pi * (1 - norm(v) / 2)) * v[2] / norm(v), cos(pi * (1 - norm(v) / 2))]
+    weiss1(v) = [sin(pi * (1 - norm(v) / 3)) * v[1] / norm(v), sin(pi * (1 - norm(v) / 3)) * v[2] / norm(v), cos(pi * (1 - norm(v) / 3))]
     sigmav(i, j) = 2 .* [su2spin[1][i, j], su2spin[2][i, j], su2spin[3][i, j]]
     s11 = sigmav(1, 1)
     s12 = sigmav(1, 2)
@@ -50,13 +50,12 @@ function MFT(params, filename)
     n_down = [0.0 0.0; 0.0 1.0]
     Hubbard = DensityToPartonCoupling(n_up, n_down)
     UParam = Param(1.0, 4)
-    Nu = []
-    Nd = []
+    Sz = []
     tParam = Param(1.0, 2)
     UParam.value = [U]
     AddIsotropicBonds!(UParam, UC, 0.0, Hubbard, "Hubbard Interaction") # Do I need to add this to all sites?
     for (ind, bas) in enumerate(UC.basis)
-        if 1 < norm(bas) < 2
+        if 1 < norm(bas) < 3
             mat = intermat(normalize(weiss1(bas) + weiss1(-bas)))
         else
             closest = [bas, bas - a1, bas - a2]
@@ -67,15 +66,14 @@ function MFT(params, filename)
         AddAnisotropicBond!(jhParam, UC, ind, ind, [0, 0], mat, 0.0, "Hunds")
     end
     CreateUnitCell!(UC, HoppingParams)
-    AddIsotropicBonds!(tParam, UC, 1.0, su2spin[4], "s Hopping") # Am I not double counting the hopping ?? 
+    AddIsotropicBonds!(tParam, UC, 1.0, su2spin[4], "s_H") # Am I not double counting the hopping ?? 
     for (ind, bas) in enumerate(UC.basis)
-        push!(Nu, Param(1.0, 2))
-        push!(Nd, Param(1.0, 2))
-        AddAnisotropicBond!(Nu[ind], UC, ind, ind, [0, 0], n_up, 0.0, "Nup-" * string(ind))
-        AddAnisotropicBond!(Nd[ind], UC, ind, ind, [0, 0], n_down, 0.0, "Ndown-" * string(ind))
+        push!(Sz, Param(1.0, 2))
+        AddAnisotropicBond!(Sz[ind], UC, ind, ind, [0, 0], su2spin[3], 0.0, "Sz-" * string(ind))
+        #AddAnisotropicBond!(Nd[ind], UC, ind, ind, [0, 0], n_down, 0.0, "Ndown-" * string(ind))
     end
 
-    ChiParams = vcat(tParam, Nu, Nd)
+    ChiParams = vcat(tParam, Sz)
     ChiParams = Vector{Param{2,Float64}}(ChiParams)
     ##Creating BZ and Hamiltonian Model
     bz = BZ(kSize)
