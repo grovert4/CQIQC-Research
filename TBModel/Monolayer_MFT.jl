@@ -4,10 +4,10 @@ loc = "/scratch/a/aparamek/andykh/Data/Bilayer_Data"
 #loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Bilayer_Data"
 function MFT(params, filename)
     ##Triangular Lattice 
-    const a1 = [-3.0, sqrt(3)]
-    const a2 = [3.0, sqrt(3)]
-    const l1 = [1.0, 0]
-    const l2 = [-0.5, sqrt(3) / 2]
+    a1 = [-1, sqrt(3) ]
+    a2 = [6.0, 0]
+    l1 = [1.0, 0]
+    l2 = [-0.5, sqrt(3) / 2]
     UC = UnitCell([a1, a2], 2, 2)
     ##Parameters
     n = get!(params, "n", 10)
@@ -25,8 +25,8 @@ function MFT(params, filename)
     su2spin = SpinMats(1 // 2)
 
     ##Adding inner-hexagon structure  
-    for j = 1:2
-        for i = -1:4
+    for j = 0:1
+        for i = 0:5
             AddBasisSite!(UC, i .* l1 + j .* l2)
         end
     end
