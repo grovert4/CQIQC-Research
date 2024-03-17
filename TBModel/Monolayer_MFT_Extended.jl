@@ -4,29 +4,29 @@ loc = "/scratch/a/aparamek/andykh/Data/Bilayer_Data"
 #loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Bilayer_Data"
 function MFT(params, filename)
     ##Triangular Lattice 
-    const a1 = [-3.0, sqrt(3)]
-    const a2 = [3.0, sqrt(3)]
-    const l1 = [1.0, 0]
-    const l2 = [-0.5, sqrt(3) / 2]
+    a1 = [-3.0, sqrt(3)]
+    a2 = [3.0, sqrt(3)]
+    l1 = [1.0, 0]
+    l2 = [-0.5, sqrt(3) / 2]
     UC = UnitCell([a1, a2], 2, 2)
     ##Parameters
     n = get!(params, "n", 10)
     kSize = 6 * n + 3
     t = get!(params, "t", 1.0)
-    jh = get!(params, "jh", 1.0)
+    jh = get!(params, "jh", 0.0)
     U = get!(params, "U", 0.0)
     ##### Thermodynamic parameters
     filling = get!(params, "filling", 0.5)
     T = get!(params, "T", 0.0)
     t1 = -t
     t1Param = Param(t1, 2)
-    jhParam = Param(jh, 2)
+    jhParam = Param(0.0, 2)
     HoppingParams = [t1Param, jhParam]
     su2spin = SpinMats(1 // 2)
 
     ##Adding inner-hexagon structure  
-    for j = 1:3
-        for i = 1:9
+    for j = 0:2
+        for i = 0:8
             AddBasisSite!(UC, i .* l1 + j .* l2)
         end
     end
