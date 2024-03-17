@@ -3,11 +3,11 @@ using MeanFieldToolkit, TightBindingToolkit, FixedPointToolkit
 loc = "/scratch/a/aparamek/andykh/Data/Bilayer_Data"
 #loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Bilayer_Data"
 function MFT(params, filename)
- ##Parameters
+    ##Parameters
     ##Triangular Lattice 
 
-    a1 = [-3.0, sqrt(3)]
-    a2 = [3.0, sqrt(3)]
+    a1 = [-1.0, sqrt(3)]
+    a2 = [6.0, 0.0]
 
     l1 = [1.0, 0]
     l2 = [-0.5, sqrt(3) / 2]
@@ -36,8 +36,8 @@ function MFT(params, filename)
     su2spin = SpinMats(1 // 2)
     su4spin = SpinMats(3 // 2)
     ##Adding inner-hexagon structure  
-    for j = 1:2
-        for i = -1:4
+    for j = 0:1
+        for i = 0:5
             AddBasisSite!(UC, i .* l1 + j .* l2)
         end
     end
@@ -96,7 +96,7 @@ function MFT(params, filename)
     # add filename to input 
     fileName = loc * "/$(filename)_UNIFORM_p=$(round(filling, digits=3))_U=$(round(U, digits=2))_t1=$(round(t1, digits=2)).jld2"
     GC.gc()
-    init_guess = fill(0.2,1)
+    init_guess = fill(0.2, 1)
     if isfile(fileName)
         println("TRYING TO LOAD " * fileName)
         try
@@ -104,10 +104,10 @@ function MFT(params, filename)
             ResumeMFT!(fileName; max_iter=params["max_iter"], tol=params["tol"])#, Update=BroydenMixing)
         catch e
             println("Error Loading $fileName")
-            SolveMFT!(mft, init_guess, fileName;  max_iter=params["max_iter"], tol=params["tol"])
+            SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
         end
     else
-        SolveMFT!(mft,init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
+        SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
     end
     for i in 1:2*length(UC.basis)
         c = ChernNumber(H, [i])

@@ -4,8 +4,8 @@ loc = "/scratch/a/aparamek/andykh/Data/Bilayer_Data"
 #loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Bilayer_Data"
 function MFT(params, filename)
     ##Triangular Lattice 
-    a1 = [-3.0, sqrt(3)]
-    a2 = [3.0, sqrt(3)]
+    a1 = [-1 / 2, sqrt(3) / 2]
+    a2 = [1.0, 0]
     l1 = [1.0, 0]
     l2 = [-0.5, sqrt(3) / 2]
     UC = UnitCell([a1, a2], 2, 2)
