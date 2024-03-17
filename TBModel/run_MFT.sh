@@ -1,4 +1,3 @@
-
 #!/bin/bash
 #SBATCH --mail-user=andrew.hardy@mail.utoronto.ca  
 #SBATCH --mail-type=ALL
