@@ -1,11 +1,14 @@
 import h5py as h5
 import yaml as yml
 from pathlib import Path
+import os,sys
 import numpy as np
 import matplotlib.pyplot as plt
 loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Bilayer_Data/"
 t1 = -1.0
-filename = "03.03.2024_Bilayer"
+os.chdir("/home/andrewhardy/Documents/Graduate/Codes/Skyrmion/TBModel/Plotting")
+os.getcwd()
+filename = "03.15.2024_Bilayer"
 plt.style.use("lake.mplstyle")
 plt.rcParams.update({"text.usetex": True})
 

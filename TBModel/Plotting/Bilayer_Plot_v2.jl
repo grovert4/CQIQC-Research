@@ -40,6 +40,7 @@ end
 
 filename = "01.25.2024_Bilayer"
 filename = "02.15.2024_Bilayer"
+filename = "03.15.2024_Bilayer"
 
 
 #println(@__DIR__)
@@ -47,7 +48,7 @@ params = YAML.load_file("../Input/$(filename).yml")
 
 U_array = collect(LinRange(params["U_min"], params["U_max"], params["U_length"]))
 filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / 48
-filling = filling_arr[9]
+filling = filling_arr[11]
 println(filling, "filling")
 #U_var = U_array[end-1]
 #loc = "/Users/ahardy/Library/CloudStorage/GoogleDrive-ahardy@flatironinstitute.org/My Drive/Skyrmion/Bilayer_SkX/TBModel/Monolayer"
@@ -58,7 +59,7 @@ const a2 = [3.0, sqrt(3)]
 
 const l1 = [1.0, 0]
 const l2 = [-0.5, sqrt(3) / 2]
-Uniform_Status = false
+Uniform_Status = true
 UC = UnitCell([a1, a2], 4)
 if Uniform_Status
     order_parameter = Array{Float64}(undef, (length(U_array), 1))
