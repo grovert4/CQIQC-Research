@@ -4,10 +4,8 @@ loc = "/scratch/a/aparamek/andykh/Data/Bilayer_Data"
 #loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Bilayer_Data"
 function MFT(params, filename)
     ##Triangular Lattice 
-
-    a1 = [-1.0, sqrt(3)]
-    a2 = [6.0, 0.0]
-
+    a1 = [-3.0, sqrt(3)] 
+    a2 = [3.0, sqrt(3)] 
     l1 = [1.0, 0]
     l2 = [-0.5, sqrt(3) / 2]
 
