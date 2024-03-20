@@ -6,7 +6,7 @@ tol : 1e-08
 # physical parameters
 t : 1.0
 t_inter : 0.0
-jh : 0.0
+jh : -1.0
 U : 1.0
 t_density : 0
 U_min : 0.0
