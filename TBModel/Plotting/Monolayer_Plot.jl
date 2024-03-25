@@ -15,7 +15,7 @@ function Plot_Band_Data!(TBResults, labels, closed::Bool=true, nearest::Bool=tru
     plt = plot(grid=false, legend=plot_legend, bg_legend=:transparent,
         framestyle=framestyle, guidefontsize=guidefontsize, tickfontsize=tickfontsize)
     #println(size(bands))
-    for (i, band) in enumerate(bands[1:24])
+    for i in 1:length(bands[1])
         #println(i)
         plot!(getindex.(bands, i), labels=L"Band : %$i", lw=2.0)
     end
@@ -39,15 +39,15 @@ end
 #############################
 
 filename = "01.25.2024_Bilayer"
-filename = "03.15.2024_Monolayer"
+filename = "03.20.2024_Monolayer_Extended"
 
 
 #println(@__DIR__)
 params = YAML.load_file("../Input/$(filename).yml")
 
 U_array = collect(LinRange(params["U_min"], params["U_max"], params["U_length"]))
-filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / 48
-filling = filling_arr[10]
+filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / (params["filling_length"] * 2)
+filling = filling_arr[27]
 println(filling, "filling")
 #U_var = U_array[end-1]
 #loc = "/Users/ahardy/Library/CloudStorage/GoogleDrive-ahardy@flatironinstitute.org/My Drive/Skyrmion/Bilayer_SkX/TBModel/Monolayer"
@@ -59,13 +59,18 @@ const a2 = [3.0, sqrt(3)]
 const l1 = [1.0, 0]
 const l2 = [-0.5, sqrt(3) / 2]
 Uniform_Status = false
-UC = UnitCell([a1, a2], 4)
+UC = UnitCell([a1, a2], 2)
+for j = 0:2
+    for i = 0:8
+        AddBasisSite!(UC, i .* l1 + j .* l2)
+    end
+end
 if Uniform_Status
     order_parameter = Array{Float64}(undef, (length(U_array), 1))
 else
-    order_parameter = Array{Float64}(undef, (length(U_array), 25))
+    order_parameter = Array{Float64}(undef, (length(U_array), 28))
 end
-c_arr = Array{Float64}(undef, (length(U_array), 24))
+c_arr = Array{Float64}(undef, (length(U_array), 54))
 c_fill = Array{Float64}(undef, (length(U_array)))
 gap_array = zeros((length(U_array), 2))
 ord_array = Array{Float64}(undef, (length(U_array)))
@@ -79,10 +84,10 @@ for (ind, U_var) in enumerate(U_array)
     end
     println(fileName)
     TBResults = load(fileName) #MeanFieldToolkit.MFTResume.ReadMFT(fileName)
-    #println(keys(TBResults))
+    println(length(TBResults["UC"].basis))
     gap_array[ind, 1] = U_var
     gap_array[ind, 2] = TBResults["Gap"]
-    println(TBResults["MFT_Energy"])
+    #println(TBResults["MFT_Energy"])
     eng_array[ind] = TBResults["MFT_Energy"][end]
     #println(TBResults["Gap"])
     c_arr[ind, :] = abs.(TBResults["Chern"])
@@ -90,6 +95,7 @@ for (ind, U_var) in enumerate(U_array)
     ord_arr = abs.(TBResults["Order_Parameter"])
     ords = TBResults["Outputs"]
     order_parameter[ind, :] = TBResults["Outputs"]
+    #println(length(ords))
     ord_array[ind] = (mean(abs.(ords)))
 
     plot = Plot_Band_Data!(TBResults, [L"\Gamma", L"M_2", L"M_3"])
@@ -111,9 +117,9 @@ energy_plot = scatter(U_array, eng_array, xlabel="U", ylabel="Energy")
 display(energy_plot)
 ords = scatter(U_array, abs.(order_parameter[:, 1]), xlabel="U", ylabel="t")
 display(ords)
-ords2 = scatter(U_array, abs.(order_parameter[:, 2:13]), xlabel="U", ylabel="ΔP_u")
+ords2 = scatter(U_array, abs.(order_parameter), xlabel="U", ylabel="ΔP_u")
 display(ords2)
-ords3 = scatter(U_array, abs.(order_parameter[:, 13:25]), xlabel="U", ylabel="ΔP_d")
+ords3 = scatter(U_array, abs.(order_parameter), xlabel="U", ylabel="ΔP_d")
 display(ords3)
 # scatter(U_array, [abs.(c_arr[:, 1]), abs.(c_arr[:, 4])], label=["Chern ( first 2 bands)" "Chern ( first 6 bands)"], ylabel="C")
 # #It's uncertain of what Chern number to use?
