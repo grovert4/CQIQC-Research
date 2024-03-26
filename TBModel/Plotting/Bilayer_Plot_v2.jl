@@ -15,7 +15,7 @@ function Plot_Band_Data!(TBResults, labels, closed::Bool=true, nearest::Bool=tru
     plt = plot(grid=false, legend=plot_legend, bg_legend=:transparent,
         framestyle=framestyle, guidefontsize=guidefontsize, tickfontsize=tickfontsize)
     #println(size(bands))
-    for (i, band) in enumerate(bands[1:48])
+    for i in 1:length(bands[1])
         #println(i)
         plot!(getindex.(bands, i), labels=L"Band : %$i", lw=2.0)
     end
@@ -40,14 +40,14 @@ end
 
 filename = "01.25.2024_Bilayer"
 filename = "02.15.2024_Bilayer"
-filename = "03.15.2024_Bilayer"
+filename = "03.03.2024_Bilayer"
 
 
 #println(@__DIR__)
 params = YAML.load_file("../Input/$(filename).yml")
 
 U_array = collect(LinRange(params["U_min"], params["U_max"], params["U_length"]))
-filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / 48
+filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / (params["filling_length"] * 2)
 filling = filling_arr[11]
 println(filling, "filling")
 #U_var = U_array[end-1]
@@ -59,7 +59,7 @@ const a2 = [3.0, sqrt(3)]
 
 const l1 = [1.0, 0]
 const l2 = [-0.5, sqrt(3) / 2]
-Uniform_Status = true
+Uniform_Status = false
 UC = UnitCell([a1, a2], 4)
 if Uniform_Status
     order_parameter = Array{Float64}(undef, (length(U_array), 1))

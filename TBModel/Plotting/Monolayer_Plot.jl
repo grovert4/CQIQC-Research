@@ -47,7 +47,7 @@ params = YAML.load_file("../Input/$(filename).yml")
 
 U_array = collect(LinRange(params["U_min"], params["U_max"], params["U_length"]))
 filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / (params["filling_length"] * 2)
-filling = filling_arr[27]
+filling = filling_arr[26]
 println(filling, "filling")
 #U_var = U_array[end-1]
 #loc = "/Users/ahardy/Library/CloudStorage/GoogleDrive-ahardy@flatironinstitute.org/My Drive/Skyrmion/Bilayer_SkX/TBModel/Monolayer"
@@ -125,7 +125,7 @@ display(ords3)
 # #It's uncertain of what Chern number to use?
 # xlabel!("U")
 
-C_plot = scatter(U_array, c_fill, xlabel="U", ylabel="σ(0)")
+C_plot = scatter(U_array, c_fill, xlabel="U", ylabel="σ(0)", ylims=(0.0, 1E-2))
 display(C_plot)
 savefig(loc * "Chern.png")
 # plot the bands color code by sign of Chern # 
