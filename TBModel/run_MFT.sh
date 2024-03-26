@@ -15,4 +15,4 @@ module load StdEnv/2023
 module load julia/1.10.0
 module load intel/2023.2.1
 module load intelmpi
-mpirun julia --project=.. --heap-size-hint=1G MFT_wrapper.jl 03.20.2024_Bilayer_Extended ./Bilayer_MFT_Extended.jl
+mpirun julia --project=.. --heap-size-hint=1G MFT_wrapper.jl 03.26.2024_Bilayer_Extended ./Bilayer_MFT_Extended.jl
