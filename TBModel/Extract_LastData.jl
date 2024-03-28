@@ -33,7 +33,7 @@ function KuboChern(Ham::Hamiltonian, bz::BZ, mu::Float64)
 
 end
 # how to make this MPI compatible ? 
-function extract_data!(folderpath::String, substring::String=".jld2")
+function extract_data!(folderpath::String, date, substring::String=".jld2")
     MPI.Init()
     comm = MPI.COMM_WORLD
     rank = MPI.Comm_rank(comm)
@@ -47,7 +47,7 @@ function extract_data!(folderpath::String, substring::String=".jld2")
     for i in start_index:end_index
         file = file_list[i]
         if occursin(substring, string(file))
-            if isfile(folderpath * "/Last_Itr/Last_Itr_" * string(file))
+            if isfile(folderpath * "/Last_Itr/Last_Itr_" * string(file)) && occursin(date, string(file))
                 println("FILE EXISTS : " * folderpath * "/Last_Itr/Last_Itr_" * string(file))
                 continue
             else
@@ -107,7 +107,7 @@ function extract_data!(folderpath::String, substring::String=".jld2")
     MPI.Finalize()
 end
 pwd()
-extract_data!("/scratch/a/aparamek/andykh/Data/Bilayer_Data")
+extract_data!("/scratch/a/aparamek/andykh/Data/Bilayer_Data", "03.26.2024")
 #dict["Gr"] = data_entry["function args"][1].model.Gr
 #dict["Convergence"] = [maximum(norm.(data_entry["outputs"][i] - data_entry["inputs"][i])) for i in 1:length(data_entry["inputs"])]
 #dict["Pairing Block"] = Lookup(data_entry["function args"][1].PairingOrders)
