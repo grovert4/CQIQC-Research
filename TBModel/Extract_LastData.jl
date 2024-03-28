@@ -46,8 +46,8 @@ function extract_data!(folderpath::String, date, substring::String=".jld2")
 
     for i in start_index:end_index
         file = file_list[i]
-        if occursin(substring, string(file))
-            if isfile(folderpath * "/Last_Itr/Last_Itr_" * string(file)) && occursin(date, string(file))
+        if occursin(substring, string(file)) && occursin(date, string(file))
+            if isfile(folderpath * "/Last_Itr/Last_Itr_" * string(file))
                 println("FILE EXISTS : " * folderpath * "/Last_Itr/Last_Itr_" * string(file))
                 continue
             else
