@@ -12,8 +12,8 @@ export CXX=g++
 export CFLAGS="-march=broadwell"
 export CXXFLAGS="-stdlib=libc++ -Wno-register -march=broadwell"
 export FC=gfortran
-
 export BLA_VENDOR=FlexiBLAS
+set(CMAKE_C_COMPILER_WORKS 1)
 
 # set up flexiblas:
 export MKL_INTERFACE_LAYER=GNU,LP64
