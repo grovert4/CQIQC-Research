@@ -7,8 +7,8 @@ MODULES="CCEnv StdEnv/2023 gcc/12.3 flexiblas/3.3.1 openmpi/4.1.5 cmake/3.27.7 f
 module purge
 module load ${MODULES}
 
-export CC=clang
-export CXX=clang++
+export CC=gcc
+export CXX=g++
 export CFLAGS="-march=broadwell"
 export CXXFLAGS="-stdlib=libc++ -Wno-register -march=broadwell"
 export FC=gfortran
@@ -24,7 +24,7 @@ export NEVANLINNA_NUM_THREADS=4
 NCORES=20
 
 BUILDINFO=3.2.x_nix2.2_llvm
-BUILDDIR=/tmp/triqs${BUILDINFO}_build
+BUILDDIR=$(pwd)/triqs${BUILDINFO}_build
 INSTALLDIR=$(pwd)/installation
 MODULEDIR=$(pwd)/installation/modules
 mkdir -p $BUILDDIR
