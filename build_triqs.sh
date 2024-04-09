@@ -1,6 +1,6 @@
 # #!/bin/bash
 
-MODULES=" CCEnv StdEnv/2023 gcc flexiblas openmpi cmake fftw  hdf5 boost python/3.10.13 llvm/16 eigen mpfr clang"
+MODULES=" CCEnv StdEnv/2023 gcc flexiblas openmpi cmake fftw  hdf5 boost python/3.10.13 llvm/16 eigen clang"
 module purge
 module load ${MODULES}
 
@@ -45,7 +45,7 @@ for pkg in ${packages} ; do
     # fetch latest changes
     cd $pkg.src && git pull
     mkdir -p build && cd build
-    cmake ../$pkg.src -DCMAKE_INSTALL_PREFIX=${INSTALLDIR} -DMPIEXEC_PREFLAGS='--allow-run-as-root'
+    cmake ../ -DCMAKE_INSTALL_PREFIX=${INSTALLDIR} -DMPIEXEC_PREFLAGS='--allow-run-as-root'
     make -j$NCORES
     # some test may use mpi
     ctest -j1 2>&1 >> ${testlog}
