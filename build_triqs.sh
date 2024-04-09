@@ -34,7 +34,7 @@ export PATH=${INSTALLDIR}/bin:$PATH
 export CPLUS_INCLUDE_PATH=${INSTALLDIR}/include:$CPLUS_INCLUDE_PATH
 export LIBRARY_PATH=${INSTALLDIR}/lib:$LIBRARY_PATH
 export LD_LIBRARY_PATH=${INSTALLDIR}/lib:$LD_LIBRARY_PATH
-export PYTHONPATH=${INSTALLDIR}/lib/python${PYVER}/site-packages:$PYTHONPATH
+export PYTHONPATH=${INSTALLDIR}/lib/python3.10/site-packages:$PYTHONPATH
 export CMAKE_PREFIX_PATH=${INSTALLDIR}/lib/cmake/triqs:${INSTALLDIR}/lib/cmake/cpp2py:$CMAKE_PREFIX_PATH
 packages="triqs"
 
