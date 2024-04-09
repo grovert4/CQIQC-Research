@@ -1,6 +1,6 @@
 # #!/bin/bash
 
-MODULES="modules/2.2-20230808 gcc flexiblas openmpi cmake gmp fftw  hdf5/mpi boost/libcpp-1.82.0 python/3.10 python-mpi/3.10 intel-oneapi-mkl llvm/16 eigen mpfr clang"
+MODULES=" CCEnv StdEnv2023 gcc flexiblas openmpi cmake fftw  hdf5 boost python/3.10.13 llvm/16 eigen mpfr clang"
 module purge
 module load ${MODULES}
 
@@ -31,8 +31,8 @@ export CPLUS_INCLUDE_PATH=${INSTALLDIR}/include:$CPLUS_INCLUDE_PATH
 export LIBRARY_PATH=${INSTALLDIR}/lib:$LIBRARY_PATH
 export LD_LIBRARY_PATH=${INSTALLDIR}/lib:$LD_LIBRARY_PATH
 export PYTHONPATH=${INSTALLDIR}/lib/python3.10/site-packages:$PYTHONPATH
-export CMAKE_PREFIX_PATH=${INSTALLDIR}/lib/cmake/triqs:${INSTALLDIR}/lib/cmake/cpp2py:$CMAKE_PREFIX_PATH
-
+export CMAKE_PREFIX_PATH=${INSTALLDIR}/lib/cmake/triqs:$CMAKE_PREFIX_PATH
+export CMAKE_PREFIX_PATH=${INSTALLDIR}/lib/cmake/cpp2py:$CMAKE_PREFIX_PATH
 # choose triqs + app to be installed
 packages="triqs tprf"
 
