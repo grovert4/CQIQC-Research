@@ -77,7 +77,7 @@ function extract_data!(folderpath::String, date, substring::String=".jld2")
                     DiagonalizeHamiltonian!(TBModel.Ham)
                     c = Array{Float32}(undef, 2 * length(TBModel.uc.basis))
                     for i in 1:2*length(TBModel.uc.basis)
-                        c[i] = PartialChernNumber(TBModel.Ham, i, TBModel.mu)
+                        c[i] = ChernNumber(TBModel.Ham, i, TBModel.mu)
                         #println(round(c[i]), "Chern")
                     end
                     GetVelocity!(TBModel.Ham, TBModel.bz)
