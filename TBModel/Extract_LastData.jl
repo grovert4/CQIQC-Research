@@ -78,7 +78,7 @@ function extract_data!(folderpath::String, date, substring::String=".jld2")
                     c = Array{Float32}(undef, 2 * length(TBModel.uc.basis))
                     for i in 1:2*length(TBModel.uc.basis)
                         c[i] = PartialChernNumber(TBModel.Ham, i, TBModel.mu)
-                        println(round(c[i]), "Chern")
+                        #println(round(c[i]), "Chern")
                     end
                     GetVelocity!(TBModel.Ham, TBModel.bz)
                     c_fill = KuboChern(TBModel.Ham, TBModel.bz, TBModel.mu)
@@ -93,6 +93,7 @@ function extract_data!(folderpath::String, date, substring::String=".jld2")
                     #plot = Plot_Band_Structure!(TBModel, [TBModel.bz.HighSymPoints["G"], TBModel.bz.HighSymPoints["M2"], TBModel.bz.HighSymPoints["M3"]]; labels=[L"\Gamma", L"M_2", L"M_3"])
                     dict["Chern"] = c
                     dict["Chern Fill"] = c_fill
+                    println(c_fill)
                     dict["Convergence"] = norm(data_entry["inputs"][end] - data_entry["outputs"][end]) #[maximum(norm.(data_entry["outputs"][i] - data_entry["inputs"][i])) for i in 1:length(data_entry["inputs"])]#
                     # save convergences
                     save(folderpath * "/Last_Itr/Last_Itr_" * string(file), dict)
