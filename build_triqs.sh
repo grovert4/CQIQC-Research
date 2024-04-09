@@ -45,7 +45,9 @@ for pkg in ${packages} ; do
     # fetch latest changes
     cd $pkg.src && git pull
     mkdir -p build && cd build
-    cmake ../ -DCMAKE_INSTALL_PREFIX=${INSTALLDIR} -DMPIEXEC_PREFLAGS='--allow-run-as-root'
+    cmake ../ -DCMAKE_INSTALL_PREFIX=${INSTALLDIR} -DMPIEXEC_PREFLAGS='--allow-run-as-root' \
+    -DPYTHON_INCLUDE_DIR=$(python -c "import sysconfig; print(sysconfig.get_path('include'))")  \
+    -DPYTHON_LIBRARY=$(python -c "import sysconfig; print(sysconfig.get_config_var('LIBDIR'))")
     make -j$NCORES
     # some test may use mpi
     ctest -j1 2>&1 >> ${testlog}
