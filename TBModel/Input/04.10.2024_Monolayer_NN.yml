@@ -1,12 +1,12 @@
 # numerical parameters
-n : 6
+n : 5
 T : 0.0005
 max_iter : 250
 tol : 1e-06
 # physical parameters
 t : 1.0
 t_inter : 0.0
-jh : 0.0
+jh : 1.0
 U : 1.0
 t_density : 0
 U_min : 0.0
