@@ -20,7 +20,7 @@ function MFT(params, filename)
     T = get!(params, "T", 0.0)
     t1 = -t
     t1Param = Param(t1, 2)
-    jhParam = Param(0.0, 2)
+    jhParam = Param(jh, 2)
     HoppingParams = [t1Param, jhParam]
     su2spin = SpinMats(1 // 2)
 
