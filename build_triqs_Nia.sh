@@ -1,7 +1,7 @@
 # #!/bin/bash
 
 #MODULES=" CCEnv StdEnv/2023 gcc/12.3 flexiblas openmpi/4.1.5 cmake fftw/3.3.10 hdf5 boost/1.82.0 python/3.10.13 llvm/16 eigen clang"
-MODULES=" NiaEnv/2022a gcc/11.3.0  openmpi/4.1.5 cmake fftw/3.3.10 hd
+MODULES="NiaEnv/2022a gcc/11.3.0  openmpi cmake fftw hdf5 boost python/3.11.5" 
 module purge
 module load ${MODULES}
 
@@ -40,8 +40,6 @@ export Python3_ROOT_DIR = `which python`
 packages="triqs cthyb tprf"
 printf "hello\nworld\n"
 echo $LD_LIBRARY_PATH
-printf "hello\nworld\n"
-echo $LIBRARY_PATH
 for pkg in ${packages} ; do 
     cd ${BUILDDIR}
     git clone -b unstable --depth 1 https://github.com/TRIQS/$pkg $pkg.src
