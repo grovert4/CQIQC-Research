@@ -33,22 +33,22 @@ export TRIQS_ROOT=${INSTALLDIR}
 export PATH=${INSTALLDIR}/bin:$PATH
 export CPLUS_INCLUDE_PATH=${INSTALLDIR}/include:$CPLUS_INCLUDE_PATH
 export LIBRARY_PATH=${INSTALLDIR}/lib:$LIBRARY_PATH
-export LD_LIBRARY_PATH=${INSTALLDIR}/lib:$LD_LIBRARY_PATH
+#export LD_LIBRARY_PATH=${INSTALLDIR}/lib:$LD_LIBRARY_PATH
 export PYTHONPATH=${INSTALLDIR}/lib/python${PYVER}/site-packages:$PYTHONPATH
 export CMAKE_PREFIX_PATH=${INSTALLDIR}/lib/cmake/triqs:${INSTALLDIR}/lib/cmake/cpp2py:$CMAKE_PREFIX_PATH
 export Python3_ROOT_DIR = `which python`
 packages="triqs cthyb tprf"
 
-echo $LD_LIBRARY_PATH
-# for pkg in ${packages} ; do 
-#     cd ${BUILDDIR}
-#     git clone -b unstable --depth 1 https://github.com/TRIQS/$pkg $pkg.src
-#     # fetch latest changes
-#     cd $pkg.src && git pull
-#     mkdir -p build && cd build
-#     cmake ../ -DCMAKE_INSTALL_PREFIX=${INSTALLDIR} -DMPIEXEC_PREFLAGS='--allow-run-as-root' 
-#     make -j$NCORES
-#     # some test may use mpi
-#     ctest --output-on-failure
-#     make install
-# done
+#echo $LD_LIBRARY_PATH
+for pkg in ${packages} ; do 
+    cd ${BUILDDIR}
+    git clone -b unstable --depth 1 https://github.com/TRIQS/$pkg $pkg.src
+    # fetch latest changes
+    cd $pkg.src && git pull
+    mkdir -p build && cd build
+    cmake ../ -DCMAKE_INSTALL_PREFIX=${INSTALLDIR} -DMPIEXEC_PREFLAGS='--allow-run-as-root' 
+    make -j$NCORES
+    # some test may use mpi
+    ctest --output-on-failure
+    make install
+done
