@@ -218,6 +218,7 @@ for index, mu in enumerate(mus):
 
     g0_wk = lattice_dyson_g0_wk(mu=mu, e_k=e_k, mesh=wmesh)
     chi00_wk = imtime_bubble_chi0_wk(g0_wk, nw=1)
+    print("TRIQS part done!")
 
     chiDD = np.zeros((ksize**2, N, N), dtype = np.complex128)
     chiXX = np.zeros((ksize**2, N, N), dtype = np.complex128)
@@ -225,12 +226,15 @@ for index, mu in enumerate(mus):
     chiZZ = np.zeros((ksize**2, N, N), dtype = np.complex128)
 
     for i in range(N):
-        for j in range(N):
+        for j in range(i+1):
             chiDD[:, i, j] = chi_contraction(chi00_wk, i, j, N, 0).data
-            chiXX[:, i, j] = chi_contraction(chi00_wk, i, j, N, 1).data
-            chiYY[:, i, j] = chi_contraction(chi00_wk, i, j, N, 2).data
-            chiZZ[:, i, j] = chi_contraction(chi00_wk, i, j, N, 3).data
-
+            
+            if i != j:
+                chiDD[:, j, i] = np.conj(chiDD[:, i, j])
+            # chiXX[:, i, j] = chi_contraction(chi00_wk, i, j, N, 1).data
+            # chiYY[:, i, j] = chi_contraction(chi00_wk, i, j, N, 2).data
+            # chiZZ[:, i, j] = chi_contraction(chi00_wk, i, j, N, 3).data
+    print("contraction completed")
 
     fileName = f"t1={t1}_B={B}_beta={beta}_mu={mu}_suscep.npz"
     np.savez(fileName, chiDD = chiDD, chiXX=chiXX, chiYY=chiYY, chiZZ=chiZZ, 
