@@ -34,7 +34,7 @@ export PATH=${INSTALLDIR}/bin:$PATH
 export CPLUS_INCLUDE_PATH=${INSTALLDIR}/include:$CPLUS_INCLUDE_PATH
 export LIBRARY_PATH=${INSTALLDIR}/lib:$LIBRARY_PATH
 export LD_LIBRARY_PATH=${INSTALLDIR}/lib:$LD_LIBRARY_PATH
-export PYTHONPATH=${INSTALLDIR}/lib/python3.10/site-packages:$PYTHONPATH
+export PYTHONPATH=${INSTALLDIR}/lib/python${PYVER}/site-packages:$PYTHONPATH
 export CMAKE_PREFIX_PATH=${INSTALLDIR}/lib/cmake/triqs:${INSTALLDIR}/lib/cmake/cpp2py:$CMAKE_PREFIX_PATH
 packages="triqs"
 
@@ -45,10 +45,9 @@ for pkg in ${packages} ; do
     # fetch latest changes
     cd $pkg.src && git pull
     mkdir -p build && cd build
-    cmake ../ -DCMAKE_INSTALL_PREFIX=${INSTALLDIR} -DMPIEXEC_PREFLAGS='--allow-run-as-root' \
-    -DPython3_EXECUTABLE=$(which python3)
+    cmake ../ -DCMAKE_INSTALL_PREFIX=${INSTALLDIR} -DMPIEXEC_PREFLAGS='--allow-run-as-root' 
     make -j$NCORES
     # some test may use mpi
-    ctest -j1 2>&1 >> ${testlog}
+    make test
     make install
 done
