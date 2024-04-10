@@ -7,9 +7,8 @@ source ~/triqsenv/bin/activate
 
 export CC=clang
 export CXX=clang++
-export CFLAGS="-march=broadwell"
 export PYVER=$(python3 -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')
-export CXXFLAGS="-stdlib=libc++ -Wno-register -march=broadwell"
+export CXXFLAGS="-stdlib=libc++ -Wno-register -march=native"
 export FC=gfortran
 # compiler flags add stdlib=libc++ for clang
 
@@ -29,17 +28,20 @@ BUILDDIR=$(pwd)
 # set installation directory (default pwd/install)
 INSTALLDIR=$(pwd)/install
 
+
 export TRIQS_ROOT=${INSTALLDIR}
 export PATH=${INSTALLDIR}/bin:$PATH
 export CPLUS_INCLUDE_PATH=${INSTALLDIR}/include:$CPLUS_INCLUDE_PATH
 export LIBRARY_PATH=${INSTALLDIR}/lib:$LIBRARY_PATH
-#export LD_LIBRARY_PATH=${INSTALLDIR}/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=${INSTALLDIR}/lib:$LD_LIBRARY_PATH
 export PYTHONPATH=${INSTALLDIR}/lib/python${PYVER}/site-packages:$PYTHONPATH
 export CMAKE_PREFIX_PATH=${INSTALLDIR}/lib/cmake/triqs:${INSTALLDIR}/lib/cmake/cpp2py:$CMAKE_PREFIX_PATH
 export Python3_ROOT_DIR = `which python`
 packages="triqs cthyb tprf"
-
-#echo $LD_LIBRARY_PATH
+printf "hello\nworld\n"
+echo $LD_LIBRARY_PATH
+printf "hello\nworld\n"
+echo $LIBRARY_PATH
 for pkg in ${packages} ; do 
     cd ${BUILDDIR}
     git clone -b unstable --depth 1 https://github.com/TRIQS/$pkg $pkg.src
