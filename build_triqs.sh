@@ -5,8 +5,8 @@ module purge
 module load ${MODULES}
 source ~/triqsenv/bin/activate
 
-export CC=gcc
-export CXX=g++
+export CC=clang
+export CXX=clang++
 export PYVER=$(python3 -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')
 export CXXFLAGS="-stdlib=libc++ -Wno-register -march=native"
 export FC=gfortran
