@@ -1,6 +1,6 @@
 # #!/bin/bash
 
-MODULES=" CCEnv StdEnv/2023 gcc flexiblas openmpi cmake fftw  hdf5 boost python/3.10.13 llvm/16 eigen clang"
+MODULES=" CCEnv StdEnv/2023 gcc flexiblas openmpi/4.1.5 cmake fftw  hdf5 boost python/3.10.13 llvm/16 eigen clang"
 module purge
 module load ${MODULES}
 
