@@ -14,7 +14,7 @@ export FC=gfortran
 # compiler flags add stdlib=libc++ for clang
 
 # set blas / lapack Intel10_64_dyn | OpenBLAS | FlexiBLAS
-export BLA_VENDOR=Intel10_64_dyn
+export BLA_VENDOR=FlexiBLAS
 
 # set up MKL / OpenMP:
 export MKL_INTERFACE_LAYER=GNU,LP64
