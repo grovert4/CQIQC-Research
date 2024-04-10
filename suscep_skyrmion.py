@@ -13,9 +13,10 @@ from triqs_tprf.lattice_utils import imtime_bubble_chi0_wk
 s1 = np.matrix([[0,1],[1,0]])
 s2 = np.matrix([[0,-1j],[1j,0]])
 s3 = np.matrix([[1,0],[0,-1]])
+s4 = np.eye(2, dtype=np.complex128)
 sup = np.matrix([[1,0],[0,0]])
 sdo = np.matrix([[0,0],[0,1]])
-paulis = [s1,s2,s3]
+paulis = [s4, s1, s2, s3]
 
 ##### return the Hunds coupling matrix
 def hunds(B: list) -> np.matrix:
@@ -87,8 +88,10 @@ bonds = {(0, 0) : NN_00, (0, 1) : NN_01, (1, 0) : NN_10, (1, 1) : NN_11}
 
 t1 = 1.0
 B = 1.0 * t1
+L = (6, 2)
+N = L[0] * L[1]
 
-pos, names = positions(6, 2, 2)
+pos, names = positions(*L, 2)
 ########## tight binding model #################
 model = TBLattice(
     units = [(-3.0, np.sqrt(3), 0.0), [3.0, np.sqrt(3), 0.0]],##### Primitive vectors
@@ -107,7 +110,8 @@ model = TBLattice(
         },
     )
 
-kmesh = model.get_kmesh(n_k=(8, 8, 1))
+ksize = 32
+kmesh = model.get_kmesh(n_k=(ksize, ksize, 1))
 e_k = model.fourier(kmesh)
 
 G = [0.0, 0.0, 0.0]
@@ -123,12 +127,14 @@ k_vecs, k_plot, k_ticks = k_space_path(paths, bz=model.bz)
 def energies(k, e_k):
     return np.linalg.eigvalsh(e_k(k))
 ##### Band structure
-# bands_plot = plt.plot(k_plot, [energies(k, e_k) for k in k_vecs])
-# plt.xticks(k_ticks, [r'$\Gamma$',r'$K_1$',r'$M_2$',r'$\Gamma$'])
-# plt.ylabel(r'$\epsilon(\mathbf{k})$')
-# plt.grid(True)
+bands_plot = plt.plot(k_plot, [energies(k, e_k) for k in k_vecs])
+plt.xticks(k_ticks, [r'$\Gamma$',r'$K_1$',r'$M_2$',r'$\Gamma$'])
+plt.ylabel(r'$\epsilon(\mathbf{k})$')
+plt.grid(True)
+plt.savefig(f"band_structure_t1={t1}_B={B}.png")
+plt.close()
 # plt.show()
-
+# quit()
 ##### fermi distribution function
 def fermi(e, beta, mu):
     return 1.0 / (np.exp(beta * (e-mu)) + 1.0)
@@ -149,20 +155,84 @@ mus = np.linspace(-7.0, 4.0, 111)
 fillings = np.zeros(len(mus))
 print("calculating chemical potential vs filling...")
 for (i, mu) in enumerate(mus):
-    fillings[i] = filling(bands(e_k, kmesh, 32), beta, mu)
+    fillings[i] = filling(bands(e_k, kmesh, ksize), beta, mu)
     
-# mu_vs_filling = plt.plot(fillings, mus)
-# plt.ylabel(r'$\mu$')
-# plt.xlabel(r'$n$')
+mu_vs_filling = plt.plot(fillings, mus)
+plt.ylabel(r'$\mu$')
+plt.xlabel(r'$n$')
 # plt.hlines(-0.4, 0.0, 1.0, ls='--', color='orange')
-# plt.vlines(0.3, -2.5, 2.5, ls='--', color='orange')
+plt.vlines(0.5, -7, 4, ls='--', color='orange')
 # plt.show(mu_vs_filling)
-print("calculating bare bubble...")
-ind = 40
-mu = mus[ind]
-filling = fillings[ind]
-wmesh = MeshImFreq(beta=10.0, S='Fermion', n_max=30)
-g0_wk = lattice_dyson_g0_wk(mu=mu, e_k=e_k, mesh=wmesh)
+plt.savefig(f"mu_vs_filling_t1={t1}_B={B}.png")
+plt.close()
+
+############################################ BARE BUBBLE #######################################
+##### returns S^a at site i of total sites N where S^a = [rho, Sx, Sy, Sz].
+def S(i:int, N:int, direction:int) -> np.matrix:
+    mat = np.eye(2*N, dtype=np.complex128)
+    mat[2*i:2*i+2, 2*i:2*i+2] = paulis[direction]
+    return mat
+
+##### contract the full rank-4 susceptibility tensor to return a matrix
+def chi_contraction(chi, i:int, j:int, N:int, direction:int):
+    Si = S(i, N, direction)
+    Sj = S(j, N, direction)
+    
+    chi_density = chi[0, 0, 0, 0].copy()
+    chi_density.data[:] = np.einsum('wqabcd,ab,cd->wq', chi.data, Si, Sj)[:, :]
+    chi_density = chi_density[Idx(0), :]
+    return chi_density
+
+def interpolate_chi(chi, k_vecs):
+    assert( k_vecs.shape[1] == 3 )
+    chi_interp = np.zeros(
+        [k_vecs.shape[0]] + list(chi.target_shape), dtype=complex)
+
+    for kidx, (kx, ky, kz) in enumerate(k_vecs):
+        chi_interp[kidx] = chi((kx, ky, kz))
+
+    return chi_interp
+
+def interp_mat(chi, N:int, direction:int):
+
+    chiMats = np.zeros([k_vecs.shape[0], N, N], dtype=complex)
+    
+    for i in range(N):
+        for j in range(i+1):
+            
+            chi_contracted = chi_contraction(chi, i, j, N, direction)
+            chiMats[:, i, j] += interpolate_chi(chi_contracted, k_vecs)
+
+            if i != j:
+                chiMats[:, j, i] += chiMats[:, i, j].conj() 
+    
+    return chiMats
+# quit()
+wmesh = MeshImFreq(beta=beta, S='Fermion', n_max=60)
+ks = np.array([k.value for k in kmesh])
 
 from triqs_tprf.lattice_utils import imtime_bubble_chi0_wk
-chi00_wk = imtime_bubble_chi0_wk(g0_wk, nw=1)
+
+for index, mu in enumerate(mus):
+    print(f"calculating bare bubble for mu = {mu}...")
+
+    g0_wk = lattice_dyson_g0_wk(mu=mu, e_k=e_k, mesh=wmesh)
+    chi00_wk = imtime_bubble_chi0_wk(g0_wk, nw=1)
+
+    chiDD = np.zeros((ksize**2, N, N), dtype = np.complex128)
+    chiXX = np.zeros((ksize**2, N, N), dtype = np.complex128)
+    chiYY = np.zeros((ksize**2, N, N), dtype = np.complex128)
+    chiZZ = np.zeros((ksize**2, N, N), dtype = np.complex128)
+
+    for i in range(N):
+        for j in range(N):
+            chiDD[:, i, j] = chi_contraction(chi00_wk, i, j, N, 0).data
+            chiXX[:, i, j] = chi_contraction(chi00_wk, i, j, N, 1).data
+            chiYY[:, i, j] = chi_contraction(chi00_wk, i, j, N, 2).data
+            chiZZ[:, i, j] = chi_contraction(chi00_wk, i, j, N, 3).data
+
+
+    fileName = f"t1={t1}_B={B}_beta={beta}_mu={mu}_suscep.npz"
+    np.savez(fileName, chiDD = chiDD, chiXX=chiXX, chiYY=chiYY, chiZZ=chiZZ, 
+                ks=ks, beta = beta, mu = mu, filling=fillings[index],
+                reciprocal = kmesh.bz.units, primitives=model.units)
