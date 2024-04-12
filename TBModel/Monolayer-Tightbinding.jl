@@ -1,7 +1,7 @@
 using Plots, TightBindingToolkit, LinearAlgebra, ColorSchemes
-
-a1 = [-3.0, sqrt(3)]
-a2 = [3.0, sqrt(3)]
+SkXSize = 4
+a1 = SkXSize/2*[-3.0, sqrt(3)]
+a2 = SkXSize/2*[3.0, sqrt(3)]
 UC = UnitCell([a1 , a2] , 2)
 
 ##Triangular Lattice
@@ -15,8 +15,8 @@ JH = 1.0
 
 
 ##Adding inner-hexagon structure
-for j = 1:2
-    for i = -1:4
+for j = 0:(SkXSize-1)
+    for i = 0:(SkXSize*3-1)
         AddBasisSite!(UC, i .* l1 + j .* l2)
     end
 end
@@ -25,8 +25,9 @@ end
 AddIsotropicBonds!(UC, 1.0, -t * pspin[4], "iso", checkOffsetRange = 1)
 
 ##Functions that will be useful for adding anisotropic bonds
+
 ep = 1.0
-tau1(v) = [sin(pi * (1 - norm(v)/2)) * v[1]/norm(v), sin(pi * (1 - norm(v)/2 )) * v[2]/norm(v), cos(pi * (1 - norm(v)/2 ))]
+tau1(v) = [sin(pi * (norm(v)/(SkXSize))) * v[1]/norm(v), sin(pi * (norm(v)/(SkXSize) )) * v[2]/norm(v), cos(pi * ( norm(v)/(SkXSize) ))]
 tau2(v) = [0,0,1]
 # tau(v) = ep .* tau1(v) .+ (1 - ep) .* tau2(v)
 tau(v) = tau1(v)
@@ -40,22 +41,24 @@ intermat(s) = [dot(s, s11) dot(s, s12);dot(s, s21) dot(s, s22)]
 
 ##Adding anisotropic bonds and normalizing if needed
 for (ind, bas) in enumerate(UC.basis)
-    if 1 < norm(bas) < 2
-        mat = intermat(normalize(tau(bas) + tau(-bas)))
+    closest = [bas, bas-a1, bas-a2, bas-a1-a2, bas + a1, bas + a2, bas + a1+a2, bas + a1-a2, bas - a1+a2]
+    minimal = findmin(x -> norm(x), closest)[2]
+    if (SkXSize -1) < norm(closest[minimal]) < SkXSize
+        mat = intermat(tau( closest[minimal] ) + tau( -closest[minimal] ) )
     else
-        closest = [bas, bas-a1, bas-a2]
-        spn = tau( closest[findmin(x -> norm(x), closest)[2]] )
+
+        # println(findmin(x -> norm(x), closest))
+        spn = tau( closest[minimal])
         replace!(spn, NaN=> 0.0)
         mat = intermat(spn)
     end
     AddAnisotropicBond!(UC, ind, ind, [0,0], -JH * mat, 0.0, "interaction")
 end
 
-Plot_Fields!(UC ; use_lookup = true, site_size = 4.0,
+p = Plot_Fields!(UC ; use_lookup = true, site_size = 4.0,
     field_thickness=2.0, field_opacity=0.9, scale = 0.5,
     cmp=:viridis)
-
-##Plotting the unit cell
+# p.legend = false##Plotting the unit cell
 # plot_UC = Plot_UnitCell!(UC);
 # display(plot_UC)
 
