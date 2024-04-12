@@ -37,7 +37,7 @@ function MFT(params, filename)
     weiss_neel(v) = [sin(pi * (norm(v) / (SkXSize))) * v[1] / norm(v), sin(pi * (norm(v) / (SkXSize))) * v[2] / norm(v), cos(pi * (norm(v) / (SkXSize)))]
     weiss_bloch(v) = [sin(pi * (norm(v) / (SkXSize))) * v[2] / norm(v), sin(pi * (norm(v) / (SkXSize))) * -v[1] / norm(v), cos(pi * (norm(v) / (SkXSize)))]
     weiss = Dict("Neel" => weiss_neel, "Bloch" => weiss_bloch)
-    sigmav(i, j) = 2 .* [pspin[1][i, j], pspin[2][i, j], pspin[3][i, j]]
+    sigmav(i, j) = 2 .* [su2spin[1][i, j], su2spin[2][i, j], su2spin[3][i, j]]
     s11 = sigmav(1, 1)
     s12 = sigmav(1, 2)
     s21 = sigmav(2, 1)
