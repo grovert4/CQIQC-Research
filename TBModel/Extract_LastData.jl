@@ -48,7 +48,7 @@ function extract_data!(folderpath::String, date, substring::String=".jld2")
         file = file_list[i]
         if occursin(substring, string(file)) && occursin(date, string(file))
             if isfile(folderpath * "/Last_Itr/Last_Itr_" * string(file))
-                println("FILE EXISTS : "* string(file))
+                println("FILE EXISTS : " * string(file))
                 continue
             else
                 try
@@ -63,7 +63,7 @@ function extract_data!(folderpath::String, date, substring::String=".jld2")
                     order_param = last.(getproperty.(dict["Hopping_Block"], :value))
                     dict["Order_Parameter"] = order_param
                     TBModel = data_entry["function args"][1].model
-                    n = 6
+                    n = 15
                     kSize = 6 * n + 3
                     TBModel.bz = BZ(kSize)
                     FillBZ!(TBModel.bz, TBModel.uc)
@@ -71,13 +71,15 @@ function extract_data!(folderpath::String, date, substring::String=".jld2")
                     DiagonalizeHamiltonian!(TBModel.Ham)
                     SolveModel!(TBModel; get_gap=true)
                     c = Array{Float32}(undef, 2 * length(TBModel.uc.basis))
+                    idx = isBandGapped(TBModel.Ham)
+                    band_list = LinRange(1:2*length(TBModel.uc.basis))
                     for i in 1:2*length(TBModel.uc.basis)
-                        c[i] = ChernNumber(TBModel.Ham, [i])#, TBModel.mu)
+                        c[i] = ChernNumber(TBModel.Ham, band_list[idx[i]])#, TBModel.mu)
                         #c[i] = PartialChernNumber(TBModel.Ham, i)#, TBModel.mu)
-
                         #println(round(c[i]), "Chern")
-                    # This has an error for some reason ? 
+                        # This has an error for some reason ? 
                     end
+
                     GetVelocity!(TBModel.Ham, TBModel.bz)
                     c_fill = KuboChern(TBModel.Ham, TBModel.bz, TBModel.mu)
                     path = [TBModel.bz.HighSymPoints["G"], TBModel.bz.HighSymPoints["M2"], TBModel.bz.HighSymPoints["M3"]]
@@ -98,7 +100,7 @@ function extract_data!(folderpath::String, date, substring::String=".jld2")
                     dict["Convergence"] = norm(data_entry["inputs"][end] - data_entry["outputs"][end]) #[maximum(norm.(data_entry["outputs"][i] - data_entry["inputs"][i])) for i in 1:length(data_entry["inputs"])]#
                     # save convergences
                     save(folderpath * "/Last_Itr/Last_Itr_" * string(file), dict)
-                    println("COMPLETED : "* string(file) )
+                    println("COMPLETED : " * string(file))
                 catch e
                     println("Error Loading $file")
                     println(e)
@@ -110,4 +112,4 @@ function extract_data!(folderpath::String, date, substring::String=".jld2")
     MPI.Finalize()
 end
 pwd()
-extract_data!("/scratch/a/aparamek/andykh/Data/Bilayer_Data",  "$(ARGS[1])")
+extract_data!("/scratch/a/aparamek/andykh/Data/Bilayer_Data", "$(ARGS[1])")
