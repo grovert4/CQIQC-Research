@@ -83,17 +83,15 @@ function extract_data!(folderpath::String, date, substring::String=".jld2")
                     GetVelocity!(TBModel.Ham, TBModel.bz)
                     c_fill = KuboChern(TBModel.Ham, TBModel.bz, TBModel.mu)
                     dict["Bands"] = bands_from_index
-                    #println(bands_from_index)
                     dict["Labels"] = label_indices
                     dict["BZ_Path"] = bzpath
                     dict["UC"] = TBModel.uc
                     dict["Gap"] = TBModel.gap # I seem to have done this wrong? 
                     dict["mu"] = TBModel.mu
                     dict["Outputs"] = data_entry["outputs"][end]
-                    #plot = Plot_Band_Structure!(TBModel, [TBModel.bz.HighSymPoints["G"], TBModel.bz.HighSymPoints["M2"], TBModel.bz.HighSymPoints["M3"]]; labels=[L"\Gamma", L"M_2", L"M_3"])
                     dict["Chern"] = c
                     dict["Chern Fill"] = c_fill
-                    println(c_fill)
+                    #println(c_fill)
                     dict["Convergence"] = norm(data_entry["inputs"][end] - data_entry["outputs"][end]) #[maximum(norm.(data_entry["outputs"][i] - data_entry["inputs"][i])) for i in 1:length(data_entry["inputs"])]#
                     # save convergences
                     save(folderpath * "/Last_Itr/Last_Itr_" * string(file), dict)
