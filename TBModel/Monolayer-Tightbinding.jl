@@ -1,16 +1,17 @@
 using Plots, TightBindingToolkit, LinearAlgebra, ColorSchemes
-SkXSize = 4
-a1 = SkXSize/2*[-3.0, sqrt(3)]
-a2 = SkXSize/2*[3.0, sqrt(3)]
-UC = UnitCell([a1 , a2] , 2)
+SkXSize = get!(params, "SkXSize", 2)
+SkX = get!(params, "SkX", "Neel")
+a1 = SkXSize / 2 * [-3.0, sqrt(3)]
+a2 = SkXSize / 2 * [3.0, sqrt(3)]
+UC = UnitCell([a1, a2], 2)
 
 ##Triangular Lattice
 l1 = [1.0, 0]
-l2 = [-0.5, sqrt(3)/2]
+l2 = [-0.5, sqrt(3) / 2]
 
 ##Parameters
 t = 1.0
-pspin = SpinMats(1//2)
+pspin = SpinMats(1 // 2)
 JH = 1.0
 
 
@@ -22,42 +23,42 @@ for j = 0:(SkXSize-1)
 end
 
 ##Istrotropic bonds
-AddIsotropicBonds!(UC, 1.0, -t * pspin[4], "iso", checkOffsetRange = 1)
+AddIsotropicBonds!(UC, 1.0, -t * pspin[4], "iso", checkOffsetRange=1)
 
 ##Functions that will be useful for adding anisotropic bonds
 
-ep = 1.0
-tau1(v) = [sin(pi * (norm(v)/(SkXSize))) * v[1]/norm(v), sin(pi * (norm(v)/(SkXSize) )) * v[2]/norm(v), cos(pi * ( norm(v)/(SkXSize) ))]
-tau2(v) = [0,0,1]
-# tau(v) = ep .* tau1(v) .+ (1 - ep) .* tau2(v)
-tau(v) = tau1(v)
-sigmav(i,j) = 2 .* [pspin[1][i,j], pspin[2][i,j], pspin[3][i,j]]
-s11 = sigmav(1,1)
-s12 = sigmav(1,2)
-s21 = sigmav(2,1)
-s22 = sigmav(2,2)
+weiss_neel(v) = [sin(pi * (norm(v) / (SkXSize))) * v[1] / norm(v), sin(pi * (norm(v) / (SkXSize))) * v[2] / norm(v), cos(pi * (norm(v) / (SkXSize)))]
+weiss_bloch(v) = [sin(pi * (norm(v) / (SkXSize))) * v[1] / norm(v), sin(pi * (norm(v) / (SkXSize))) * v[2] / norm(v), cos(pi * (norm(v) / (SkXSize)))]
+weiss = Dict("Neel" => weiss_neel, "Bloch" => weiss_bloch)
+sigmav(i, j) = 2 .* [pspin[1][i, j], pspin[2][i, j], pspin[3][i, j]]
+s11 = sigmav(1, 1)
+s12 = sigmav(1, 2)
+s21 = sigmav(2, 1)
+s22 = sigmav(2, 2)
 
-intermat(s) = [dot(s, s11) dot(s, s12);dot(s, s21) dot(s, s22)]
+intermat(s) = [dot(s, s11) dot(s, s12); dot(s, s21) dot(s, s22)]
 
 ##Adding anisotropic bonds and normalizing if needed
 for (ind, bas) in enumerate(UC.basis)
-    closest = [bas, bas-a1, bas-a2, bas-a1-a2, bas + a1, bas + a2, bas + a1+a2, bas + a1-a2, bas - a1+a2]
+    closest = [bas, bas - a1, bas - a2, bas - a1 - a2, bas + a1, bas + a2, bas + a1 + a2, bas + a1 - a2, bas - a1 + a2]
     minimal = findmin(x -> norm(x), closest)[2]
-    if (SkXSize -1) < norm(closest[minimal]) < SkXSize
-        mat = intermat(tau( closest[minimal] ) + tau( -closest[minimal] ) )
+    if (SkXSize - 1) < norm(closest[minimal]) < SkXSize
+        mat = intermat(weiss[Skx](closest[minimal]) + weiss[Skx](-closest[minimal]))
     else
 
         # println(findmin(x -> norm(x), closest))
-        spn = tau( closest[minimal])
-        replace!(spn, NaN=> 0.0)
+        spn = weiss[Skx](closest[minimal])
+        replace!(spn, NaN => 0.0)
         mat = intermat(spn)
     end
-    AddAnisotropicBond!(UC, ind, ind, [0,0], -JH * mat, 0.0, "interaction")
+    AddAnisotropicBond!(UC, ind, ind, [0, 0], -JH * mat, 0.0, "interaction")
 end
 
-p = Plot_Fields!(UC ; use_lookup = true, site_size = 4.0,
-    field_thickness=2.0, field_opacity=0.9, scale = 0.5,
+p = Plot_Fields!(UC; use_lookup=true, site_size=1.0,
+    field_thickness=1.0, range=2, field_opacity=0.9, scale=0.5,
     cmp=:viridis)
+
+
 # p.legend = false##Plotting the unit cell
 # plot_UC = Plot_UnitCell!(UC);
 # display(plot_UC)

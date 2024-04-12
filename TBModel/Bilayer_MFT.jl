@@ -4,8 +4,10 @@ loc = "/scratch/a/aparamek/andykh/Data/Bilayer_Data"
 #loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Bilayer_Data"
 function MFT(params, filename)
     ##Triangular Lattice 
-    a1 = [-3.0, sqrt(3)] 
-    a2 = [3.0, sqrt(3)] 
+    SkXSize = get!(params, "SkXSize", 2)
+    SkX = get!(params, "SkX", "Neel")
+    a1 = SkXSize / 2 * [-3.0, sqrt(3)]
+    a2 = SkXSize / 2 * [3.0, sqrt(3)]
     l1 = [1.0, 0]
     l2 = [-0.5, sqrt(3) / 2]
 
@@ -32,8 +34,8 @@ function MFT(params, filename)
     su2spin = SpinMats(1 // 2)
     su4spin = SpinMats(3 // 2)
     ##Adding inner-hexagon structure  
-    for j = 0:1
-        for i = 0:5
+    for j = 0:(SkXSize-1)
+        for i = 0:(SkXSize*3-1)
             AddBasisSite!(UC, i .* l1 + j .* l2)
         end
     end
@@ -44,8 +46,9 @@ function MFT(params, filename)
     AddIsotropicBonds!(tdParam, UC, 0.0, 2 * kron(su2spin[3], su2spin[4]), "imbalance")
 
     ##Functions that will be useful for adding anisotropic bonds
-    weiss0(v) = [sin(pi * (1 - norm(v) / 2)) * v[1] / norm(v), sin(pi * (1 - norm(v) / 2)) * v[2] / norm(v), cos(pi * (1 - norm(v) / 2))]
-    weiss1(v) = [sin(pi * (1 - norm(v) / 2)) * v[1] / norm(v), sin(pi * (1 - norm(v) / 2)) * v[2] / norm(v), -cos(pi * (1 - norm(v) / 2))]
+    weiss_neel(v) = [sin(pi * (norm(v) / (SkXSize))) * v[1] / norm(v), sin(pi * (norm(v) / (SkXSize))) * v[2] / norm(v), cos(pi * (norm(v) / (SkXSize)))]
+    weiss_bloch(v) = [sin(pi * (norm(v) / (SkXSize))) * v[2] / norm(v), sin(pi * (norm(v) / (SkXSize))) * -v[1] / norm(v), cos(pi * (norm(v) / (SkXSize)))]
+    weiss = Dict("Neel" => weiss_neel, "Bloch" => weiss_bloch)
     sigmav(i, j) = 2 .* [su2spin[1][i, j], su2spin[2][i, j], su2spin[3][i, j]]
 
     s11 = sigmav(1, 1)
@@ -53,23 +56,23 @@ function MFT(params, filename)
     s21 = sigmav(2, 1)
     s22 = sigmav(2, 2)
     intermat(s1, s2) = [dot(s1, s11) dot(s1, s12) 0 0; dot(s1, s21) dot(s1, s22) 0 0; 0 0 dot(s2, s11) dot(s2, s12); 0 0 dot(s2, s21) dot(s2, s22)]
-
     ##Creating BZ and Hamiltonian Model
     bz = BZ(kSize)
     FillBZ!(bz, UC)
-    path = CombinedBZPath(bz, [bz.HighSymPoints["G"], bz.HighSymPoints["K1"], bz.HighSymPoints["M2"]]; nearest=true)
     n_up = real.(kron([1.0 0.0; 0.0 0.0], su2spin[4]))
     n_down = real.(kron([0.0 0.0; 0.0 1.0], su2spin[4]))
     Hubbard = DensityToPartonCoupling(n_up, n_down)
     UParam = Param(1.0, 4)
     AddIsotropicBonds!(UParam, UC, 0.0, Hubbard, "Hubbard Interaction")
     for (ind, bas) in enumerate(UC.basis)
-        if 1 < norm(bas) < 2
-            mat = intermat(normalize(weiss0(bas) + weiss0(-bas)), normalize(weiss1(bas) + weiss1(-bas)))
+        closest = [bas, bas - a1, bas - a2, bas - a1 - a2, bas + a1, bas + a2, bas + a1 + a2, bas + a1 - a2, bas - a1 + a2]
+        minimal = findmin(x -> norm(x), closest)[2]
+        if (SkXSize - 1) < norm(closest[minimal]) < SkXSize
+            mat = intermat(weiss[SkX](closest[minimal]) + weiss[SkX](-closest[minimal]), weiss[SkX](closest[minimal]) .* [1, 1, -1] + weiss[SkX](-closest[minimal]) .* [1, 1, -1])
         else
-            closest = [bas, bas - a1, bas - a2]
-            clv = closest[findmin(x -> norm(x), closest)[2]]
-            mat = intermat(replace!(weiss0(clv), NaN => 0.0), replace!(weiss1(clv), NaN => 0.0))
+            spn = weiss[SkX](closest[minimal])
+            replace!(spn, NaN => 0.0)
+            mat = intermat(spn, spn .* [1, 1, -1])
         end
         AddAnisotropicBond!(jhParam, UC, ind, ind, [0, 0], mat, 0.0, "Hunds")
     end
@@ -82,7 +85,6 @@ function MFT(params, filename)
     end
     ChiParams = vcat(Density)
     ChiParams = Vector{Param{2,Float64}}(ChiParams)
-    path = CombinedBZPath(bz, [bz.HighSymPoints["G"], bz.HighSymPoints["K1"], bz.HighSymPoints["M2"]]; nearest=true)
     H = Hamiltonian(UC, bz)
     DiagonalizeHamiltonian!(H)
     Mdl = Model(UC, bz, H; filling=filling, T=T) # Does T matter, don't I want 0 T, or is that technically impossible? 
@@ -103,10 +105,5 @@ function MFT(params, filename)
         end
     else
         SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
-    end
-    for i in 1:2*length(UC.basis)
-        c = ChernNumber(H, [i])
-        println(round(c))
-
     end
 end
