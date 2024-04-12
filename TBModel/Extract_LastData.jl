@@ -63,11 +63,6 @@ function extract_data!(folderpath::String, date, substring::String=".jld2")
                     order_param = last.(getproperty.(dict["Hopping_Block"], :value))
                     dict["Order_Parameter"] = order_param
                     TBModel = data_entry["function args"][1].model
-                    path = [TBModel.bz.HighSymPoints["G"], TBModel.bz.HighSymPoints["M2"], TBModel.bz.HighSymPoints["M3"]]
-                    bzpath = CombinedBZPath(TBModel.bz, path; nearest=true, closed=true)
-                    path_index = GetQIndex.(bzpath, Ref(TBModel.bz); nearest=true)
-                    bands_from_index = getindex.(Ref(TBModel.Ham.bands), CartesianIndex.(Tuple.(path_index)))
-                    label_indices = getindex.(findmin.([norm.(Ref(ReduceQ(x, TBModel.bz)) .- bzpath) for x in path]), 2)
                     n = 6
                     kSize = 6 * n + 3
                     TBModel.bz = BZ(kSize)
@@ -82,6 +77,11 @@ function extract_data!(folderpath::String, date, substring::String=".jld2")
                     end
                     GetVelocity!(TBModel.Ham, TBModel.bz)
                     c_fill = KuboChern(TBModel.Ham, TBModel.bz, TBModel.mu)
+                    path = [TBModel.bz.HighSymPoints["G"], TBModel.bz.HighSymPoints["M2"], TBModel.bz.HighSymPoints["M3"]]
+                    bzpath = CombinedBZPath(TBModel.bz, path; nearest=true, closed=true)
+                    path_index = GetQIndex.(bzpath, Ref(TBModel.bz); nearest=true)
+                    bands_from_index = getindex.(Ref(TBModel.Ham.bands), CartesianIndex.(Tuple.(path_index)))
+                    label_indices = getindex.(findmin.([norm.(Ref(ReduceQ(x, TBModel.bz)) .- bzpath) for x in path]), 2)
                     dict["Bands"] = bands_from_index
                     dict["Labels"] = label_indices
                     dict["BZ_Path"] = bzpath
@@ -97,7 +97,7 @@ function extract_data!(folderpath::String, date, substring::String=".jld2")
                     save(folderpath * "/Last_Itr/Last_Itr_" * string(file), dict)
                 catch e
                     println("Error Loading $file")
-                    println(e)
+                    #println(e)
                     #rethrow(e)
                 end
             end
