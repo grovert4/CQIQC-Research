@@ -3,7 +3,7 @@ using MeanFieldToolkit, TightBindingToolkit, FixedPointToolkit
 loc = "/scratch/a/aparamek/andykh/Data/Bilayer_Data"
 #loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Bilayer_Data"
 function MFT(params, filename)
-    ##Triangular Lattice 
+    ##Triangular Lattice
     a1 = [-3.0, sqrt(3)] * 3 / 2
     a2 = [3.0, sqrt(3)] * 3 / 2
     l1 = [1.0, 0]
@@ -24,7 +24,7 @@ function MFT(params, filename)
     HoppingParams = [t1Param, jhParam]
     su2spin = SpinMats(1 // 2)
 
-    ##Adding inner-hexagon structure  
+    ##Adding inner-hexagon structure
     for j = 0:2
         for i = 0:8
             AddBasisSite!(UC, i .* l1 + j .* l2)
@@ -66,7 +66,7 @@ function MFT(params, filename)
         AddAnisotropicBond!(jhParam, UC, ind, ind, [0, 0], mat, 0.0, "Hunds")
     end
     CreateUnitCell!(UC, HoppingParams)
-    AddIsotropicBonds!(tParam, UC, 1.0, su2spin[4], "s_H") # Am I not double counting the hopping ?? 
+    AddIsotropicBonds!(tParam, UC, 1.0, su2spin[4], "s_H") # Am I not double counting the hopping ??
     for (ind, bas) in enumerate(UC.basis)
         push!(Sz, Param(1.0, 2))
         AddAnisotropicBond!(Sz[ind], UC, ind, ind, [0, 0], su2spin[3], 0.0, "Sz-" * string(ind))
@@ -81,9 +81,9 @@ function MFT(params, filename)
     path = CombinedBZPath(bz, [bz.HighSymPoints["G"], bz.HighSymPoints["K1"], bz.HighSymPoints["M2"]]; nearest=true)
     H = Hamiltonian(UC, bz)
     DiagonalizeHamiltonian!(H)
-    Mdl = Model(UC, bz, H; filling=filling, T=T) # Does T matter, don't I want 0 T, or is that technically impossible? 
+    Mdl = Model(UC, bz, H; filling=filling, T=T) # Does T matter, don't I want 0 T, or is that technically impossible?
     mft = TightBindingMFT(Mdl, ChiParams, [UParam], IntraQuarticToHopping)
-    # add filename to input 
+    # add filename to input
     fileName = loc * "/$(filename)_p=$(round(filling, digits=3))_U=$(round(U, digits=2))_t1=$(round(t1, digits=2)).jld2"
     GC.gc()
     init_guess = fill(0.01, 1 + 9 * 3)
@@ -104,4 +104,76 @@ function MFT(params, filename)
         println(round(c))
 
     end
+end
+
+function plot_skyrmion()
+
+    a1 = [-3.0, sqrt(3)] * 3 / 2
+    a2 = [3.0, sqrt(3)] * 3 / 2
+    l1 = [1.0, 0]
+    l2 = [-0.5, sqrt(3) / 2]
+    UC = UnitCell([a1, a2], 2, 2)
+    ##Parameters
+    n = 5
+    kSize = 6 * n + 3
+    t = -1.0
+    jh = 1.0
+    U = 0.0
+    ##### Thermodynamic parameters
+    filling = 0.5
+    T = 0.001
+    t1 = -t
+    t1Param = Param(t1, 2)
+    jhParam = Param(jh, 2)
+    HoppingParams = [t1Param, jhParam]
+    su2spin = SpinMats(1 // 2)
+
+    ##Adding inner-hexagon structure
+    for j = 0:2
+        for i = 0:8
+            AddBasisSite!(UC, i .* l1 + j .* l2)
+        end
+    end
+    AddIsotropicBonds!(t1Param, UC, 1.0, su2spin[4], "t1", checkOffsetRange=1)
+    ##Functions that will be useful for adding anisotropic bonds
+    weiss1(v) = [sin(pi * (1 - norm(v) / 3)) * v[1] / norm(v), sin(pi * (1 - norm(v) / 3)) * v[2] / norm(v), cos(pi * (1 - norm(v) / 3))]
+    sigmav(i, j) = 2 .* [su2spin[1][i, j], su2spin[2][i, j], su2spin[3][i, j]]
+    s11 = sigmav(1, 1)
+    s12 = sigmav(1, 2)
+    s21 = sigmav(2, 1)
+    s22 = sigmav(2, 2)
+
+    intermat(s) = [dot(s, s11) dot(s, s12); dot(s, s21) dot(s, s22)]
+
+    bz = BZ(kSize)
+    FillBZ!(bz, UC)
+    ##Adding anisotropic bonds and normalizing if needed
+    # Adding MFT Parameters
+    # HoppingParams = [t1Param]
+
+    Sz = []
+    tParam = Param(1.0, 2)
+
+    for (ind, bas) in enumerate(UC.basis)
+        if 1 < norm(bas) < 3
+            mat = intermat(normalize(weiss1(bas) + weiss1(-bas)))
+        else
+            closest = [bas, bas - a1, bas - a2]
+            spn = weiss1(closest[findmin(x -> norm(x), closest)[2]])
+            replace!(spn, NaN => 0.0)
+            mat = intermat(spn)
+        end
+        AddAnisotropicBond!(jhParam, UC, ind, ind, [0, 0], mat, 0.0, "Hunds")
+    end
+    CreateUnitCell!(UC, HoppingParams)
+    AddIsotropicBonds!(tParam, UC, 1.0, su2spin[4], "s_H") # Am I not double counting the hopping ??
+    for (ind, bas) in enumerate(UC.basis)
+        push!(Sz, Param(1.0, 2))
+        AddAnisotropicBond!(Sz[ind], UC, ind, ind, [0, 0], su2spin[3], 0.0, "Sz-" * string(ind))
+        #AddAnisotropicBond!(Nd[ind], UC, ind, ind, [0, 0], n_down, 0.0, "Ndown-" * string(ind))
+    end
+
+    skyrmion = Plot_Fields!(UC ; use_lookup = true, site_size = 4.0, field_thickness=2.0, field_opacity=0.9)
+
+    return skyrmion
 end
