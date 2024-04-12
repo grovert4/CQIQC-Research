@@ -13,7 +13,7 @@ function MFT(params, filename)
     n = get!(params, "n", 10)
     kSize = 6 * n + 3
     t = get!(params, "t", 1.0)
-    jh = get!(params, "jh", 0.0)
+    jh = get!(params, "jh", -1.0)
     U = get!(params, "U", 0.0)
     ##### Thermodynamic parameters
     filling = get!(params, "filling", 0.5)
