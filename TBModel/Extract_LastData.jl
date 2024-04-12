@@ -48,7 +48,7 @@ function extract_data!(folderpath::String, date, substring::String=".jld2")
         file = file_list[i]
         if occursin(substring, string(file)) && occursin(date, string(file))
             if isfile(folderpath * "/Last_Itr/Last_Itr_" * string(file))
-                println("FILE EXISTS : " * folderpath * "/Last_Itr/Last_Itr_" * string(file))
+                println("FILE EXISTS : "* string(file))
                 continue
             else
                 try
@@ -95,6 +95,7 @@ function extract_data!(folderpath::String, date, substring::String=".jld2")
                     dict["Convergence"] = norm(data_entry["inputs"][end] - data_entry["outputs"][end]) #[maximum(norm.(data_entry["outputs"][i] - data_entry["inputs"][i])) for i in 1:length(data_entry["inputs"])]#
                     # save convergences
                     save(folderpath * "/Last_Itr/Last_Itr_" * string(file), dict)
+                    println("COMPLETED : "* string(file) )
                 catch e
                     println("Error Loading $file")
                     #println(e)
@@ -107,6 +108,3 @@ function extract_data!(folderpath::String, date, substring::String=".jld2")
 end
 pwd()
 extract_data!("/scratch/a/aparamek/andykh/Data/Bilayer_Data",  "$(ARGS[1])")
-#dict["Gr"] = data_entry["function args"][1].model.Gr
-#dict["Convergence"] = [maximum(norm.(data_entry["outputs"][i] - data_entry["inputs"][i])) for i in 1:length(data_entry["inputs"])]
-#dict["Pairing Block"] = Lookup(data_entry["function args"][1].PairingOrders)
