@@ -63,7 +63,6 @@ function extract_data!(folderpath::String, date, substring::String=".jld2")
                     order_param = last.(getproperty.(dict["Hopping_Block"], :value))
                     dict["Order_Parameter"] = order_param
                     TBModel = data_entry["function args"][1].model
-                    SolveModel!(TBModel; get_gap=true)
                     path = [TBModel.bz.HighSymPoints["G"], TBModel.bz.HighSymPoints["M2"], TBModel.bz.HighSymPoints["M3"]]
                     bzpath = CombinedBZPath(TBModel.bz, path; nearest=true, closed=true)
                     path_index = GetQIndex.(bzpath, Ref(TBModel.bz); nearest=true)
@@ -75,6 +74,7 @@ function extract_data!(folderpath::String, date, substring::String=".jld2")
                     FillBZ!(TBModel.bz, TBModel.uc)
                     TBModel.Ham = Hamiltonian(TBModel.uc, TBModel.bz)
                     DiagonalizeHamiltonian!(TBModel.Ham)
+                    SolveModel!(TBModel; get_gap=true)
                     c = Array{Float32}(undef, 2 * length(TBModel.uc.basis))
                     for i in 1:2*length(TBModel.uc.basis)
                         c[i] = ChernNumber(TBModel.Ham, i, TBModel.mu)
