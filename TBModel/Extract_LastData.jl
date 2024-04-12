@@ -69,7 +69,7 @@ function extract_data!(folderpath::String, date, substring::String=".jld2")
                     path_index = GetQIndex.(bzpath, Ref(TBModel.bz); nearest=true)
                     bands_from_index = getindex.(Ref(TBModel.Ham.bands), CartesianIndex.(Tuple.(path_index)))
                     label_indices = getindex.(findmin.([norm.(Ref(ReduceQ(x, TBModel.bz)) .- bzpath) for x in path]), 2)
-                    n = 20
+                    n = 6
                     kSize = 6 * n + 3
                     TBModel.bz = BZ(kSize)
                     FillBZ!(TBModel.bz, TBModel.uc)
