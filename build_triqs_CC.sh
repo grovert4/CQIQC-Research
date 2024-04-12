@@ -55,3 +55,5 @@ for pkg in ${packages} ; do
     ctest --output-on-failure
     make install
 done
+
+# source /home/andykh/projects/def-aparamek/andykh/Skyrmion/install/share/triqs/triqsvars.sh
