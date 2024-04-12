@@ -83,7 +83,7 @@ function extract_data!(folderpath::String, date, substring::String=".jld2")
                     GetVelocity!(TBModel.Ham, TBModel.bz)
                     c_fill = KuboChern(TBModel.Ham, TBModel.bz, TBModel.mu)
                     dict["Bands"] = bands_from_index
-                    println(bands_from_index)
+                    #println(bands_from_index)
                     dict["Labels"] = label_indices
                     dict["BZ_Path"] = bzpath
                     dict["UC"] = TBModel.uc
