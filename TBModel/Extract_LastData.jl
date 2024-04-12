@@ -71,10 +71,11 @@ function extract_data!(folderpath::String, date, substring::String=".jld2")
                     DiagonalizeHamiltonian!(TBModel.Ham)
                     SolveModel!(TBModel; get_gap=true)
                     c = Array{Float32}(undef, 2 * length(TBModel.uc.basis))
-                    for i in 1:2*length(TBModel.uc.basis)
-                        c[i] = ChernNumber(TBModel.Ham, i, TBModel.mu)
-                        #println(round(c[i]), "Chern")
-                    end
+                    # for i in 1:2*length(TBModel.uc.basis)
+                    #     c[i] = ChernNumber(TBModel.Ham, i, TBModel.mu)
+                    #     #println(round(c[i]), "Chern")
+                    # This has an error for some reason ? 
+                    # end
                     GetVelocity!(TBModel.Ham, TBModel.bz)
                     c_fill = KuboChern(TBModel.Ham, TBModel.bz, TBModel.mu)
                     path = [TBModel.bz.HighSymPoints["G"], TBModel.bz.HighSymPoints["M2"], TBModel.bz.HighSymPoints["M3"]]
