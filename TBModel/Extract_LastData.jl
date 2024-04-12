@@ -72,7 +72,9 @@ function extract_data!(folderpath::String, date, substring::String=".jld2")
                     SolveModel!(TBModel; get_gap=true)
                     c = Array{Float32}(undef, 2 * length(TBModel.uc.basis))
                     for i in 1:2*length(TBModel.uc.basis)
-                        c[i] = PartialChernNumber(TBModel.Ham, i, TBModel.mu)
+                        c[i] = ChernNumber(TBModel.Ham, i)#, TBModel.mu)
+                        #c[i] = PartialChernNumber(TBModel.Ham, i)#, TBModel.mu)
+
                         #println(round(c[i]), "Chern")
                     # This has an error for some reason ? 
                     end
