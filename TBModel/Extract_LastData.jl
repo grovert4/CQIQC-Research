@@ -76,7 +76,7 @@ function extract_data!(folderpath::String, date, substring::String=".jld2")
                     display(band_list)
                     display(idx)
                     for i in 1:2*length(TBModel.uc.basis)
-                        c[i] = ChernNumber(TBModel.Ham, band_list[idx[i, :]])#, TBModel.mu)
+                        c[i] = ChernNumber(TBModel.Ham, band_list[!idx[i, :]])#, TBModel.mu)
                         #c[i] = PartialChernNumber(TBModel.Ham, i)#, TBModel.mu)
                         #println(round(c[i]), "Chern")
                         # This has an error for some reason ? 
