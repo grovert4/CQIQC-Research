@@ -63,11 +63,11 @@ function MFT(params, filename)
         closest = [bas, bas - a1, bas - a2, bas - a1 - a2, bas + a1, bas + a2, bas + a1 + a2, bas + a1 - a2, bas - a1 + a2]
         minimal = findmin(x -> norm(x), closest)[2]
         if (SkXSize - 1) < norm(closest[minimal]) < SkXSize
-            mat = intermat(weiss[SkX](closest[minimal]) + weiss[SkX](-closest[minimal]))
+            mat = intermat(normalize(weiss[SkX](closest[minimal]) + weiss[SkX](-closest[minimal])))
         else
             spn = weiss[SkX](closest[minimal])
             replace!(spn, NaN => 0.0)
-            mat = intermat(spn)
+            mat = intermat(normalize(spn))
         end
         AddAnisotropicBond!(jhParam, UC, ind, ind, [0, 0], mat, 0.0, "Hunds")
     end
