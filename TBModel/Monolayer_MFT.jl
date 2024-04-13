@@ -1,6 +1,6 @@
 using Plots, LinearAlgebra, ColorSchemes
 using MeanFieldToolkit, TightBindingToolkit, FixedPointToolkit
-loc = "/scratch/a/aparamek/andykh/Data/Bilayer_Data"
+loc = "/scratch/a/aparamek/andykh/Data/Monolayer_Data"
 #loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Bilayer_Data"
 function MFT(params, filename)
     ##Triangular Lattice
@@ -47,12 +47,10 @@ function MFT(params, filename)
 
     ##Adding anisotropic bonds and normalizing if needed
 
-
     bz = BZ(kSize)
     FillBZ!(bz, UC)
     ##Adding anisotropic bonds and normalizing if needed
     # Adding MFT Parameters
-    HoppingParams = [t1Param]
     n_up = [1.0 0.0; 0.0 0.0]
     n_down = [0.0 0.0; 0.0 1.0]
     Hubbard = DensityToPartonCoupling(n_up, n_down)

@@ -38,28 +38,30 @@ end
 
 #############################
 
-filename = "01.25.2024_Bilayer"
-filename = "03.20.2024_Monolayer_Extended"
+filename = "04.12.2024_Monolayer_NN"
 
 
 #println(@__DIR__)
 params = YAML.load_file("../Input/$(filename).yml")
 
 U_array = collect(LinRange(params["U_min"], params["U_max"], params["U_length"]))
-filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / (params["filling_length"] * 2)
-filling = filling_arr[26]
+filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / (params["filling_max"] * 2)
+filling = filling_arr[14]
 println(filling, "filling")
 #U_var = U_array[end-1]
 #loc = "/Users/ahardy/Library/CloudStorage/GoogleDrive-ahardy@flatironinstitute.org/My Drive/Skyrmion/Bilayer_SkX/TBModel/Monolayer"
-loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Bilayer_Data/"
+loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Monolayer_Data/"
 t1 = -1.0
-const a1 = [-3.0, sqrt(3)]
-const a2 = [3.0, sqrt(3)]
+SkXSize = get!(params, "SkXSize", 2)
+SkX = get!(params, "SkX", "Neel")
+a1 = SkXSize / 2 * [-3.0, sqrt(3)]
+a2 = SkXSize / 2 * [3.0, sqrt(3)]
 
 const l1 = [1.0, 0]
 const l2 = [-0.5, sqrt(3) / 2]
 Uniform_Status = false
-UC = UnitCell([a1, a2], 2)
+dimension = 2
+UC = UnitCell([a1, a2], dimension)
 for j = 0:2
     for i = 0:8
         AddBasisSite!(UC, i .* l1 + j .* l2)
@@ -68,9 +70,9 @@ end
 if Uniform_Status
     order_parameter = Array{Float64}(undef, (length(U_array), 1))
 else
-    order_parameter = Array{Float64}(undef, (length(U_array), 28))
+    order_parameter = Array{Float64}(undef, (length(U_array), 1 + SkXSize^2 * 3))
 end
-c_arr = Array{Float64}(undef, (length(U_array), 54))
+c_arr = Array{Float64}(undef, (length(U_array), SkXSize^2 * 3 * dimension))
 c_fill = Array{Float64}(undef, (length(U_array)))
 gap_array = zeros((length(U_array), 2))
 ord_array = Array{Float64}(undef, (length(U_array)))
@@ -78,9 +80,9 @@ eng_array = Array{Float64}(undef, (length(U_array)))
 
 for (ind, U_var) in enumerate(U_array)
     if Uniform_Status == true
-        fileName = loc * "Last_Itr/Last_Itr_$(filename)_UNIFORM_p=$(round(filling, digits=3))_U=$(round(U_var, digits=2))_t1=$(round(t1, digits=2)).jld2"
+        fileName = loc * "Last_Itr_$(filename)_UNIFORM_p=$(round(filling, digits=3))_U=$(round(U_var, digits=2))_t1=$(round(t1, digits=2)).jld2"
     else
-        fileName = loc * "Last_Itr/Last_Itr_$(filename)_p=$(round(filling, digits=3))_U=$(round(U_var, digits=2))_t1=$(round(t1, digits=2)).jld2"
+        fileName = loc * "Last_Itr_$(filename)_p=$(round(filling, digits=3))_U=$(round(U_var, digits=2))_t1=$(round(t1, digits=2)).jld2"
     end
     println(fileName)
     TBResults = load(fileName) #MeanFieldToolkit.MFTResume.ReadMFT(fileName)
@@ -101,6 +103,10 @@ for (ind, U_var) in enumerate(U_array)
     plot = Plot_Band_Data!(TBResults, [L"\Gamma", L"M_2", L"M_3"])
     #plot = Plot_Band_Structure!(TBModel, [TBModel.bz.HighSymPoints["G"], TBModel.bz.HighSymPoints["M2"], TBModel.bz.HighSymPoints["M3"]]; labels=[L"\Gamma", L"M_2", L"M_3"])
     display(plot)
+    p = Plot_Fields!(TBResults["UC"]; use_lookup=true, site_size=1.0,
+        field_thickness=1.5, range=1, field_opacity=0.9, scale=0.75,
+        cmp=:viridis)
+    display(p)
 
 end
 gap_plot = scatter(gap_array[:, 1], gap_array[:, 2], xlabel="U", ylabel="Δ")
