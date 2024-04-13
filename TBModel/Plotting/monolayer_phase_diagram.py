@@ -4,9 +4,9 @@ from pathlib import Path
 import os,sys
 import numpy as np
 import matplotlib.pyplot as plt
-loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Bilayer_Data/"
+loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Monolayer_Data/"
 t1 = -1.0
-filename = "03.26.2024_Monolayer_NN"
+filename = "04.12-Bloch.2024_Monolayer_NN"
 os.chdir("/home/andrewhardy/Documents/Graduate/Codes/Skyrmion/TBModel/Plotting")
 os.getcwd()
 sys.path.append(os.getcwd())
@@ -19,17 +19,16 @@ plt.rcParams.update({"text.usetex": True})
 params = yml.safe_load(Path(f"../Input/{filename}.yml").read_text())
 U_array = np.linspace(params["U_min"], params["U_max"], params["U_length"])
 filling_arr = np.linspace(params["filling_min"], params["filling_max"], params["filling_length"]) / (params["filling_length"]*2)
-filling = filling_arr[26]
 Uniform_Status = False
 polarization = np.zeros((len(U_array), len(filling_arr)))
 energy = np.zeros((len(U_array), len(filling_arr)))
 conduct = np.zeros((len(U_array), len(filling_arr)))
-for (ind_f, filling) in enumerate(filling_arr[1:]):
+for (ind_f, filling) in enumerate(filling_arr):
     for (ind_u, U_var) in enumerate(U_array):
         if Uniform_Status == True:
-            fileName = loc + f"Last_Itr/Last_Itr_{filename}_UNIFORM_p={round(filling, 3)}_U={round(U_var, 2)}_t1={round(t1, 2)}.jld2"
+            fileName = loc + f"Last_Itr_{filename}_UNIFORM_p={round(filling, 3)}_U={round(U_var, 2)}_t1={round(t1, 2)}.jld2"
         else:
-            fileName = loc + f"Last_Itr/Last_Itr_{filename}_p={round(filling, 3)}_U={round(U_var, 2)}_t1={round(t1, 2)}.jld2"
+            fileName = loc + f"Last_Itr_{filename}_p={round(filling, 3)}_U={round(U_var, 2)}_t1={round(t1, 2)}.jld2"
         TBResults = h5.File(fileName, 'r')
         conduct[ind_u, ind_f] =  np.abs(TBResults["Chern Fill"])
         energy[ind_u, ind_f] = TBResults["MFT_Energy"][-1]

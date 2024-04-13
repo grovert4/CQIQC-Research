@@ -38,7 +38,7 @@ end
 
 #############################
 
-filename = "04.12.2024_Monolayer_NN"
+filename = "04.12-Bloch.2024_Monolayer_NN"
 
 
 #println(@__DIR__)
@@ -46,7 +46,7 @@ params = YAML.load_file("../Input/$(filename).yml")
 
 U_array = collect(LinRange(params["U_min"], params["U_max"], params["U_length"]))
 filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / (params["filling_max"] * 2)
-filling = filling_arr[14]
+filling = filling_arr[12]
 println(filling, "filling")
 #U_var = U_array[end-1]
 #loc = "/Users/ahardy/Library/CloudStorage/GoogleDrive-ahardy@flatironinstitute.org/My Drive/Skyrmion/Bilayer_SkX/TBModel/Monolayer"
@@ -102,10 +102,13 @@ for (ind, U_var) in enumerate(U_array)
 
     plot = Plot_Band_Data!(TBResults, [L"\Gamma", L"M_2", L"M_3"])
     #plot = Plot_Band_Structure!(TBModel, [TBModel.bz.HighSymPoints["G"], TBModel.bz.HighSymPoints["M2"], TBModel.bz.HighSymPoints["M3"]]; labels=[L"\Gamma", L"M_2", L"M_3"])
+    plot!(plot, legend=false)
     display(plot)
+
     p = Plot_Fields!(TBResults["UC"]; use_lookup=true, site_size=1.0,
         field_thickness=1.5, range=1, field_opacity=0.9, scale=0.75,
         cmp=:viridis)
+    plot!(p, legend=false)
     display(p)
 
 end
@@ -131,7 +134,7 @@ display(ords3)
 # #It's uncertain of what Chern number to use?
 # xlabel!("U")
 
-C_plot = scatter(U_array, c_fill, xlabel="U", ylabel="σ(0)", ylims=(0.0, 1E-2))
+C_plot = scatter(U_array, c_fill, xlabel="U", ylabel="σ(0)")
 display(C_plot)
 savefig(loc * "Chern.png")
 # plot the bands color code by sign of Chern # 
