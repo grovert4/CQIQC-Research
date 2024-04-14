@@ -1,7 +1,7 @@
 # #!/bin/bash
 
 
-MODULES="CCEnv StdEnv/2023 gcc/12 openmpi"
+MODULES="CCEnv StdEnv/2023 gcc/12 openmpi python/3.11 imkl cmake clang mpi4py hdf5 boost fftw"
 module purge
 module load ${MODULES}
 #source ~/triqsenv/bin/activate
