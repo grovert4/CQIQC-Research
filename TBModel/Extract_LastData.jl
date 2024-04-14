@@ -113,4 +113,4 @@ function extract_data!(folderpath::String, date, substring::String=".jld2")
     MPI.Finalize()
 end
 pwd()
-extract_data!("/scratch/a/aparamek/andykh/Data/Bilayer_Data", "$(ARGS[1])")
+extract_data!("$(ARGS[1])", "$(ARGS[2])")
