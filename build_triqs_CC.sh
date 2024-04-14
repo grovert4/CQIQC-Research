@@ -1,59 +1,33 @@
 # #!/bin/bash
 
 
-MODULES="gcc/12.3 flexiblas openmpi cmake fftw hdf5 boost python/3.10.13 llvm/16 eigen clang"
+MODULES="CCEnv StdEnv/2023 gcc/12 openmpi"
 module purge
 module load ${MODULES}
 #source ~/triqsenv/bin/activate
+virtualenv triqsvenv
+source triqsvenv/bin/activate
+pip install mako numpy scipy msgpack packaging matplotlib pandas
+export CXXFLAGS="-Wno-register -march=native"
 
-export CC=clang
-export CXX=clang++
-export PYVER=$(python3 -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')
-export CXXFLAGS="-stdlib=libc++ -Wno-register -march=native"
-export FC=gfortran
-# compiler flags add stdlib=libc++ for clang
-
-# set blas / lapack Intel10_64_dyn | OpenBLAS | FlexiBLAS
-export BLA_VENDOR=FlexiBLAS
-
-# set up MKL / OpenMP:
-export MKL_INTERFACE_LAYER=GNU,LP64
-export MKL_THREADING_LAYER=SEQUENTIAL
-export MKL_NUM_THREADS=1
-export OMP_NUM_THREADS=1
-
-# set number of threads for compiling and testing
-NCORES=10
-
+mkdir TRIQS
+cd TRIQS
+mkdir install
 BUILDDIR=$(pwd)
-# set installation directory (default pwd/install)
-INSTALLDIR=$(pwd)/install
 
-export TRIQS_ROOT=${INSTALLDIR}
-export PATH=${INSTALLDIR}/bin:$PATH
-export CPLUS_INCLUDE_PATH=${INSTALLDIR}/include:$CPLUS_INCLUDE_PATH
-export LIBRARY_PATH=${INSTALLDIR}/lib:$LIBRARY_PATH
-export LD_LIBRARY_PATH=${INSTALLDIR}/lib:$LD_LIBRARY_PATH
-#export LD_LIBRARY_PATH=/cvmfs/soft.computecanada.ca/easybuild/software/2020/Core/gcccore/11.3.0/lib64:$LD_LIBRARY_PATH
-export PYTHONPATH=${INSTALLDIR}/lib/python${PYVER}/site-packages:$PYTHONPATH
-export CMAKE_PREFIX_PATH=${INSTALLDIR}/lib/cmake/triqs:${INSTALLDIR}/lib/cmake/cpp2py:$CMAKE_PREFIX_PATH
-export Python3_ROOT_DIR = `which python`
-packages="triqs cthyb tprf"
-printf "hello\nworld\n"
-echo $LD_LIBRARY_PATH
-printf "hello\nworld\n"
-echo $LIBRARY_PATH
+INSTALLDIR=$(pwd)/install
+export CXXFLAGS="-Wno-register -march=native"
 for pkg in ${packages} ; do 
     cd ${BUILDDIR}
-    git clone -b unstable --depth 1 https://github.com/TRIQS/$pkg $pkg.src
+    git clone https://github.com/TRIQS/$pkg $pkg.src
     # fetch latest changes
     cd $pkg.src && git pull
     mkdir -p build && cd build
-    cmake ../ -DCMAKE_INSTALL_PREFIX=${INSTALLDIR} -DMPIEXEC_PREFLAGS='--allow-run-as-root' 
-    make -j$NCORES
+    cmake ../ -DCMAKE_INSTALL_PREFIX=${INSTALLDIR} 
+    make install
+    LD_LIBRARY_PATH=$(pwd)/lib:$LD_LIBRARY_PATH
+    LD_LIBRARY_PATH=$INSTALLDIR/lib:$LD_LIBRARY_PATH
     # some test may use mpi
     ctest --output-on-failure
-    make install
 done
 
-# source /home/andykh/projects/def-aparamek/andykh/Skyrmion/install/share/triqs/triqsvars.sh
