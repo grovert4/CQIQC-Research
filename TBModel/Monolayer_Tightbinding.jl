@@ -1,6 +1,6 @@
 using Plots, TightBindingToolkit, LinearAlgebra, ColorSchemes
 SkXSize = get!(params, "SkXSize", 3)
-SkXSize = 3
+SkXSize = 2
 SkX = get!(params, "SkX", "Bloch")
 a1 = SkXSize / 2 * [-3.0, sqrt(3)]
 a2 = SkXSize / 2 * [3.0, sqrt(3)]
