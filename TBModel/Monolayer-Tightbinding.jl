@@ -59,24 +59,24 @@ p = Plot_Fields!(UC; use_lookup=true, site_size=1.0,
     cmp=:viridis)
 
 
-# p.legend = false##Plotting the unit cell
-# plot_UC = Plot_UnitCell!(UC);
-# display(plot_UC)
+p.legend = false##Plotting the unit cell
+plot_UC = Plot_UnitCell!(UC);
+display(plot_UC)
 
-##Creating BZ and Hamiltonian Model
-# kSize = 6 * 10 + 3
-# bz = BZ(kSize)
-# FillBZ!(bz, UC)
-# path = CombinedBZPath(bz, [bz.HighSymPoints["G"], bz.HighSymPoints["K1"], bz.HighSymPoints["M2"]] ; nearest=true)
-# H = Hamiltonian(UC, bz)
-# DiagonalizeHamiltonian!(H)
-# Mdl = Model(UC, bz, H; filling = 0.5)
-# SolveModel!(Mdl; get_gap=true)
+#Creating BZ and Hamiltonian Model
+kSize = 6 * 10 + 3
+bz = BZ(kSize)
+FillBZ!(bz, UC)
+path = CombinedBZPath(bz, [bz.HighSymPoints["G"], bz.HighSymPoints["K1"], bz.HighSymPoints["M2"]]; nearest=true)
+H = Hamiltonian(UC, bz)
+DiagonalizeHamiltonian!(H)
+Mdl = Model(UC, bz, H; filling=0.5)
+SolveModel!(Mdl; get_gap=true)
 
-##Plotting the band structure
-# bands = Plot_Band_Structure!(Mdl, [bz.HighSymPoints["G"], bz.HighSymPoints["K1"], bz.HighSymPoints["M2"]] , labels = ["G", "K1", "M2"], plot_legend=false);
-# plot!(bands, legend = false);
-# display(bands)
+#Plotting the band structure
+bands = Plot_Band_Structure!(Mdl, [bz.HighSymPoints["G"], bz.HighSymPoints["K1"], bz.HighSymPoints["M2"]], labels=["G", "K1", "M2"], plot_legend=false);
+plot!(bands, legend=false);
+display(bands)
 
 #Calculating Chern Numbers for bands
 # for i in 1:2*length(UC.basis)

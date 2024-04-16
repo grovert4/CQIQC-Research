@@ -38,7 +38,7 @@ end
 
 #############################
 
-filename = "04.12-Bloch.2024_Monolayer_NN"
+filename = "04.15-Bloch.2024_Monolayer_NN"
 
 
 #println(@__DIR__)
@@ -51,22 +51,38 @@ println(filling, "filling")
 #U_var = U_array[end-1]
 #loc = "/Users/ahardy/Library/CloudStorage/GoogleDrive-ahardy@flatironinstitute.org/My Drive/Skyrmion/Bilayer_SkX/TBModel/Monolayer"
 loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Monolayer_Data/"
-t1 = -1.0
 SkXSize = get!(params, "SkXSize", 2)
 SkX = get!(params, "SkX", "Neel")
 a1 = SkXSize / 2 * [-3.0, sqrt(3)]
 a2 = SkXSize / 2 * [3.0, sqrt(3)]
-
-const l1 = [1.0, 0]
-const l2 = [-0.5, sqrt(3) / 2]
-Uniform_Status = false
+l1 = [1.0, 0]
+l2 = [-0.5, sqrt(3) / 2]
 dimension = 2
-UC = UnitCell([a1, a2], dimension)
-for j = 0:2
-    for i = 0:8
+UC = UnitCell([a1, a2], 2, 2)
+##Parameters
+n = get!(params, "n", 10)
+kSize = 6 * n + 3
+t = get!(params, "t", 1.0)
+jh = get!(params, "jh", -1.0)
+U = get!(params, "U", 0.0)
+##### Thermodynamic parameters
+#filling = get!(params, "filling", 0.5)
+T = get!(params, "T", 0.0)
+t1 = -t
+t1Param = Param(t1, 2)
+jhParam = Param(jh, 2)
+HoppingParams = [t1Param, jhParam]
+su2spin = SpinMats(1 // 2)
+
+##Adding inner-hexagon structure
+for j = 0:(SkXSize-1)
+    for i = 0:(SkXSize*3-1)
         AddBasisSite!(UC, i .* l1 + j .* l2)
     end
 end
+Uniform_Status = false
+bz = BZ(kSize)
+FillBZ!(bz, UC)
 if Uniform_Status
     order_parameter = Array{Float64}(undef, (length(U_array), 1))
 else
@@ -78,7 +94,8 @@ gap_array = zeros((length(U_array), 2))
 ord_array = Array{Float64}(undef, (length(U_array)))
 eng_array = Array{Float64}(undef, (length(U_array)))
 
-for (ind, U_var) in enumerate(U_array)
+for (ind, U_var) in enumerate(U_array[:])
+    println(U_var)
     if Uniform_Status == true
         fileName = loc * "Last_Itr_$(filename)_UNIFORM_p=$(round(filling, digits=3))_U=$(round(U_var, digits=2))_t1=$(round(t1, digits=2)).jld2"
     else
@@ -86,7 +103,7 @@ for (ind, U_var) in enumerate(U_array)
     end
     println(fileName)
     TBResults = load(fileName) #MeanFieldToolkit.MFTResume.ReadMFT(fileName)
-    println(length(TBResults["UC"].basis))
+    #println(length(TBResults["UC"].basis))
     gap_array[ind, 1] = U_var
     gap_array[ind, 2] = TBResults["Gap"]
     #println(TBResults["MFT_Energy"])
@@ -94,23 +111,28 @@ for (ind, U_var) in enumerate(U_array)
     #println(TBResults["Gap"])
     c_arr[ind, :] = abs.(TBResults["Chern"])
     c_fill[ind] = abs.(TBResults["Chern Fill"])
-    ord_arr = abs.(TBResults["Order_Parameter"])
     ords = TBResults["Outputs"]
     order_parameter[ind, :] = TBResults["Outputs"]
     #println(length(ords))
     ord_array[ind] = (mean(abs.(ords)))
 
-    plot = Plot_Band_Data!(TBResults, [L"\Gamma", L"M_2", L"M_3"])
-    #plot = Plot_Band_Structure!(TBModel, [TBModel.bz.HighSymPoints["G"], TBModel.bz.HighSymPoints["M2"], TBModel.bz.HighSymPoints["M3"]]; labels=[L"\Gamma", L"M_2", L"M_3"])
-    plot!(plot, legend=false)
-    display(plot)
+    #plot = Plot_Band_Data!(TBResults, [L"\Gamma", L"M_2", L"M_3"])
+    H = Hamiltonian(TBResults["UC"], bz)
+    DiagonalizeHamiltonian!(H)
+    Mdl = Model(TBResults["UC"], bz, H; filling=0.5)
+    SolveModel!(Mdl; get_gap=true)
+
+    bands = Plot_Band_Structure!(Mdl, [bz.HighSymPoints["G"], bz.HighSymPoints["M2"], bz.HighSymPoints["M3"]], labels=["G", "M2", "M3"], plot_legend=false)
+    plot!(bands, legend=false)
+    display(bands)
 
     p = Plot_Fields!(TBResults["UC"]; use_lookup=true, site_size=1.0,
         field_thickness=1.5, range=1, field_opacity=0.9, scale=0.75,
         cmp=:viridis)
     plot!(p, legend=false)
-    display(p)
-
+    #display(p)
+    #println(TBResults["UC"].bonds)
+    #println(ords)
 end
 gap_plot = scatter(gap_array[:, 1], gap_array[:, 2], xlabel="U", ylabel="Δ")
 display(gap_plot)
@@ -126,10 +148,8 @@ energy_plot = scatter(U_array, eng_array, xlabel="U", ylabel="Energy")
 display(energy_plot)
 ords = scatter(U_array, abs.(order_parameter[:, 1]), xlabel="U", ylabel="t")
 display(ords)
-ords2 = scatter(U_array, abs.(order_parameter), xlabel="U", ylabel="ΔP_u")
+ords2 = scatter(U_array, order_parameter, xlabel="U", ylabel="ΔS_z")
 display(ords2)
-ords3 = scatter(U_array, abs.(order_parameter), xlabel="U", ylabel="ΔP_d")
-display(ords3)
 # scatter(U_array, [abs.(c_arr[:, 1]), abs.(c_arr[:, 4])], label=["Chern ( first 2 bands)" "Chern ( first 6 bands)"], ylabel="C")
 # #It's uncertain of what Chern number to use?
 # xlabel!("U")
