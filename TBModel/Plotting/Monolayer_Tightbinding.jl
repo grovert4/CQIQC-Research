@@ -58,7 +58,7 @@ UC = UnitCell([a1, a2], 2, 2)
 n = get!(params, "n", 20)
 kSize = 6 * n + 3
 t = get!(params, "t", 1.0)
-jh = get!(params, "jh", 1.0)
+jh = get!(params, "jh", 4.0)
 U = get!(params, "U", 0.0)
 ##### Thermodynamic parameters
 filling = get!(params, "filling", 0.5)
@@ -152,9 +152,10 @@ bands = Plot_Band_Structure!(Mdl, [bz.HighSymPoints["G"], bz.HighSymPoints["M1"]
 plot!(bands, legend=false);
 display(bands)
 savefig(bands, "TBModel/Plotting/Plots/Monolayer_Band_Structure_$(SkXSize)_$(jh).pdf")
-filling_arr = LinRange(0.0001, 0.5, 40)
-c_fill = zeros(length(filling_arr))
-mu_arr = LinRange(-6, 0, 25)
+filling_arr = LinRange(0.0001, 0.5, 60)
+mu_arr = LinRange(-6, -1, 100)
+c_fill = zeros(length(mu_arr))
+
 #for (i, filling) in enumerate(filling_arr)
 for (i, mu) in enumerate(mu_arr)
     DiagonalizeHamiltonian!(H)
@@ -163,7 +164,7 @@ for (i, mu) in enumerate(mu_arr)
     #SolveModel!(Mdl; get_gap=true)
     c_fill[i] = KuboChern(H, bz, mu)
 end
-p = plot(mu_arr, c_fill, marker = :o, ylims=(-5, 5), xlabel="Filling", ylabel=L"\sigma_{xy}", label=L"\sigma_{xy}", legend=false)
+p = plot(mu_arr, -1*c_fill, marker = :o, ylims=(-6, 4), xlabel="Filling", ylabel=L"\sigma_{xy}", label=L"\sigma_{xy}", legend=false)
 display(p)
 savefig(p, "TBModel/Plotting/Plots/Monolayer_Hall_$(SkXSize)_$(jh).pdf")
 
