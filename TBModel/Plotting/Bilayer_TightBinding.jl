@@ -8,6 +8,8 @@ rcParams = PyPlot.PyDict(PyPlot.matplotlib."rcParams")
 mpl = pyimport("matplotlib")
 
 mpl.style.use("./TBModel/Plotting/lake.mplstyle")
+#mpl.style.use("lake.mplstyle")
+
 rcParams["text.usetex"] = true
 
 rcParams["font.family"] = "serif"
@@ -59,9 +61,9 @@ n = get!(params, "n", 12)
 kSize = 6 * n + 3
 t = get!(params, "t", 1.0)
 t_inter = get!(params, "t_inter", 0.0)
-jh = get!(params, "jh", 5.0)
+jh = get!(params, "jh", 2.0)
 U = get!(params, "U", 0.0)
-t_density = get!(params, "t_density", 0.0)
+t_density = get!(params, "t_density", 1.0)
 ##### Thermodynamic parameters
 filling = get!(params, "filling", 0.5)
 T = get!(params, "T", 0.0)
@@ -158,18 +160,18 @@ plot!(bands, legend=false);
 display(bands)
 savefig(bands, "TBModel/Plotting/Plots/Bilayer_Band_Structure_$(SkXSize).pdf")
 
-filling_arr = LinRange(0.0001, 0.5, 10)
-c_fill = zeros(length(filling_arr))
-for (i, filling) in enumerate(filling_arr)
-    DiagonalizeHamiltonian!(H)
-    GetVelocity!(H, bz)
-    Mdl = Model(UC, bz, H; filling=filling)
-    SolveModel!(Mdl; get_gap=true)
-    c_fill[i] = KuboChern(H, bz, Mdl.mu)
-end
-p = plot(filling_arr, c_fill, ylims=(-5, 5), xlabel="Filling", ylabel=L"\sigma_{xy}", label=L"\sigma_{xy}", legend=false)
-display(p)
-savefig(p, "TBModel/Plotting/Plots/Bilayer_Hall_$(SkXSize).pdf")
+# filling_arr = LinRange(0.0001, 0.5, 10)
+# c_fill = zeros(length(filling_arr))
+# for (i, filling) in enumerate(filling_arr)
+#     DiagonalizeHamiltonian!(H)
+#     GetVelocity!(H, bz)
+#     Mdl = Model(UC, bz, H; filling=filling)
+#     SolveModel!(Mdl; get_gap=true)
+#     c_fill[i] = KuboChern(H, bz, Mdl.mu)
+# end
+# p = plot(filling_arr, c_fill, ylims=(-5, 5), xlabel="Filling", ylabel=L"\sigma_{xy}", label=L"\sigma_{xy}", legend=false)
+# display(p)
+# savefig(p, "TBModel/Plotting/Plots/Bilayer_Hall_$(SkXSize).pdf")
 
 #Calculating Chern Numbers for bands
 # for i in 1:2*length(UC.basis)

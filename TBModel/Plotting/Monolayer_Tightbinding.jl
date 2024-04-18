@@ -46,9 +46,9 @@ function KuboChern(Ham::Hamiltonian, bz::BZ, mu::Float64)
 end
 ##Triangular Lattice
 params = Dict()
-SkXSize = get!(params, "SkXSize", 2)
+SkXSize = get!(params, "SkXSize", 3)
 SkX = get!(params, "SkX", "Bloch")
-SkX = "Neel"
+SkX = "Bloch"
 a1 = SkXSize / 2 * [-3.0, sqrt(3)]
 a2 = SkXSize / 2 * [3.0, sqrt(3)]
 l1 = [1.0, 0]
@@ -58,7 +58,7 @@ UC = UnitCell([a1, a2], 2, 2)
 n = get!(params, "n", 20)
 kSize = 6 * n + 3
 t = get!(params, "t", 1.0)
-jh = get!(params, "jh", -1.0)
+jh = get!(params, "jh", 4.0)
 U = get!(params, "U", 0.0)
 ##### Thermodynamic parameters
 filling = get!(params, "filling", 0.5)
@@ -151,8 +151,8 @@ SolveModel!(Mdl; get_gap=true)
 bands = Plot_Band_Structure!(Mdl, [bz.HighSymPoints["G"], bz.HighSymPoints["M1"], bz.HighSymPoints["K1"]], labels=["G", "M", "K"], plot_legend=false);
 plot!(bands, legend=false);
 display(bands)
-savefig(bands, "TBModel/Plotting/Plots/Monolayer_Band_Structure_$(SkXSize).pdf")
-filling_arr = LinRange(0.0001, 0.5, 50)
+savefig(bands, "TBModel/Plotting/Plots/Monolayer_Band_Structure_$(SkXSize)_$(jh).pdf")
+filling_arr = LinRange(0.0001, 0.5, 25)
 c_fill = zeros(length(filling_arr))
 for (i, filling) in enumerate(filling_arr)
     DiagonalizeHamiltonian!(H)
@@ -163,7 +163,7 @@ for (i, filling) in enumerate(filling_arr)
 end
 p = plot(filling_arr, c_fill, ylims=(-5, 5), xlabel="Filling", ylabel=L"\sigma_{xy}", label=L"\sigma_{xy}", legend=false)
 display(p)
-savefig(p, "TBModel/Plotting/Plots/Monolayer_Hall_$(SkXSize).pdf")
+savefig(p, "TBModel/Plotting/Plots/Monolayer_Hall_$(SkXSize)_$(jh).pdf")
 
 #Calculating Chern Numbers for bands
 # for i in 1:2*length(UC.basis)
