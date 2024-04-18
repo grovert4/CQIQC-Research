@@ -46,7 +46,7 @@ function KuboChern(Ham::Hamiltonian, bz::BZ, mu::Float64)
 end
 ##Triangular Lattice
 params = Dict()
-SkXSize = get!(params, "SkXSize", 3)
+SkXSize = get!(params, "SkXSize", 2)
 SkX = get!(params, "SkX", "Bloch")
 SkX = "Bloch"
 a1 = SkXSize / 2 * [-3.0, sqrt(3)]
@@ -152,7 +152,7 @@ bands = Plot_Band_Structure!(Mdl, [bz.HighSymPoints["G"], bz.HighSymPoints["M1"]
 plot!(bands, legend=false);
 display(bands)
 savefig(bands, "TBModel/Plotting/Plots/Monolayer_Band_Structure_$(SkXSize)_$(jh).pdf")
-filling_arr = LinRange(0.0001, 0.5, 25)
+filling_arr = LinRange(0.0001, 0.5, 40)
 c_fill = zeros(length(filling_arr))
 mu_arr = LinRange(-6, 0, 25)
 #for (i, filling) in enumerate(filling_arr)
@@ -163,7 +163,7 @@ for (i, mu) in enumerate(mu_arr)
     #SolveModel!(Mdl; get_gap=true)
     c_fill[i] = KuboChern(H, bz, mu)
 end
-p = plot(filling_arr, -1*c_fill, marker = :o, ylims=(-5, 5), xlabel="Filling", ylabel=L"\sigma_{xy}", label=L"\sigma_{xy}", legend=false)
+p = plot(mu_arr, c_fill, marker = :o, ylims=(-5, 5), xlabel="Filling", ylabel=L"\sigma_{xy}", label=L"\sigma_{xy}", legend=false)
 display(p)
 savefig(p, "TBModel/Plotting/Plots/Monolayer_Hall_$(SkXSize)_$(jh).pdf")
 
