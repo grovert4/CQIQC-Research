@@ -38,7 +38,7 @@ end
 
 #############################
 
-filename = "04.15-Bloch.2024_Monolayer_NN"
+filename = "04.14-Bloch.2024_Monolayer_NN"
 
 
 #println(@__DIR__)
@@ -122,7 +122,7 @@ for (ind, U_var) in enumerate(U_array[:])
     Mdl = Model(TBResults["UC"], bz, H; filling=0.5)
     SolveModel!(Mdl; get_gap=true)
 
-    bands = Plot_Band_Structure!(Mdl, [bz.HighSymPoints["G"], bz.HighSymPoints["M2"], bz.HighSymPoints["M3"]], labels=["G", "M2", "M3"], plot_legend=false)
+    bands = Plot_Band_Structure!(Mdl, [bz.HighSymPoints["G"], bz.HighSymPoints["M1"], bz.HighSymPoints["K1"]], labels=["G", "M1", "K1"], plot_legend=false)
     plot!(bands, legend=false)
     display(bands)
 
@@ -134,7 +134,7 @@ for (ind, U_var) in enumerate(U_array[:])
     #println(TBResults["UC"].bonds)
     #println(ords)
 end
-gap_plot = scatter(gap_array[:, 1], gap_array[:, 2], xlabel="U", ylabel="Δ")
+gap_plot = scatter(gap_array[:, 1], gap_array[:, 2], xlabel="U", ylabel=L"\Delta")
 display(gap_plot)
 savefig(loc * "gap.png")
 
@@ -148,13 +148,13 @@ energy_plot = scatter(U_array, eng_array, xlabel="U", ylabel="Energy")
 display(energy_plot)
 ords = scatter(U_array, abs.(order_parameter[:, 1]), xlabel="U", ylabel="t")
 display(ords)
-ords2 = scatter(U_array, order_parameter, xlabel="U", ylabel="ΔS_z")
+ords2 = scatter(U_array, order_parameter, xlabel="U", ylabel=L"\Delta S_z")
 display(ords2)
 # scatter(U_array, [abs.(c_arr[:, 1]), abs.(c_arr[:, 4])], label=["Chern ( first 2 bands)" "Chern ( first 6 bands)"], ylabel="C")
 # #It's uncertain of what Chern number to use?
 # xlabel!("U")
 
-C_plot = scatter(U_array, c_fill, xlabel="U", ylabel="σ(0)")
+C_plot = scatter(U_array, c_fill, xlabel="U", ylabel=L"\sigma_xy")
 display(C_plot)
 savefig(loc * "Chern.png")
 # plot the bands color code by sign of Chern # 

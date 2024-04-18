@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Monolayer_Data/"
 t1 = -1.0
-filename = "04.15-Bloch.2024_Monolayer_NN"
+filename = "04.14-Bloch.2024_Monolayer_NN"
 os.chdir("/home/andrewhardy/Documents/Graduate/Codes/Skyrmion/TBModel/Plotting")
 os.getcwd()
 sys.path.append(os.getcwd())
@@ -100,17 +100,28 @@ plt.xlabel(r'$n$')
 plt.show()
 
 
+fig = plt.figure(figsize=(8, 8))
 
-plt.imshow(conduct, aspect='auto', cmap='viridis', vmax=4, origin='lower',
+plt.imshow(np.round(conduct,3), aspect='auto', cmap='PRGn',vmin = -4, vmax=4, origin='lower',
            extent=[filling_arr.min(), filling_arr.max(), U_array.min(), U_array.max()])
 
 plt.colorbar(label=r'$\sigma_{xy}$')
-plt.ylabel(r'$U$')
+plt.ylabel(r'$U_1$')
 plt.xlabel(r'$n$')
+plt.ylim(U_array.min(), min(U_array.max(), 5))
+
+plt.savefig("Plots/Monolayer_Conductivity.pdf")
+
 plt.show()
+fig = plt.figure(figsize=(8, 8))
+
 plt.imshow(polarization, aspect='auto', cmap='viridis', origin='lower',
            extent=[filling_arr.min(), filling_arr.max(), U_array.min(), U_array.max()])
-plt.colorbar(label=r'$P$')
-plt.ylabel(r'$U$')
+plt.colorbar(label=r'$S_z$')
+plt.ylabel(r'$U_1$')
 plt.xlabel(r'$n$')
+plt.ylim(U_array.min(), min(U_array.max(), 5))
+
+plt.savefig("Plots/Monolayer_Polarization.pdf")
+
 plt.show()

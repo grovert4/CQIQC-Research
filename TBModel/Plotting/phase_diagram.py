@@ -63,19 +63,27 @@ plt.ylabel(r'$U$')
 plt.xlabel(r'$n$')
 
 plt.show()
-
-plt.imshow(conduct, aspect='auto', cmap='viridis',vmin = -2, vmax=2, origin='lower',
+fig = plt.figure(figsize=(8, 8))
+plt.imshow(conduct, aspect='auto', cmap='PRGn',vmin = -2, vmax=2, origin='lower',
            extent=[filling_arr.min(), filling_arr.max(), U_array.min(), U_array.max()])
 
 plt.colorbar(label=r'$\sigma_{xy}$')
 plt.ylabel(r'$U$')
 plt.xlabel(r'$n$')
+plt.ylim(U_array.min(), min(U_array.max(), 7))
+
+plt.savefig("Plots/Bilayer_Conductivity.pdf")
 plt.show()
+fig = plt.figure(figsize=(8, 8))
 plt.imshow(polarization, aspect='auto', cmap='viridis', origin='lower',
            extent=[filling_arr.min(), filling_arr.max(), U_array.min(), U_array.max()])
 plt.colorbar(label=r'$P$')
 plt.ylabel(r'$U$')
 plt.xlabel(r'$n$')
+plt.ylim(U_array.min(), min(U_array.max(), 7))
+
+plt.savefig("Plots/Bilayer_Polarization.pdf")
+
 plt.show()
 
 # Uniform_Status = False

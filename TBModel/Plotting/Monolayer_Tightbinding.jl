@@ -46,7 +46,7 @@ function KuboChern(Ham::Hamiltonian, bz::BZ, mu::Float64)
 end
 ##Triangular Lattice
 params = Dict()
-SkXSize = get!(params, "SkXSize", 3)
+SkXSize = get!(params, "SkXSize", 2)
 SkX = get!(params, "SkX", "Bloch")
 SkX = "Neel"
 a1 = SkXSize / 2 * [-3.0, sqrt(3)]
@@ -139,7 +139,6 @@ display(p)
 # display(plot_UC)
 
 #Creating BZ and Hamiltonian Model
-kSize = 6 * 5 + 3
 bz = BZ(kSize)
 FillBZ!(bz, UC)
 path = CombinedBZPath(bz, [bz.HighSymPoints["G"], bz.HighSymPoints["K1"], bz.HighSymPoints["M2"]]; nearest=true)

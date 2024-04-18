@@ -53,7 +53,8 @@ function MFT(params, filename)
     # Adding MFT Parameters
     n_up = [1.0 0.0; 0.0 0.0]
     n_down = [0.0 0.0; 0.0 1.0]
-    Hubbard = DensityToPartonCoupling(n_up, n_down)
+    n_tot = [1.0 0.0; 0.0 1.0]
+    Hubbard = DensityToPartonCoupling(n_tot, n_tot)
     UParam = Param(1.0, 4)
     Sz = []
     tParam = Param(1.0, 2)
