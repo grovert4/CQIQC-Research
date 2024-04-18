@@ -80,7 +80,7 @@ function MFT(params, filename)
         AddAnisotropicBond!(Nexp[ind], UC, ind, ind, [0, 0], n_tot, 0.0, "Ntotal-" * string(ind))
     end
 
-    ChiParams = vcat(tParam, Sz)
+    ChiParams = vcat(tParam, Nexp)
     ChiParams = Vector{Param{2,Float64}}(ChiParams)
     ##Creating BZ and Hamiltonian Model
     bz = BZ(kSize)
