@@ -56,7 +56,7 @@ function MFT(params, filename)
     n_tot = [1.0 0.0; 0.0 1.0]
     Hubbard = DensityToPartonCoupling(n_tot, n_tot)
     UParam = Param(1.0, 4)
-    Sz = []
+    Nexp = []
     tParam = Param(1.0, 2)
     UParam.value = [U]
     AddIsotropicBonds!(UParam, UC, 1.0, Hubbard, "Hubbard Interaction", checkOffsetRange=1) # Do I need to add this to all sites?
@@ -75,9 +75,9 @@ function MFT(params, filename)
     CreateUnitCell!(UC, HoppingParams)
     AddIsotropicBonds!(tParam, UC, 1.0, su2spin[4], "s_H") # Am I not double counting the hopping ??
     for (ind, bas) in enumerate(UC.basis)
-        push!(Sz, Param(1.0, 2))
-        AddAnisotropicBond!(Sz[ind], UC, ind, ind, [0, 0], su2spin[3], 0.0, "Sz-" * string(ind))
-        #AddAnisotropicBond!(Nd[ind], UC, ind, ind, [0, 0], n_down, 0.0, "Ndown-" * string(ind))
+        push!(Nexp, Param(1.0, 2))
+        #AddAnisotropicBond!(Sz[ind], UC, ind, ind, [0, 0], su2spin[3], 0.0, "Sz-" * string(ind))
+        AddAnisotropicBond!(Nexp[ind], UC, ind, ind, [0, 0], ntot, 0.0, "Ntotal-" * string(ind))
     end
 
     ChiParams = vcat(tParam, Sz)

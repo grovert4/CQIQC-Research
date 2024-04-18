@@ -94,7 +94,7 @@ gap_array = zeros((length(U_array), 2))
 ord_array = Array{Float64}(undef, (length(U_array)))
 eng_array = Array{Float64}(undef, (length(U_array)))
 
-for (ind, U_var) in enumerate(U_array[:])
+for (ind, U_var) in enumerate(U_array[:3])
     println(U_var)
     if Uniform_Status == true
         fileName = loc * "Last_Itr_$(filename)_UNIFORM_p=$(round(filling, digits=3))_U=$(round(U_var, digits=2))_t1=$(round(t1, digits=2)).jld2"
@@ -119,7 +119,7 @@ for (ind, U_var) in enumerate(U_array[:])
     #plot = Plot_Band_Data!(TBResults, [L"\Gamma", L"M_2", L"M_3"])
     H = Hamiltonian(TBResults["UC"], bz)
     DiagonalizeHamiltonian!(H)
-    Mdl = Model(TBResults["UC"], bz, H; filling=0.5)
+    global Mdl = Model(TBResults["UC"], bz, H; filling=0.5)
     SolveModel!(Mdl; get_gap=true)
 
     bands = Plot_Band_Structure!(Mdl, [bz.HighSymPoints["G"], bz.HighSymPoints["M1"], bz.HighSymPoints["K1"]], labels=["G", "M1", "K1"], plot_legend=false)
@@ -132,6 +132,7 @@ for (ind, U_var) in enumerate(U_array[:])
     plot!(p, legend=false)
     #display(p)
     #println(TBResults["UC"].bonds)
+    display(diag(Mdl.Gr[1, 1]))
     #println(ords)
 end
 gap_plot = scatter(gap_array[:, 1], gap_array[:, 2], xlabel="U", ylabel=L"\Delta")
