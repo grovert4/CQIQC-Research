@@ -63,7 +63,7 @@ function extract_data!(folderpath::String, date, substring::String=".jld2")
                     order_param = last.(getproperty.(dict["Hopping_Block"], :value))
                     dict["Order_Parameter"] = order_param
                     TBModel = data_entry["function args"][1].model
-                    n = 15
+                    n = 10
                     kSize = 6 * n + 3
                     TBModel.bz = BZ(kSize)
                     FillBZ!(TBModel.bz, TBModel.uc)
