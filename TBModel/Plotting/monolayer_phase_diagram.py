@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Monolayer_Data/"
 t1 = -1.0
-filename = "04.18.2024_Monolayer_NN"
+filename = "04.19.2024_Monolayer_NN"
 os.chdir("/home/andrewhardy/Documents/Graduate/Codes/Skyrmion/TBModel/Plotting")
 os.getcwd()
 sys.path.append(os.getcwd())
@@ -35,7 +35,7 @@ for (ind_f, filling) in enumerate(filling_arr):
         if Uniform_Status == True:
             polarization[ind_u, ind_f] = np.abs(TBResults["Outputs"][0])
         else:
-            polarization[ind_u, ind_f] = np.mean(np.abs(TBResults["Outputs"]))
+            polarization[ind_u, ind_f] = np.mean(np.abs(TBResults["Outputs"][2]))
 
 
         # need to make this python compatible 
@@ -117,10 +117,10 @@ fig = plt.figure(figsize=(8, 8))
 
 plt.imshow(polarization, aspect='auto', cmap='viridis', origin='lower',
            extent=[filling_arr.min(), filling_arr.max(), U_array.min(), U_array.max()])
-plt.colorbar(label=r'$S_z$')
+plt.colorbar(label=r'$P_1$')
 plt.ylabel(r'$U_1$')
 plt.xlabel(r'$n$')
-plt.ylim(U_array.min(), min(U_array.max(), 5))
+#plt.ylim(U_array.min(), min(U_array.max(), 5))
 
 plt.savefig("Plots/Monolayer_Polarization.pdf")
 
