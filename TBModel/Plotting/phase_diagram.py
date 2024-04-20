@@ -8,7 +8,7 @@ loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Bilayer_Data/"
 t1 = -1.0
 os.chdir("/home/andrewhardy/Documents/Graduate/Codes/Skyrmion/TBModel/Plotting")
 os.getcwd()
-filename = "04.14-Bloch.2024_Bilayer"
+filename = "04.16-Bloch.2024_Bilayer"
 plt.style.use("lake.mplstyle")
 plt.rcParams.update({"text.usetex": True})
 
@@ -17,7 +17,7 @@ plt.rcParams["font.serif"] = ["Computer Modern Roman"] + plt.rcParams["font.seri
 plt.rcParams.update({"text.usetex": True})
 params = yml.safe_load(Path(f"../Input/{filename}.yml").read_text())
 U_array = np.linspace(params["U_min"], params["U_max"], params["U_length"])
-filling_arr = np.linspace(params["filling_min"], params["filling_max"], params["filling_length"]) / 48
+filling_arr = np.linspace(params["filling_min"], params["filling_max"], params["filling_length"]) / (params["filling_max"] *2 )
 filling = filling_arr[6]
 Uniform_Status = False
 polarization = np.zeros((len(U_array), len(filling_arr)))
@@ -70,9 +70,9 @@ plt.imshow(conduct, aspect='auto', cmap='PRGn',vmin = -2, vmax=2, origin='lower'
 plt.colorbar(label=r'$\sigma_{xy}$')
 plt.ylabel(r'$U$')
 plt.xlabel(r'$n$')
-plt.ylim(U_array.min(), min(U_array.max(), 7))
+plt.ylim(U_array.min(), min(U_array.max(), 8))
 
-plt.savefig("Plots/Bilayer_Conductivity.pdf")
+plt.savefig("Plots/Bilayer_Conductivity_Extended.pdf")
 plt.show()
 fig = plt.figure(figsize=(8, 8))
 plt.imshow(polarization, aspect='auto', cmap='viridis', origin='lower',
@@ -80,9 +80,9 @@ plt.imshow(polarization, aspect='auto', cmap='viridis', origin='lower',
 plt.colorbar(label=r'$P$')
 plt.ylabel(r'$U$')
 plt.xlabel(r'$n$')
-plt.ylim(U_array.min(), min(U_array.max(), 7))
+plt.ylim(U_array.min(), min(U_array.max(), 8))
 
-plt.savefig("Plots/Bilayer_Polarization.pdf")
+plt.savefig("Plots/Bilayer_Polarization_Extended.pdf")
 
 plt.show()
 
