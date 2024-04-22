@@ -8,7 +8,7 @@ from triqs_tprf.lattice import lindhard_chi00
 from triqs.gf import MeshImFreq, Idx
 from triqs_tprf.lattice import lattice_dyson_g0_wk
 from triqs_tprf.lattice_utils import imtime_bubble_chi0_wk
-
+loc = "/scratch/andykh/Data/"
 ###### Pauli matrices ###########
 s1 = np.matrix([[0,1],[1,0]])
 s2 = np.matrix([[0,-1j],[1j,0]])
@@ -131,7 +131,7 @@ bands_plot = plt.plot(k_plot, [energies(k, e_k) for k in k_vecs])
 plt.xticks(k_ticks, [r'$\Gamma$',r'$K_1$',r'$M_2$',r'$\Gamma$'])
 plt.ylabel(r'$\epsilon(\mathbf{k})$')
 plt.grid(True)
-plt.savefig(f"band_structure_t1={t1}_B={B}.png")
+plt.savefig(loc+f"band_structure_t1={t1}_B={B}.png")
 plt.close()
 # plt.show()
 # quit()
@@ -163,7 +163,7 @@ plt.xlabel(r'$n$')
 # plt.hlines(-0.4, 0.0, 1.0, ls='--', color='orange')
 plt.vlines(0.5, -7, 4, ls='--', color='orange')
 # plt.show(mu_vs_filling)
-plt.savefig(f"mu_vs_filling_t1={t1}_B={B}.png")
+plt.savefig(loc + f"mu_vs_filling_t1={t1}_B={B}.png")
 plt.close()
 
 ############################################ BARE BUBBLE #######################################
@@ -237,6 +237,6 @@ for index, mu in enumerate(mus):
     print("contraction completed")
 
     fileName = f"t1={t1}_B={B}_beta={beta}_mu={mu}_suscep.npz"
-    np.savez(fileName, chiDD = chiDD, chiXX=chiXX, chiYY=chiYY, chiZZ=chiZZ, 
+    np.savez(loc+fileName, chiDD = chiDD, chiXX=chiXX, chiYY=chiYY, chiZZ=chiZZ, 
                 ks=ks, beta = beta, mu = mu, filling=fillings[index],
                 reciprocal = kmesh.bz.units, primitives=model.units)
