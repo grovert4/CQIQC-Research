@@ -151,7 +151,7 @@ def filling(band, beta, mu):
 
 ##### Temperature
 beta = 10.0
-mus = np.linspace(-7.0, 4.0, 111)
+mus = np.linspace(-7.0, 4.0, 23)
 fillings = np.zeros(len(mus))
 print("calculating chemical potential vs filling...")
 for (i, mu) in enumerate(mus):
@@ -169,7 +169,7 @@ plt.close()
 ############################################ BARE BUBBLE #######################################
 ##### returns S^a at site i of total sites N where S^a = [rho, Sx, Sy, Sz].
 def S(i:int, N:int, direction:int) -> np.matrix:
-    mat = np.eye(2*N, dtype=np.complex128)
+    mat = np.zeros((2*N, 2*N), dtype=np.complex128)
     mat[2*i:2*i+2, 2*i:2*i+2] = paulis[direction]
     return mat
 
