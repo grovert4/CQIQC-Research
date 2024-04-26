@@ -23,7 +23,7 @@ start_index = commRank * elements_per_process + min(commRank, remainder) + 1
 end_index = start_index + elements_per_process - 1 + (commRank < remainder ? 1 : 0)
 
 for i in start_index:end_index
-    for (U, j) in enumerate(Us)
+    for (U, j) in enumerate
         params["U"] = round(Us[j], sigdigits=5)
         params["filling"] = round(fillings[i], sigdigits=5)
         #params["date"] = filename # change to output file name. 
