@@ -59,6 +59,7 @@ function extract_data!(folderpath::String, date, substring::String=".jld2")
                     dict["Iterations"] = data_entry["Self-consistency params"][:iter]
                     dict["MFT_Energy"] = data_entry["function args"][1].MFTEnergy
                     dict["Hopping_Block"] = data_entry["function args"][1].HoppingOrders
+                    dict["Expectations"] = data_entry["outputs"][end]
                     order_param = last.(getproperty.(dict["Hopping_Block"], :value))
                     dict["Order_Parameter"] = order_param
                     TBModel = data_entry["function args"][1].model
@@ -93,7 +94,7 @@ function extract_data!(folderpath::String, date, substring::String=".jld2")
                     dict["UC"] = TBModel.uc
                     dict["Gap"] = TBModel.gap # I seem to have done this wrong? 
                     dict["mu"] = TBModel.mu
-                    dict["Expectations"] = data_entry["outputs"][end]
+                    dict["Outputs"] = data_entry["outputs"][end]
                     dict["Chern"] = c
                     dict["Chern Fill"] = c_fill
                     #println(c_fill)

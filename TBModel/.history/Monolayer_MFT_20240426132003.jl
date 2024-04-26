@@ -109,7 +109,7 @@ function MFT(params, filename)
         end
     else
         if haskey(dict, "U_prev")
-            init_guess = load(fileName)["outputs"][end]
+            init_guess = load(fileName)["mft"].chi_params
             SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
         else
             SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])

@@ -101,19 +101,14 @@ function MFT(params, filename)
         catch e
             println("Error Loading $fileName")
             if haskey(dict, "U_prev")
-                init_guess = load(fileName)["outputs"][end]
                 SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
+            end
             else
                 SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
             end
         end
     else
-        if haskey(dict, "U_prev")
-            init_guess = load(fileName)["outputs"][end]
-            SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
-        else
-            SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
-        end
+        SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
     end
     for i in 1:2*length(UC.basis)
         c = ChernNumber(H, [i])

@@ -15,8 +15,8 @@ module load StdEnv/2023
 module load julia/1.10.0
 module load intel/2023.2.1
 module load intelmpi
-mpirun julia --project=.. --heap-size-hint=1G MFT_wrapper.jl 04.26.2024_Monolayer_NN ./Monolayer_MFT.jl
+mpirun julia --project=.. --heap-size-hint=1G MFT_wrapper.jl 04.19.2024_Monolayer_NN ./Monolayer_MFT.jl
 #mpirun julia --project=.. --heap-size-hint=1G Extract_LastData.jl "/scratch/a/aparamek/andykh/Data/Monolayer_Data" 04.19
 #mpirun julia --project=.. --heap-size-hint=1G MFT_wrapper.jl 04.20.2024_Monolayer_NN ./Monolayer_MFT.jl
-mpirun julia --project=.. --heap-size-hint=1G Extract_LastData.jl "/scratch/a/aparamek/andykh/Data/Monolayer_Data" 04.26
+mpirun julia --project=.. --heap-size-hint=1G Extract_LastData.jl "/scratch/a/aparamek/andykh/Data/Monolayer_Data" 04.20
 

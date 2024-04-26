@@ -113,9 +113,6 @@ for (ind, U_var) in enumerate(U_array[:3])
     c_fill[ind] = abs.(TBResults["Chern Fill"])
     ords = TBResults["Outputs"]
     order_parameter[ind, :] = TBResults["Outputs"]
-    println(TBResults["Outputs"])
-    println(TBResults["Expectations"])
-    println(TBResults["Chern"])
     #println(length(ords))
     ord_array[ind] = (mean(abs.(ords)))
 

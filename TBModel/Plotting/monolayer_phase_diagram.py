@@ -35,7 +35,7 @@ for (ind_f, filling) in enumerate(filling_arr):
         if Uniform_Status == True:
             polarization[ind_u, ind_f] = np.abs(TBResults["Outputs"][0])
         else:
-            polarization[ind_u, ind_f] = np.mean(np.abs(TBResults["Outputs"][2]))
+            polarization[ind_u, ind_f] = np.mean(np.abs(TBResults["Outputs"][12]))
 
 
         # need to make this python compatible 
