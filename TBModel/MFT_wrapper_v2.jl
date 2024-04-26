@@ -14,7 +14,7 @@ params = YAML.load_file("./Input/$(filename).yml")
 Us = collect(range(params["U_min"], params["U_max"], params["U_length"]))
 fillings = collect(range(params["filling_min"], params["filling_max"], params["filling_length"]) / (params["filling_max"] * 2))
 
-gridsize = params["U_length"] * params["filling_length"]
+gridsize =  params["filling_length"]
 
 elements_per_process = div(params["filling_length"], commSize)
 remainder = rem(gridsize, commSize)
