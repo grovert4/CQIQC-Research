@@ -24,12 +24,13 @@ end_index = start_index + elements_per_process - 1 + (commRank < remainder ? 1 :
 
 for i in start_index:end_index
     for (j, U) in enumerate(Us)
-        params["U"] = round(Us[j], sigdigits=5)
+        params["U"] = round(U, sigdigits=5)
         params["filling"] = round(fillings[i], sigdigits=5)
         #params["date"] = filename # change to output file name. 
         if j > 2
             params["U_prev"] = Us[j-1]
         end
+        println(U)
         MFT(params, filename)
     end
 end
