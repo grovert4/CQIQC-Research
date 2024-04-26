@@ -100,7 +100,7 @@ function MFT(params, filename)
             #ResumeMFT!(fileName; max_iter=params["max_iter"], tol=params["tol"])#, Update=BroydenMixing)
         catch e
             println("Error Loading $fileName")
-            if haskey(params, "U_prev")
+            if haskey(dict, "U_prev")
                 init_guess = load(fileName)["outputs"][end]
                 SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
             else
@@ -108,7 +108,7 @@ function MFT(params, filename)
             end
         end
     else
-        if haskey(params, "U_prev")
+        if haskey(dict, "U_prev")
             init_guess = load(fileName)["outputs"][end]
             SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
         else
