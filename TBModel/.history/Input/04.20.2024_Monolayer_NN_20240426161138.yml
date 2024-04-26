@@ -10,8 +10,8 @@ jh : -1.0
 U : 1.0
 t_density : 0
 U_min : 0.0
-U_max : 5.0
-U_length : 11
+U_max : 6.0
+U_length : 
 filling_min : 1
 filling_max : 27
 filling_length : 27 # 27 to also get even. 
