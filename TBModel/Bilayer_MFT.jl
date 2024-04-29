@@ -104,7 +104,8 @@ function MFT(params, filename)
         catch e
             println("Error Loading $fileName")
             if haskey(params, "U_prev")
-                init_guess = load(fileName)["outputs"][end]
+                oldfile = loc * "/$(filename)_p=$(round(filling, digits=3))_U=$(round(params["U_prev"], digits=2))_t1=$(round(t1, digits=2)).jld2"
+                init_guess = load(oldfile)["outputs"][end]
                 SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
             else
                 SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
@@ -112,7 +113,8 @@ function MFT(params, filename)
         end
     else
         if haskey(params, "U_prev")
-            init_guess = load(fileName)["outputs"][end]
+            oldfile = loc * "/$(filename)_p=$(round(filling, digits=3))_U=$(round(params["U_prev"], digits=2))_t1=$(round(t1, digits=2)).jld2"
+            init_guess = load(oldfile)["outputs"][end]
             SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
         else
             SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
