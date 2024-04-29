@@ -93,7 +93,7 @@ function MFT(params, filename)
     # add filename to input 
     fileName = loc * "/$(filename)_p=$(round(filling, digits=3))_U=$(round(U, digits=2))_t1=$(round(t1, digits=2)).jld2"
     GC.gc()
-    init_guess = fill(0.10, SkXSize^2 * 3)
+    init_guess = fill(0.25, SkXSize^2 * 3)
     if isfile(fileName)
         println("TRYING TO LOAD " * fileName)
         try
@@ -101,19 +101,9 @@ function MFT(params, filename)
             #ResumeMFT!(fileName; max_iter=params["max_iter"], tol=params["tol"])#, Update=BroydenMixing)
         catch e
             println("Error Loading $fileName")
-            if haskey(params, "U_prev")
-                init_guess = load(fileName)["outputs"][end]
-                SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
-            else
-                SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
-            end
+            SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
         end
     else
-        if haskey(params, "U_prev")
-            init_guess = load(fileName)["outputs"][end]
-            SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
-        else
-            SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
-        end
+        SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
     end
 end

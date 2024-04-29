@@ -6,7 +6,7 @@
 #SBATCH --mail-type=FAIL
 #SBATCH --ntasks=40
 #SBATCH --cpus-per-task=1
-#SBATCH --nodes=2
+#SBATCH --nodes=1
 #SBATCH --account=rrg-aparamek
 #SBATCH --time=23:45:00
 #SBATCH --output=/scratch/a/aparamek/andykh/SLURMOutputs/slurm-%x-%j.txt
@@ -15,8 +15,7 @@ module load StdEnv/2023
 module load julia/1.10.0
 module load intel/2023.2.1
 module load intelmpi
-mpirun julia --project=.. --heap-size-hint=1G MFT_wrapper_v2.jl 04.29.2024_Monolayer_NN ./Monolayer_MFT.jl
+mpirun julia --project=.. --heap-size-hint=1G MFT_wrapper_v2.jl 04.30.2024_Monolayer_NN ./Monolayer_MFT.jl
 #mpirun julia --project=.. --heap-size-hint=1G Extract_LastData.jl "/scratch/a/aparamek/andykh/Data/Monolayer_Data" 04.19
 #mpirun julia --project=.. --heap-size-hint=1G MFT_wrapper.jl 04.20.2024_Monolayer_NN ./Monolayer_MFT.jl
-mpirun julia --project=.. --heap-size-hint=1G Extract_LastData.jl "/scratch/a/aparamek/andykh/Data/Monolayer_Data" 04.29
-
+mpirun julia --project=.. --heap-size-hint=1G Extract_LastData.jl "/scratch/a/aparamek/andykh/Data/Monolayer_Data" 04.30

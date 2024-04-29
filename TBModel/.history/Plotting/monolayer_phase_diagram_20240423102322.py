@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Monolayer_Data/"
 t1 = -1.0
-filename = "04.27.2024_Monolayer_NN"
+filename = "04.19.2024_Monolayer_NN"
 os.chdir("/home/andrewhardy/Documents/Graduate/Codes/Skyrmion/TBModel/Plotting")
 os.getcwd()
 sys.path.append(os.getcwd())
@@ -33,10 +33,12 @@ for (ind_f, filling) in enumerate(filling_arr):
         conduct[ind_u, ind_f] =  np.mean(TBResults["Chern Fill"])
         energy[ind_u, ind_f] = TBResults["MFT_Energy"][-1]
         if Uniform_Status == True:
-            polarization[ind_u, ind_f] = np.abs(TBResults["Expectations"][0])
+            polarization[ind_u, ind_f] = np.abs(TBResults["Outputs"][0])
         else:
-            polarization[ind_u, ind_f] = np.mean(np.abs(TBResults["Expectations"][1]))
+            polarization[ind_u, ind_f] = np.mean(np.abs(TBResults["Outputs"][12]))
 
+
+        # need to make this python compatible 
 U_array_flat = U_array.repeat(len(filling_arr))
 filling_arr_flat = np.tile(filling_arr, len(U_array))
 conduct_flat = conduct.flatten()
@@ -76,9 +78,9 @@ plt.show()
 #         conduct[ind_u, ind_f] =  np.abs(TBResults["Chern Fill"])
 #         energy_2[ind_u, ind_f] = TBResults["MFT_Energy"][-1]
 #         if Uniform_Status == True:
-#             polarization[ind_u, ind_f] = np.abs(TBResults["Expectations"][0])
+#             polarization[ind_u, ind_f] = np.abs(TBResults["Outputs"][0])
 #         else:
-#             polarization[ind_u, ind_f] = np.mean(np.abs(TBResults["Expectations"]))
+#             polarization[ind_u, ind_f] = np.mean(np.abs(TBResults["Outputs"]))
 
 
 conduct_flat = conduct.flatten()

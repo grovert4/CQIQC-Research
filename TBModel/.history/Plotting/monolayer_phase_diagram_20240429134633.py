@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Monolayer_Data/"
 t1 = -1.0
-filename = "04.27.2024_Monolayer_NN"
+filename = "04.25.2024_Monolayer_NN"
 os.chdir("/home/andrewhardy/Documents/Graduate/Codes/Skyrmion/TBModel/Plotting")
 os.getcwd()
 sys.path.append(os.getcwd())
@@ -35,7 +35,7 @@ for (ind_f, filling) in enumerate(filling_arr):
         if Uniform_Status == True:
             polarization[ind_u, ind_f] = np.abs(TBResults["Expectations"][0])
         else:
-            polarization[ind_u, ind_f] = np.mean(np.abs(TBResults["Expectations"][1]))
+            polarization[ind_u, ind_f] = np.mean(np.abs(TBResults["Expectations"][2]))
 
 U_array_flat = U_array.repeat(len(filling_arr))
 filling_arr_flat = np.tile(filling_arr, len(U_array))
