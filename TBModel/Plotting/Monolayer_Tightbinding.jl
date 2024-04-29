@@ -58,7 +58,7 @@ UC = UnitCell([a1, a2], 2, 2)
 n = get!(params, "n", 20)
 kSize = 6 * n + 3
 t = get!(params, "t", 1.0)
-jh = get!(params, "jh", 3.0)
+jh = get!(params, "jh", 2.0)
 U = get!(params, "U", 0.0)
 ##### Thermodynamic parameters
 filling = get!(params, "filling", 0.5)
@@ -140,13 +140,6 @@ display(p)
 
 #Creating BZ and Hamiltonian Model
 bz = BZ(kSize)
-FillBZ!(bz, UC)
-path = CombinedBZPath(bz, [bz.HighSymPoints["G"], bz.HighSymPoints["K1"], bz.HighSymPoints["M2"]]; nearest=true)
-H = Hamiltonian(UC, bz)
-DiagonalizeHamiltonian!(H)
-Mdl = Model(UC, bz, H; filling=0.5)
-SolveModel!(Mdl; get_gap=true)
-
 #Plotting the band structure
 bands = Plot_Band_Structure!(Mdl, [bz.HighSymPoints["G"], bz.HighSymPoints["M1"], bz.HighSymPoints["K1"]], labels=["G", "M", "K"], plot_legend=false);
 plot!(bands, legend=false);
@@ -166,7 +159,7 @@ for (i, mu) in enumerate(mu_arr)
     #SolveModel!(Mdl; get_gap=true)
     c_fill[i] = KuboChern(H, bz, mu)
 end
-p = plot(mu_arr, -1*c_fill,  ylims=(-4, 6), xlabel=L"\mu", ylabel=L"\sigma_{xy}", label=L"\sigma_{xy}", legend=false)
+p = plot(mu_arr, -1*c_fill,  ylims=(-5, 15), xlabel=L"\mu", ylabel=L"\sigma_{xy}", label=L"\sigma_{xy}", legend=false)
 display(p)
 savefig(p, "TBModel/Plotting/Plots/Monolayer_Hall_$(SkXSize)_$(jh).pdf")
 

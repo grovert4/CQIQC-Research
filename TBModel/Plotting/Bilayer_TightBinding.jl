@@ -61,7 +61,7 @@ n = get!(params, "n", 12)
 kSize = 6 * n + 3
 t = get!(params, "t", 1.0)
 t_inter = get!(params, "t_inter", 0.0)
-jh = get!(params, "jh", 2.0)
+jh = get!(params, "jh", 1.0)
 U = get!(params, "U", 0.0)
 t_density = get!(params, "t_density", 1.0)
 ##### Thermodynamic parameters
@@ -160,15 +160,20 @@ plot!(bands, legend=false);
 display(bands)
 savefig(bands, "TBModel/Plotting/Plots/Bilayer_Band_Structure_$(SkXSize).pdf")
 
-# filling_arr = LinRange(0.0001, 0.5, 10)
-# c_fill = zeros(length(filling_arr))
-# for (i, filling) in enumerate(filling_arr)
-#     DiagonalizeHamiltonian!(H)
-#     GetVelocity!(H, bz)
-#     Mdl = Model(UC, bz, H; filling=filling)
-#     SolveModel!(Mdl; get_gap=true)
-#     c_fill[i] = KuboChern(H, bz, Mdl.mu)
-# end
+filling_arr = LinRange(0.0001, 0.5, 60)
+#mu_arr = LinRange(-7.5, -1, 100)
+mu_arr = LinRange(-7.5, 0, 10)
+
+c_fill = zeros(length(mu_arr))
+
+#for (i, filling) in enumerate(filling_arr)
+for (i, mu) in enumerate(mu_arr)
+    DiagonalizeHamiltonian!(H)
+    GetVelocity!(H, bz)
+    #Mdl = Model(UC, bz, H; filling=filling)
+    #SolveModel!(Mdl; get_gap=true)
+    c_fill[i] = KuboChern(H, bz, mu)
+end
 # p = plot(filling_arr, c_fill, ylims=(-5, 5), xlabel="Filling", ylabel=L"\sigma_{xy}", label=L"\sigma_{xy}", legend=false)
 # display(p)
 # savefig(p, "TBModel/Plotting/Plots/Bilayer_Hall_$(SkXSize).pdf")

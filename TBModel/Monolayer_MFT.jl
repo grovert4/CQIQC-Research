@@ -1,6 +1,6 @@
 using Plots, LinearAlgebra, ColorSchemes
 using MeanFieldToolkit, TightBindingToolkit, FixedPointToolkit
-using YAML, LazyGrids
+using YAML, LazyGrids, JLD2
 
 loc = "/scratch/a/aparamek/andykh/Data/Monolayer_Data"
 #loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Bilayer_Data"
