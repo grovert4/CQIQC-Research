@@ -24,7 +24,7 @@ end_index = start_index + elements_per_process - 1 + (commRank < remainder ? 1 :
 println(Us)
 for i in start_index:end_index
     for (j, U) in enumerate(Us)
-        println(U, "U value")
+        println(U, " U value")
         params["U"] = round(U, sigdigits=5)
         params["filling"] = round(fillings[i], sigdigits=5)
         #params["date"] = filename # change to output file name. 
