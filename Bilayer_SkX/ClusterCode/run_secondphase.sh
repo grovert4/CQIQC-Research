@@ -4,12 +4,12 @@
 #SBATCH --mail-type=BEGIN
 #SBATCH --mail-type=END
 #SBATCH --mail-type=FAIL
-#SBATCH --ntasks=150
+#SBATCH --ntasks=200
 #SBATCH --cpus-per-task=1 
 #SBATCH --account=def-aparamek
-#SBATCH --time=4:30:00
+#SBATCH --time=18:00:00
 #SBATCH --mem-per-cpu=4000MB
 #SBATCH --output=/scratch/grovert4/SLURM/slurm-%x-%j.txt
 module load julia/1.8.5
 
-srun julia PhaseDiagram2.jl 10.03.2024-Bilayer-decreasingfield-secondphase
+srun julia PhaseDiagram2.jl 01.05.2024-Bilayer-decreasingfield-secondphase
