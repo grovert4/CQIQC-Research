@@ -178,7 +178,7 @@ function runAnnealTWO(H, t0,tf,lat,thermSweeps,MeasureSweeps, coolRate, outfile=
    for (ind,temp) in enumerate(ts) 
       thermalizationSweeps = thermSweeps
       measurementSweeps = 0
-      h = lat.unitcell.interactionsField[1][3]
+      h = abs.(lat.unitcell.interactionsField[1][3])
         
       if ind == 1
             thermalizationSweeps = 0
@@ -204,8 +204,8 @@ function runAnnealTWO(H, t0,tf,lat,thermSweeps,MeasureSweeps, coolRate, outfile=
                     m.lattice.interactionField[1:2:end] = repeat([(0.0, 0.0, h/2 + H)], length(m.lattice.interactionField[1:2:end]))
                     m.lattice.interactionField[2:2:end] = repeat([(0.0, 0.0, -h/2 + H)], length(m.lattice.interactionField[2:2:end]))
                 elseif 3  * length(ts)/4 > ind >= length(ts)/2
-                    m.lattice.interactionField[1:2:end] = repeat([(0.0, 0.0, h/2 + H)], length(m.lattice.interactionField[1:2:end]))
-                    m.lattice.interactionField[2:2:end] = repeat([(0.0, 0.0, -h/2 + H)], length(m.lattice.interactionField[2:2:end]))
+                    m.lattice.interactionField[1:2:end] = repeat([(0.0, 0.0, h/4 + H)], length(m.lattice.interactionField[1:2:end]))
+                    m.lattice.interactionField[2:2:end] = repeat([(0.0, 0.0, -h/4 + H)], length(m.lattice.interactionField[2:2:end]))
                 elseif ind >= 3 * length(ts)/4
                     m.lattice.interactionField[1:2:end] = repeat([(0.0, 0.0, H)], length(m.lattice.interactionField[1:2:end]))
                     m.lattice.interactionField[2:2:end] = repeat([(0.0, 0.0, H)], length(m.lattice.interactionField[2:2:end]))
