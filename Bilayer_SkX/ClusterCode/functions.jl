@@ -128,7 +128,7 @@ function runAnneal(t0,tf,lat,thermSweeps,MeasureSweeps, coolRate, outfile=nothin
    for (ind,temp) in enumerate(ts) 
       thermalizationSweeps = thermSweeps
       measurementSweeps = 0
-      h = lat.unitcell.interactionsField[1][3]
+      h = abs.(lat.unitcell.interactionsField[1][3])
         
       if ind == 1
             thermalizationSweeps = 0
@@ -148,12 +148,13 @@ function runAnneal(t0,tf,lat,thermSweeps,MeasureSweeps, coolRate, outfile=nothin
             m = MonteCarlo(monte.lattice, 1/temp, thermalizationSweeps, measurementSweeps, reportInterval = MeasureSweeps, rewrite = false);
 
             if extfield
-                # m.lattice.interactionField[1:2:end] = repeat([(0.0, 0.0, coolRate^(ind) * h)], length(m.lattice.interactionField[1:2:end]))
-                # m.lattice.interactionField[2:2:end] = repeat([(0.0, 0.0, -coolRate^(ind) * h)], length(m.lattice.interactionField[2:2:end]))
-                if 2 * length(ts)/5 >= ind > length(ts)/2
+                if length(ts)/2 > ind > length(ts)/4
                     m.lattice.interactionField[1:2:end] = repeat([(0.0, 0.0, h/2)], length(m.lattice.interactionField[1:2:end]))
                     m.lattice.interactionField[2:2:end] = repeat([(0.0, 0.0, -h/2)], length(m.lattice.interactionField[2:2:end]))
-                elseif ind > 2 * length(ts)/5
+                elseif 3  * length(ts)/4 > ind >= length(ts)/2
+                    m.lattice.interactionField[1:2:end] = repeat([(0.0, 0.0, h/4)], length(m.lattice.interactionField[1:2:end]))
+                    m.lattice.interactionField[2:2:end] = repeat([(0.0, 0.0, -h/4)], length(m.lattice.interactionField[2:2:end]))
+                elseif ind >= 3 * length(ts)/4
                     m.lattice.interactionField[1:2:end] = repeat([(0.0, 0.0, 0.0)], length(m.lattice.interactionField[1:2:end]))
                     m.lattice.interactionField[2:2:end] = repeat([(0.0, 0.0, 0.0)], length(m.lattice.interactionField[2:2:end]))
                 end
