@@ -4,12 +4,7 @@ using JLD2
 using Plots
 using LaTeXStrings
 
-const t1 = 1.0
-const B = 1.0
-const beta = 10.0
-mu = -4.0
-fileName = "./RPA_data/RPA/t1=$(t1)_B=$(B)_beta=$(beta)_mu=$(mu)_suscep.npz"
-data = npzread(fileName)
+
 
 function dress_primitives(data::Dict)
     primitives = data["primitives"]
@@ -56,7 +51,7 @@ end
 
 
 
-function U_NN(U::Float64, k::Vector{Float64} ; primitives = dress_primitives(data))
+function U_NN(U::Float64, k::Vector{Float64} ; primitives ::Vector{Vector{Float64}})
 
     ##### Nearest neighbours within unit cell : 21
     NN_00 = [(1, 2), (1, 7), (1, 8), (2, 3), (2, 8), (2, 9), (3, 4), (3, 9), (3, 10),
@@ -99,16 +94,17 @@ function minima(values::Vector{Vector{ComplexF64}}, vectors::Vector{Matrix{Compl
 end
 
 function maxima(values::Vector{Vector{ComplexF64}}, vectors::Vector{Matrix{ComplexF64}})
-    minEigs = getindex.(values, 6)
+    n = length(values[begin])
+    minEigs = getindex.(values, n)
     value, index = findmax(real.(minEigs))
-    return index, value, vectors[index][:, 6]
+    return index, value, vectors[index][:, n]
 end
 
 
 function suscep_rpa(data::Dict, U::Float64)
     chis = dress_chis(data)
     ks = Vector{eltype(data["ks"])}[eachrow(data["ks"])...]
-    Us = U_NN.(Ref(U), ks)
+    Us = U_NN.(Ref(U), ks ; primitives = dress_primitives(data))
     rpa = RPAeigs(chis, Us)
     return rpa..., ks
 end
@@ -128,10 +124,10 @@ function maxima(data::Dict, U::Float64)
 end
 
 
-function find_peak(data::Dict ; steps::Int = 21)
+function find_peak(data::Dict ; steps::Int = 31)
 
     lower = 0.0
-    upper = 2.0
+    upper = 8.0
     current = Float64[]
     check = nothing
 
@@ -156,4 +152,20 @@ function find_peak(data::Dict ; steps::Int = 21)
         maxim = maxima(data, U)
         return Dict("U" => current[end], check..., maxim...)
     end
+end
+
+
+const t1 = 1.0
+const B = 1.0
+const beta = 10.0
+mus = LinRange(-7.0, 4.0, 23)
+
+peaks = Dict[]
+
+for mu in mus
+    fileName = "./RPA_data/RPA/t1=$(t1)_B=$(B)_beta=$(beta)_mu=$(round(mu ; digits = 1))_suscep.npz"
+    data = npzread(fileName)
+    peak = find_peak(data ; steps = 31)
+    push!(peaks, peak)
+    println("mu = $(mu) done")
 end

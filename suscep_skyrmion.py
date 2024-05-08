@@ -94,7 +94,7 @@ N = L[0] * L[1]
 pos, names = positions(*L, 2)
 ########## tight binding model #################
 model = TBLattice(
-    units = [(-3.0, np.sqrt(3), 0.0), [3.0, np.sqrt(3), 0.0]],##### Primitive vectors
+    units = [(-3.0, np.sqrt(3), 0.0), (3.0, np.sqrt(3), 0.0)],##### Primitive vectors
     orbital_positions = pos,##### 2 sublattice x 2 spins
     orbital_names = names,
     hoppings = {
