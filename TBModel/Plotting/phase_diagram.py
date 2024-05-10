@@ -8,7 +8,7 @@ loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Bilayer_Data/"
 t1 = -1.0
 os.chdir("/home/andrewhardy/Documents/Graduate/Codes/Skyrmion/TBModel/Plotting")
 os.getcwd()
-filename = "04.16-Bloch.2024_Bilayer"
+filename = "05.09.2024_Bilayer"
 plt.style.use("lake.mplstyle")
 plt.rcParams.update({"text.usetex": True})
 
@@ -33,9 +33,9 @@ for (ind_f, filling) in enumerate(filling_arr):
         conduct[ind_u, ind_f] =  np.mean(TBResults["Chern Fill"])
         energy[ind_u, ind_f] = TBResults["MFT_Energy"][-1]
         if Uniform_Status == True:
-            polarization[ind_u, ind_f] = np.abs(TBResults["Outputs"][0])
+            polarization[ind_u, ind_f] = np.abs(TBResults["Expectations"][0])
         else:
-            polarization[ind_u, ind_f] = np.mean(np.abs(TBResults["Outputs"]))
+            polarization[ind_u, ind_f] = np.mean(np.abs(TBResults["Expectations"]))
 
 
         # need to make this python compatible 
@@ -100,9 +100,9 @@ plt.show()
 #         conduct[ind_u, ind_f] =  np.abs(TBResults["Chern Fill"])
 #         energy_2[ind_u, ind_f] = TBResults["MFT_Energy"][-1]
 #         if Uniform_Status == True:
-#             polarization[ind_u, ind_f] = np.abs(TBResults["Outputs"][0])
+#             polarization[ind_u, ind_f] = np.abs(TBResults["Expectations"][0])
 #         else:
-#             polarization[ind_u, ind_f] = np.mean(np.abs(TBResults["Outputs"]))
+#             polarization[ind_u, ind_f] = np.mean(np.abs(TBResults["Expectations"]))
 
 
 # conduct_flat = conduct.flatten()
