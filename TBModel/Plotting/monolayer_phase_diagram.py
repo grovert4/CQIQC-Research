@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Monolayer_Data/"
 t1 = -1.0
-filename = "04.29.2024_Monolayer_NN"
+filename = "04.30.2024_Monolayer_NN"
 os.chdir("/home/andrewhardy/Documents/Graduate/Codes/Skyrmion/TBModel/Plotting")
 os.getcwd()
 sys.path.append(os.getcwd())
@@ -100,7 +100,7 @@ plt.show()
 
 fig = plt.figure(figsize=(8, 8))
 
-plt.imshow(np.round(conduct,3), aspect='auto', cmap='PRGn',vmin = -4, vmax=4, origin='lower',
+plt.imshow(np.round(conduct,3), aspect='auto', cmap='PRGn',vmin = -6, vmax=6, origin='lower',
            extent=[filling_arr.min(), filling_arr.max(), U_array.min(), U_array.max()])
 
 plt.colorbar(label=r'$\sigma_{xy}$')
