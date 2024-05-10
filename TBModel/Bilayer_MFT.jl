@@ -117,7 +117,7 @@ function MFT(params, filename)
             init_guess = load(oldfile)["outputs"][end]
             SolveMFT!(mft, guess .+ init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
         else
-            SolveMFT!(mft, guess .+ init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
+            SolveMFT!(mft, guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
         end
     end
 end
