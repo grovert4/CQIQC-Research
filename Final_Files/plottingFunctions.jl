@@ -12,7 +12,7 @@ function plotChirality(centers,chirals, scale = false)
 end
 
 ##Plot Structure Factor using <S(0) . S(r)> for lattice 
-function plot_file_StructureFactor(lat::Lattice{D,N}, layer::Int64)
+function plot_file_StructureFactor(lat::Lattice, layer::Int64)
    N = 256
    correlation = getCorrelation(lat) # The correlation is measured with respect to the spin, i.e. the i-th entry is the correlation dot(S_1,S_i). 
    kx = collect(range(-5pi/3,5pi/3,length=N))
@@ -27,7 +27,7 @@ function plot_file_StructureFactor(lat::Lattice{D,N}, layer::Int64)
 end
 
 ##Plot Monolayer Spins for given input file
-function plotMonoReadSpins(file, lat::Lattice{D,N}, vertex, tit=true)
+function plotMonoReadSpins(file, lat::Lattice, vertex, tit=true)
     updateSpins!(file,lat)
     PyPlot.isjulia_display[] = false  
     xpos,ypos = [],[]
@@ -100,7 +100,7 @@ function plotMonoReadSpins(file, lat::Lattice{D,N}, vertex, tit=true)
 end
 
 ##Plot Bilayer Spins for given input file
-function plotBiReadSpins(file, lat::Lattice{D,N}, vertex = none, bg=true)
+function plotBiReadSpins(file, lat::Lattice, vertex = none, bg=true)
    updateSpins!(file,lat)
    PyPlot.isjulia_display[] = false
    xpos,ypos = [],[]
@@ -189,7 +189,7 @@ function plotBiReadSpins(file, lat::Lattice{D,N}, vertex = none, bg=true)
 end
 
 ##Plot <S(r)> Correlations have to fix this
-function plot_file_Correlations(lat::Lattice{D,N}, layer::Int64,index::Int64; sf)
+function plot_file_Correlations(lat::Lattice, layer::Int64,index::Int64; sf)
     N = 256
     # correlation = getCorrelation(lat) # The correlation is measured with respect to the spin, i.e. the i-th entry is the correlation dot(S_1,S_i). 
     kx = collect(range(-5pi/3,5pi/3,length=N))
@@ -205,4 +205,32 @@ function plot_file_Correlations(lat::Lattice{D,N}, layer::Int64,index::Int64; sf
     xs = [4.0pi/3.0, 2.0pi/3.0, -2.0pi/3.0, -4.0pi/3.0, -2.0pi/3.0, 2.0pi/3.0, 4.0pi/3.0]
     ys = [0.0, 2.0pi/sqrt(3.0), 2.0pi/sqrt(3.0), 0.0, -2.0pi/sqrt(3.0), -2.0pi/sqrt(3.0), 0.0]
     plot!(xs, ys, legend=false)  
+end
+
+##Plot a pcolor phase diagram for given x,y, and data  
+function plotMiniPhase(X, Y, data;flipx=false, flipy=false, xlab="X", ylab="Y", title="Title")
+    f = PyPlot.figure(dpi = 350)
+    phaseDiagram = pcolor(X, Y, data, cmap="gnuplot")
+    f.colorbar(phaseDiagram)
+    if flipx
+       gca().invert_xaxis()
+    end
+    if flipy 
+        gca().invert_yaxis()
+    end
+    plt.xlabel(xlab)
+    plt.ylabel(ylab)
+    plt.title(title)
+    display(f)
+    close(f)
+end
+ 
+##Display random lattices to see what spin configuration looks like for them
+function randomLattices(N = 20, Hlim = length(Hs), J2lim = length(J2s))
+    for i in 1:N
+       global H = round(Hs[rand(1:Hlim)], sigdigits=5)
+       global J2 = round(J2s[rand(1:J2lim)], sigdigits=5)
+       plotMonoReadSpins("C:/Users/tanma/Monolayer_Runs_Take2_36x36/16.01.2024-36x36-Monolayer_H=$H,J2=$J2.h5", tempLattice, vertex)
+    end
+    return nothing
 end

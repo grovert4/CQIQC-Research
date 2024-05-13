@@ -3,7 +3,7 @@ using SpinMC_more_more, LinearAlgebra, HDF5
 ##Convention layer 0 is bottom layer (starting with index 1) and layer 1 is top layer starting with index 2 
 
 ##Getting the Skyrmions number for a given layer, lattice, and input vertices(use getVertex() below for this)
-function getSkyrmionNumber(layer::Int64, lat::Lattice{D,N}, vertex)
+function getSkyrmionNumber(layer::Int64, lat::Lattice, vertex)
     Q = 0
     for i in vertex
         Si = collect(getSpin(lat, i[1] + layer))
@@ -16,7 +16,7 @@ function getSkyrmionNumber(layer::Int64, lat::Lattice{D,N}, vertex)
 end
 
 ##Get Skyrmion number locally for different vertices 
-function localSkxNum(layer::Int64,lat::Lattice{D,N},vertex)
+function localSkxNum(layer::Int64,lat::Lattice,vertex)
    Q = 0
    skxs = []
    for i in vertex
@@ -30,7 +30,7 @@ function localSkxNum(layer::Int64,lat::Lattice{D,N},vertex)
 end
 
 ##Get the scalar chirality for a given layer, lattice, and input vertices(use getVertex() below for this)
-function getScalarChirality(layer::Int64, lat::Lattice{D,N}, vertex)
+function getScalarChirality(layer::Int64, lat::Lattice, vertex)
     chi = 0
     for i in vertex
         Si = collect(getSpin(lat, i[1] + layer))
@@ -42,7 +42,7 @@ function getScalarChirality(layer::Int64, lat::Lattice{D,N}, vertex)
 end
 
 ##Get the scalar chirality locally for different vertices
-function localChiralities(layer::Int64, lat::Lattice{D,N}, vertex)
+function localChiralities(layer::Int64, lat::Lattice, vertex)
     chirals = []
     for i in vertex
         Si = collect(getSpin(lat, i[1] + layer))
@@ -54,7 +54,7 @@ function localChiralities(layer::Int64, lat::Lattice{D,N}, vertex)
 end
 
 ##Get the positions of centers of the lattice of a layer
-function getCenters(lat::Lattice{D,N})
+function getCenters(lat::Lattice)
    centerpos = []
    numBasis = length(lat.unitcell.basis)
    size = lat.size[1]
@@ -88,7 +88,7 @@ function getCenters(lat::Lattice{D,N})
 end
 
 ##Get the indeices lattice sites which are vertices the lattice of a layer
-function getVertex(lat::Lattice{D,N})
+function getVertex(lat::Lattice)
    vertex = []
    size = lat.size[1]
    numBasis = length(lat.unitcell.basis)
@@ -120,7 +120,7 @@ end
 ##Have to organize S(q) stuff out
 
 ##Get <S(0) . S(r)> with input lattice and layer and return the values 
-function readStructureFactor(layer::Int64, lat::Lattice{D,N})
+function readStructureFactor(layer::Int64, lat::Lattice)
    N = 256
    correlation = getCorrelation(lat, layer + 1) 
    kx = collect(range(-5pi/3,5pi/3,length=N))
@@ -142,7 +142,7 @@ function readStructureFactor(layer::Int64, lat::Lattice{D,N})
 end
 
 ##Read a component of <S(r)> HAVE TO FIX THIS STUFF
-function readCorrelations(layer::Int64, lat::Lattice{D,N})
+function readCorrelations(layer::Int64, lat::Lattice)
    N = 256
    kx = collect(range(-5pi/3,5pi/3,length=N))
    ky = collect(range(-5pi/3,5pi/3,length=N))
@@ -171,7 +171,7 @@ function readCorrelations(layer::Int64, lat::Lattice{D,N})
 end
 
 ##function for getting correlation with S(0)
-function getCorrelation(lattice::Lattice{D,N}, spin::Int = 1) where {D,N}
+function getCorrelation(lattice::Lattice, spin::Int = 1)
    corr = zeros(length(lattice))
    s0 = getSpin(lattice, spin)
    for i in 1:length(lattice)
@@ -181,7 +181,7 @@ function getCorrelation(lattice::Lattice{D,N}, spin::Int = 1) where {D,N}
 end
 
 ##Given input HDF5 file, update the lattice spins
-function updateSpins!(file, lat::Lattice{D,N})
+function updateSpins!(file, lat::Lattice)
    file = h5open(file)["mc"]
    sites = parse.(Int64,collect(keys(read(file["lattice"]["spins"]))))
    spins = collect(values(read(file["lattice"]["spins"])))
@@ -202,26 +202,12 @@ function readEnergy(file)
 end
 
 ##Calculate average Sz for a given lattice
-function avgSz(lat::Lattice{D,N})
+function avgSz(lat::Lattice)
    avg = 0
    for i in 1:length(lat.sitePositions)
       avg += lat.spins[3,i]
    end
    return avg/length(lat.sitePositions)
-end
-
-##Plot a pcolor phase diagram for given x,y, and data  
-function plotMiniPhase(X, Y, data,flip=false)
-   f = PyPlot.figure(dpi = 350)
-   phaseDiagram = pcolor(X, Y, data, cmap="gnuplot")
-   xlabel("X")
-   ylabel("Y")
-   f.colorbar(phaseDiagram)
-   if flip
-      gca().invert_xaxis()
-   end
-   display(f)
-   close(f)
 end
 
 ##Annealing function for J_Perp vs J_2 phase diagram used for simulations on cluster
@@ -326,4 +312,14 @@ function runAnnealTWO(H, t0,tf,lat,thermSweeps,MeasureSweeps, coolRate, outfile=
       monte = deepcopy(m);
    end
    return monte
+end
+
+##Display random lattices to see what spin configuration looks like for them
+function randomLattices(N = 20, Hlim = length(Hs), J2lim = length(J2s))
+   for i in 1:N
+      global H = round(Hs[rand(1:Hlim)], sigdigits=5)
+      global J2 = round(J2s[rand(1:J2lim)], sigdigits=5)
+      plotMonoReadSpins("C:/Users/tanma/Monolayer_Runs_Take2_36x36/16.01.2024-36x36-Monolayer_H=$H,J2=$J2.h5", tempLattice, vertex)
+   end
+   return nothing
 end
