@@ -6,8 +6,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Monolayer_Data/"
 t1 = -1.0
-filename = "04.29.2024_Monolayer_NN"
-#filename = "05.09.2024_Monolayer_NN"
+filename = "04.29.2024_Monolayer_NN" # J = 4, N = 2
+filename = "05.09.2024_Monolayer_NN" # J = 0, N = 2
+filename = "05.14.2024_Monolayer_NN" # J = 1, N = 2
+filename = "05.10.2024_Monolayer_NN" # J = 0, N = 3
+filename = "05.14.2024_Monolayer_NN" # J = 1, N = 2
+filename = "05.15.2024_Monolayer_NN" # J = 1, N = 2
+
 
 os.chdir("/home/andrewhardy/Documents/Graduate/Codes/Skyrmion/TBModel/Plotting")
 os.getcwd()
