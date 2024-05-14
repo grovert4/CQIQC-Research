@@ -9,6 +9,9 @@ t1 = -1.0
 os.chdir("/home/andrewhardy/Documents/Graduate/Codes/Skyrmion/TBModel/Plotting")
 os.getcwd()
 filename = "05.09.2024_Bilayer"
+#filename = "05.14.2024_Bilayer" # J = 2
+#filename = "05.12.2024_Bilayer" # J = 4
+
 plt.style.use("lake.mplstyle")
 plt.rcParams.update({"text.usetex": True})
 
