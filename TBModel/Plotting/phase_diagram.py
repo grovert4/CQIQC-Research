@@ -12,8 +12,8 @@ filename = "05.09.2024_Bilayer"  # J = 0
 #filename = "05.14.2024_Bilayer" # J = 2
 #filename = "05.12.2024_Bilayer" # J = 4
 filename = "05.10.2024_Bilayer"  # J = 1, N = 3
-#filename = "04.30.2024_Bilayer"  # J = 4, N = 3
-filename = "05.15.2024_Bilayer"  # J = 1, N = 2
+#filename = "05.16.2024_Bilayer"  # J = 4, N = 3
+#filename = "05.15.2024_Bilayer"  # J = 1, N = 2
 
 
 plt.style.use("lake.mplstyle")
@@ -42,7 +42,7 @@ for (ind_f, filling) in enumerate(filling_arr):
         if Uniform_Status == True:
             polarization[ind_u, ind_f] = np.abs(TBResults["Expectations"][0])
         else:
-            polarization[ind_u, ind_f] = np.mean(np.abs(TBResults["Expectations"]))
+            polarization[ind_u, ind_f] = np.abs(TBResults["Expectations"])[3]#np.mean(np.abs(TBResults["Expectations"]))
 
 
         # need to make this python compatible 
