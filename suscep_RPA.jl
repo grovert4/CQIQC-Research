@@ -53,19 +53,18 @@ end
 
 function U_NN(U::Float64, k::Vector{Float64} ; primitives ::Vector{Vector{Float64}})
 
-    ##### Nearest neighbours within unit cell : 21
     NN_00 = [(1, 2), (1, 7), (1, 8), (2, 3), (2, 8), (2, 9), (3, 4), (3, 9), (3, 10),
-    (4, 5), (4, 10), (4, 11), (5, 6), (5, 11), (5, 12),
-    (6, 12),
-    (7, 8), (8, 9), (9, 10), (10, 11), (11, 12)]
-    ##### between unit cell at (0, 1) : 11
-    NN_01 = [(7, 3), (7, 4), (8, 4), (8, 5), (9, 5), (9, 6), (10, 6), (10, 1), (11, 1), (11, 2), (12, 2)]
-    ##### between unit cell at (1, 0) : 3
-    NN_10 = [(6, 1), (6, 7), (12, 7)]
+        (4, 5), (4, 10), (4, 11), (5, 6), (5, 11), (5, 12),
+        (6, 12),
+        (7, 8), (8, 9), (9, 10), (10, 11), (11, 12)]
+    ##### between unit cell at (1, 0) : 7
+    NN_10 = [(7, 3), (7, 4), (8, 4), (8, 5), (9, 5), (9, 6), (10, 6)]
+    ##### between unit cell at (0, 1) : 5
+    NN_01 = [(10, 1), (11, 1), (11, 2), (12, 2), (12, 3)]
     ##### between unit cell at (1, 1) : 1
-    NN_11 = [(12, 3)]
+    NN_1m1 = [(6, 1), (6, 7), (12, 7)]
     ##### all bonds
-    bonds = Dict((0, 0) => NN_00, (0, 1) => NN_01, (1, 0) => NN_10, (1, 1) => NN_11)
+    bonds = Dict((0, 0) => NN_00, (0, 1) => NN_01, (1, 0) => NN_10, (-1, 1) => NN_1m1)
 
     mat = zeros(ComplexF64, 12, 12)
     for (type, neighbours) in bonds
@@ -156,7 +155,7 @@ end
 
 
 const t1 = 1.0
-const B = 1.0
+const B = 4.0
 const beta = 10.0
 mus = LinRange(-7.0, 4.0, 23)
 
@@ -169,3 +168,11 @@ for mu in mus
     push!(peaks, peak)
     println("mu = $(mu) done")
 end
+
+p = plot(framestyle=:box, aspect_ratio=:equal, xlabel=L"\mu", ylabel="U", grid=false)
+plot!(mus, [peak["U"] for peak in peaks], label="")
+savefig(p, "./t1=$(t1)_B=$(B)_beta=$(beta)_U_vs_mu.png")
+
+p = plot(framestyle=:box, aspect_ratio=:equal, xlabel=L"\mu", ylabel="|Q|", grid=false)
+plot!(mus, [norm(peak["peak momenta"]) for peak in peaks], label="")
+savefig(p, "./t1=$(t1)_B=$(B)_beta=$(beta)_Q_vs_mu.png")
