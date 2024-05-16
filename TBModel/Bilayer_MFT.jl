@@ -95,7 +95,9 @@ function MFT(params, filename)
     # add filename to input 
     fileName = loc * "/$(filename)_p=$(round(filling, digits=3))_U=$(round(U, digits=2))_t1=$(round(t1, digits=2)).jld2"
     GC.gc()
-    guess = fill(0.05, SkXSize^2 * 3)
+    rand_noise = rand(SkXSize^2 * 3) .- 0.5
+    rand_noise = 0.05 .* (rand_noise .- sum(rand_noise) / (SkXSize^2 * 3))
+    init_guess = fill(0.01, SkXSize^2 * 3) .+ rand_noise
     if isfile(fileName)
         println("TRYING TO LOAD " * fileName)
         try
@@ -105,19 +107,19 @@ function MFT(params, filename)
             println("Error Loading $fileName")
             if haskey(params, "U_prev")
                 oldfile = loc * "/$(filename)_p=$(round(filling, digits=3))_U=$(round(params["U_prev"], digits=2))_t1=$(round(t1, digits=2)).jld2"
-                init_guess = load(oldfile)["outputs"][end]
-                SolveMFT!(mft, guess .+ init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
+                init_guess = load(oldfile)["outputs"][end] .+ rand_noise
+                SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
             else
-                SolveMFT!(mft, guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
+                SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
             end
         end
     else
         if haskey(params, "U_prev")
             oldfile = loc * "/$(filename)_p=$(round(filling, digits=3))_U=$(round(params["U_prev"], digits=2))_t1=$(round(t1, digits=2)).jld2"
-            init_guess = load(oldfile)["outputs"][end]
-            SolveMFT!(mft, guess .+ init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
+            init_guess = load(oldfile)["outputs"][end] .+ rand_noise
+            SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
         else
-            SolveMFT!(mft, guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
+            SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
         end
     end
 end

@@ -1,0 +1,19 @@
+# numerical parameters
+n : 12
+T : 0.001
+max_iter : 11
+tol : 1e-06
+# physical parameters
+t : 1.0
+t_inter : 0.0
+jh : 0.0
+U : 1.0
+t_density : 0
+U_min : 0.0
+U_max : 5.0
+U_length : 11
+filling_min : 1
+filling_max : 27
+filling_length : 27 # 27 to also get even. 
+SkXSize : 2
+SkX: "Neel"

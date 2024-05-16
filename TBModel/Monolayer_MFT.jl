@@ -3,7 +3,7 @@ using MeanFieldToolkit, TightBindingToolkit, FixedPointToolkit
 using YAML, LazyGrids, JLD2
 
 loc = "/scratch/a/aparamek/andykh/Data/Monolayer_Data"
-#loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Bilayer_Data"
+loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Monolayer_Data"
 function MFT(params, filename)
     ##Triangular Lattice
     SkXSize = get!(params, "SkXSize", 2)
@@ -90,11 +90,14 @@ function MFT(params, filename)
     H = Hamiltonian(UC, bz)
     DiagonalizeHamiltonian!(H)
     Mdl = Model(UC, bz, H; filling=filling, T=T) # Does T matter, don't I want 0 T, or is that technically impossible?
-    mft = TightBindingMFT(Mdl, ChiParams, [UParam], IntraQuarticToHopping)
+    SolveModel!(Mdl)
+    mft = TightBindingMFT(Mdl, ChiParams, [UParam], InterQuarticToHopping)
     # add filename to input
     fileName = loc * "/$(filename)_p=$(round(filling, digits=3))_U=$(round(U, digits=2))_t1=$(round(t1, digits=2)).jld2"
     GC.gc()
-    init_guess = fill(0.01, 1 + SkXSize^2 * 3)
+    rand_noise = rand(SkXSize^2 * 3) .- 0.5
+    rand_noise = 0.1 .* filling .* (rand_noise .- sum(rand_noise) / (SkXSize^2 * 3))
+    init_guess = vcat([1.0], fill(filling, SkXSize^2 * 3) .+ rand_noise)   # some random # which
     if isfile(fileName)
         println("TRYING TO LOAD " * fileName)
         try
@@ -103,8 +106,8 @@ function MFT(params, filename)
         catch e
             println("Error Loading $fileName")
             if haskey(params, "U_prev")
-                oldfile =  loc * "/$(filename)_p=$(round(filling, digits=3))_U=$(round(params["U_prev"], digits=2))_t1=$(round(t1, digits=2)).jld2"
-                init_guess = load(oldfile)["outputs"][end]
+                oldfile = loc * "/$(filename)_p=$(round(filling, digits=3))_U=$(round(params["U_prev"], digits=2))_t1=$(round(t1, digits=2)).jld2"
+                init_guess = load(oldfile)["outputs"][end] .+ vcat([0.0001], rand_noise)
                 SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
             else
                 SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
@@ -112,11 +115,17 @@ function MFT(params, filename)
         end
     else
         if haskey(params, "U_prev")
-            oldfile =  loc * "/$(filename)_p=$(round(filling, digits=3))_U=$(round(params["U_prev"], digits=2))_t1=$(round(t1, digits=2)).jld2"
-            init_guess = load(oldfile)["outputs"][end]
+            oldfile = loc * "/$(filename)_p=$(round(filling, digits=3))_U=$(round(params["U_prev"], digits=2))_t1=$(round(t1, digits=2)).jld2"
+            init_guess = load(oldfile)["outputs"][end] .+ vcat([0.001], rand_noise)
             SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
         else
-            SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
+            data = SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
         end
     end
+    print("finished run!")
+    return data
 end
+# filename = "01.01.2024_Monolayer_NN_test"
+# params = YAML.load_file("../Input/$(filename).yml")
+# data = MFT(params, filename)
+#data = load("/media/andrewhardy/9C33-6BBD/Skyrmion/Monolayer_Data/01.01.2024_Monolayer_NN_test_p=0.5_U=1.0_t1=-1.0.jld2")
