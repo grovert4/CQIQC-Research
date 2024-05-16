@@ -2,9 +2,8 @@ using Plots, LinearAlgebra, ColorSchemes
 using MeanFieldToolkit, TightBindingToolkit, FixedPointToolkit
 using YAML, LazyGrids, JLD2
 
-loc = "/scratch/a/aparamek/andykh/Data/Monolayer_Data"
-loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Monolayer_Data"
 function MFT(params, filename)
+    loc = get!(params, "loc", "/scratch/a/aparamek/andykh/Data/Monolayer_Data")
     ##Triangular Lattice
     SkXSize = get!(params, "SkXSize", 2)
     SkX = get!(params, "SkX", "Neel")
