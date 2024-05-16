@@ -119,11 +119,10 @@ function MFT(params, filename)
             init_guess = load(oldfile)["outputs"][end] .+ vcat([0.001], rand_noise)
             SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
         else
-            data = SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
+            SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
         end
     end
     print("finished run!")
-    return data
 end
 # filename = "01.01.2024_Monolayer_NN_test"
 # params = YAML.load_file("../Input/$(filename).yml")
