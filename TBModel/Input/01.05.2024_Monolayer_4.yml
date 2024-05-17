@@ -1,0 +1,20 @@
+# numerical parameters
+n : 5
+T : 0.005
+max_iter : 250
+tol : 1e-06
+# physical parameters
+t : 1.0
+t_inter : 0.0
+jh : -1.0
+U : 1.0
+t_density : 0
+U_min : 0.0
+U_max : 5.0
+U_length : 11
+filling_min : 1
+filling_max : 48
+filling_length : 48 # 27 to also get even. 
+SkXSize : 4
+SkX: "Neel"
+loc: "/scratch/a/aparamek/andykh/Data/Monolayer_Data"
