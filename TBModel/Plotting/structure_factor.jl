@@ -69,7 +69,7 @@ const date = "05.10.2024"
 #const date = "04.29.2024"
 const date = "05.16.2024"
 const date = "05.05.2024"
-const date = "00.05.2024"
+const date = "05.05.2024"
 
 const n = 48#
 const ps = round.(collect(range(1, n, n) / (2 * n)), digits=3)
@@ -136,9 +136,9 @@ for p in ps
         scatter!(getindex.(skyrmion_vectors, 1), getindex.(skyrmion_vectors, 2), label="skyrmion")
         scatter!(getindex.(symmetry_vectors, 1), getindex.(symmetry_vectors, 2), label="lattice")
 
-        savefig("./Plots/SSF/$(date)_U=$(U)_p=$(p)_NSF_monolayer.png")
+        savefig("./TBModel/Plotting/Plots/SSF/$(date)_U=$(U)_p=$(p)_NSF_monolayer.png")
 
         RSPlot = plot_monolayer_Sz(UC, polarizations)
-        savefig(RSPlot, "./Plots/SSF/$(date)_U=$(U)_p=$(p)_monolayer_RS.png")
+        savefig(RSPlot, "./TBModel/Plotting/Plots/SSF/$(date)_U=$(U)_p=$(p)_monolayer_RS.png")
     end
 end

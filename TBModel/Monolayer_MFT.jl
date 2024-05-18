@@ -100,6 +100,7 @@ function MFT(params, filename)
     if isfile(fileName)
         println("TRYING TO LOAD " * fileName)
         try
+            data = load(fileName)
             println("SUCCESFULLY LOADED " * fileName)
             #ResumeMFT!(fileName; max_iter=params["max_iter"], tol=params["tol"])#, Update=BroydenMixing)
         catch e
