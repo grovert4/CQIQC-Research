@@ -31,7 +31,12 @@ for i in start_index:end_index
         if j > 2
             params["U_prev"] = Us[j-1]
         end
-        println(U, fillings[i])
-        MFT(params, filename)
+        if i > 1
+            params["filling_prev"] = fillings[i-1]
+        end
+        if params["filling"] == 0.042
+            println(U, "_ ", round(fillings[i], sigdigits=5))
+            MFT(params, filename)
+        end
     end
 end
