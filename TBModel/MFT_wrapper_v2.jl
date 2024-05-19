@@ -31,7 +31,7 @@ for i in start_index:end_index
         if j > 2
             params["U_prev"] = Us[j-1]
         end
-        println(U)
+        println(U, fillings[i])
         MFT(params, filename)
     end
 end
