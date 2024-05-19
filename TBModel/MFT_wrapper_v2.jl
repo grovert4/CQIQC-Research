@@ -30,6 +30,8 @@ for i in start_index:end_index
         #params["date"] = filename # change to output file name. 
         if j > 2
             params["U_prev"] = Us[j-1]
+        else
+            params["U_prev"] = 0.0
         end
         if i > 1
             params["filling_prev"] = fillings[i-1]
