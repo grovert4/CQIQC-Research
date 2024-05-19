@@ -31,7 +31,7 @@ for i in start_index:end_index
         if j > 2
             params["U_prev"] = Us[j-1]
         else
-            params["U_prev"] = 0.0
+            delete!(params, "U_prev")
         end
         if i > 1
             params["filling_prev"] = fillings[i-1]
