@@ -34,7 +34,7 @@ for i in start_index:end_index
         if i > 1
             params["filling_prev"] = fillings[i-1]
         end
-        if params["filling"] == 0.042
+        if params["filling"] == round(0.041666666666666664, sigdigits=5)
             println(U, "_ ", round(fillings[i], sigdigits=5))
             MFT(params, filename)
         end
