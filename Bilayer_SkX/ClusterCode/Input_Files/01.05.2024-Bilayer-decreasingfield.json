@@ -13,6 +13,6 @@
   "t_min":1E-3,
   "coolRate":0.995,
   "thermalizationSweeps": 10000,
-  "measurementSweeps": 1000000,
+  "measurementSweeps": 1500000,
   "extfield": true
 }
