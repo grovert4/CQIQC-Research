@@ -15,6 +15,6 @@ U_length : 11
 filling_min : 1
 filling_max : 48
 filling_length : 48 # 27 to also get even. 
-SkXSize : 3
+SkXSize : 4
 SkX: "Neel"
 loc: "/scratch/a/aparamek/andykh/Data/Monolayer_Data"
