@@ -89,7 +89,7 @@ for i in start_index:end_index
          addInteraction!(UClocal, i, i, -j2 * I, (1,2,0))
          addInteraction!(UClocal, i, i, -j2 * I, (2,1,0))
 
-         setField!(UClocal, i, [0,0,(-1)^(i + 1) * jperp/(10 * inputFile["Jperp_max"]) ])
+         setField!(UClocal, i, [0,0,(-1)^(i + 1) * jperp * 0.05])
       end
       addInteraction!(UClocal, b1, b2, -jperp * Sz , (0,0,0))
       latticeLocal = Lattice(UClocal, L)
