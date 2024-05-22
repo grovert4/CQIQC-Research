@@ -88,7 +88,7 @@ for i in start_index:end_index
    else
       UClocal = deepcopy(UCglobal)
       for i in 1:length(UClocal.basis)
-        setField!(UClocal, i, [0,0,-(1)^(i+1) * jperp/(10 * inputFile["Jperp_max"])])
+        setField!(UClocal, i, [0,0,-(1)^(i+1) * jperp * 0.05])
       end
       addInteraction!(UClocal, b1, b2, -jperp * Sz , (0,0,0))
       latticeLocal = Lattice(UClocal, L)
