@@ -1,6 +1,6 @@
 {
   "J_1":1.0,
-  "D":0.25,
+  "D":0.75,
   "A_ion":0.2,
   "System_Size":24,
   "Jperp_min":0.0,
@@ -13,6 +13,6 @@
   "t_min":1E-3,
   "coolRate":0.995,
   "thermalizationSweeps": 7500,
-  "measurementSweeps": 1000000,
+  "measurementSweeps": 500000,
   "extfield": true
 }
