@@ -69,9 +69,10 @@ const date = "05.10.2024"
 #const date = "04.29.2024"
 const date = "05.16.2024"
 const date = "05.05.2024"
-const date = "05.05.2024"
+const date = "04.05.2024"
 
 const n = 48#
+
 const ps = round.(collect(range(1, n, n) / (2 * n)), digits=3)
 const Us = collect(LinRange(0.0, 5.0, 11))
 const t1 = -1.0
@@ -88,9 +89,12 @@ const kSize_triangle = 6 * 30 + 3
 for p in ps
     for U in Us
 
+        filename = directory * "Last_Itr_$(date)_$(layer)_p=$(p)_U=$(U)_t1=$(t1).jld2"
+        filename = directory * "Last_Itr_$(date)_$(layer)_E_p=$(p)_U=$(U)_t1=$(t1).jld2"
         filename = directory * "Last_Itr_$(date)_$(layer)_4_p=$(p)_U=$(U)_t1=$(t1).jld2"
+
         data = load(filename)
-        println("data loaded")
+        println("data loaded" * filename)
 
         if layer == "Monolayer"
             polarizations = data["Expectations"][2:end]
@@ -136,9 +140,9 @@ for p in ps
         scatter!(getindex.(skyrmion_vectors, 1), getindex.(skyrmion_vectors, 2), label="skyrmion")
         scatter!(getindex.(symmetry_vectors, 1), getindex.(symmetry_vectors, 2), label="lattice")
 
-        savefig("./TBModel/Plotting/Plots/SSF/$(date)_U=$(U)_p=$(p)_NSF_monolayer.png")
+        savefig("./TBModel/Plotting/Plots/SSF/$(date)_U=$(U)_p=$(p)_NSF_$(layer)_4.png")
 
         RSPlot = plot_monolayer_Sz(UC, polarizations)
-        savefig(RSPlot, "./TBModel/Plotting/Plots/SSF/$(date)_U=$(U)_p=$(p)_monolayer_RS.png")
+        savefig(RSPlot, "./TBModel/Plotting/Plots/SSF/$(date)_U=$(U)_p=$(p)_RS_$(layer)_4.png")
     end
 end

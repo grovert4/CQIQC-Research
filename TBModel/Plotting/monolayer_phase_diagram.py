@@ -8,8 +8,9 @@ loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Monolayer_Data/"
 t1 = -1.0
 filename = "02.05.2024_Monolayer" # J = 4, N = 2
 #filename = "04.05.2024_Monolayer_E" # J = 4, N = 2
-filename = "05.05.2024_Monolayer_4" # J = 4, N = 2
+#filename = "05.05.2024_Monolayer_4" # J = 4, N = 2
 
+filename = "02.05.2024_Monolayer_E"
 
 
 os.chdir("/home/andrewhardy/Documents/Graduate/Codes/Skyrmion/TBModel/Plotting")

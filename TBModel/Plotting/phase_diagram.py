@@ -8,13 +8,15 @@ loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Bilayer_Data/"
 t1 = -1.0
 os.chdir("/home/andrewhardy/Documents/Graduate/Codes/Skyrmion/TBModel/Plotting")
 os.getcwd()
-filename = "05.09.2024_Bilayer"  # J = 0
-#filename = "05.14.2024_Bilayer" # J = 2
-#filename = "05.12.2024_Bilayer" # J = 4
-filename = "05.10.2024_Bilayer"  # J = 1, N = 3
-#filename = "05.16.2024_Bilayer"  # J = 4, N = 3
+
+filename = "05.20.2024_Bilayer" # J = 0, N = 2
 #filename = "05.15.2024_Bilayer"  # J = 1, N = 2
-filename = "02.05.2024_Bilayer"  # J = 1, N = 3
+filename = "05.14.2024_Bilayer" # J = 2, N = 2
+#filename = "05.12.2024_Bilayer" # J = 4, N = 2
+
+#filename = "05.10.2024_Bilayer"  # J = 1, N = 3
+#filename = "05.16.2024_Bilayer"  # J = 4, N = 3 DNE?
+
 
 
 plt.style.use("lake.mplstyle")

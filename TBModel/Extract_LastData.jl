@@ -32,8 +32,38 @@ function KuboChern(Ham::Hamiltonian, bz::BZ, mu::Float64)
     return imag(chern) * bzUnitArea * 2 * pi / length(Ham.bands)
 
 end
+function SSF(values::Vector{Float64}, positions::Vector{Vector{Float64}}, k::Vector{Float64})
+    phases = exp.(-im .* dot.(Ref(k), positions))
+    return sum((values .- (sum(values) / length(values))) .* phases) / length(values)
+end
+
+function SSF(values::Vector{Float64}, positions::Vector{Vector{Float64}}, ks::Matrix{Vector{Float64}})
+
+    return SSF.(Ref(values), Ref(positions), ks)
+end
+function N(max)
+
+    UC = data["UC"]
+
+    UC_triangle = UnitCell([l1, l2], 2, 2)
+    AddBasisSite!(UC_triangle, [0.0, 0.0])
+
+    bz = BZ([kSize, kSize])
+    FillBZ!(bz, UC)
+
+    bz_triangle = BZ([kSize_triangle, kSize_triangle])
+    FillBZ!(bz_triangle, UC_triangle)
+
+    kxs = collect(LinRange(-2 * pi, 2 * pi, 401))
+    kys = collect(LinRange(-2 * pi, 2 * pi, 401))
+
+    ks = [[kx, ky] for kx in kxs, ky in kys]
+    ssf = SSF(polarizations, UC.basis, ks)
+end
+
+
 # how to make this MPI compatible ? 
-function extract_data!(folderpath::String, date, substring::String=".jld2")
+function extract_data!(folderpath::String, date,layer="Monolayer" substring::String=".jld2")
     MPI.Init()
     comm = MPI.COMM_WORLD
     rank = MPI.Comm_rank(comm)
@@ -96,7 +126,15 @@ function extract_data!(folderpath::String, date, substring::String=".jld2")
                     dict["Expectations"] = data_entry["outputs"][end]
                     dict["Chern"] = c
                     dict["Chern Fill"] = c_fill
-                    #println(c_fill)
+                    kxs = collect(LinRange(-2 * pi, 2 * pi, 101))
+                    kys = collect(LinRange(-2 * pi, 2 * pi, 101))
+                    ks = [[kx, ky] for kx in kxs, ky in kys]
+                    if layer == "Monolayer"
+                        polarizations = data_entry["Expectations"][2:end]
+                    elseif layer == "Bilayer"
+                        polarizations = data_entry["Expectations"]
+                    end
+                    dict["ssf"] = SSF(polarizations, TBModel.uc.basis, ks)
                     dict["Convergence"] = norm(data_entry["inputs"][end] - data_entry["outputs"][end]) #[maximum(norm.(data_entry["outputs"][i] - data_entry["inputs"][i])) for i in 1:length(data_entry["inputs"])]#
                     # save convergences
                     save(folderpath * "/Last_Itr/Last_Itr_" * string(file), dict)
