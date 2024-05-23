@@ -75,7 +75,7 @@ end_index = start_index + elements_per_process - 1 + (commRank < remainder ? 1 :
 for i in start_index:end_index
    jperp = round(Jperps[i],sigdigits=5)
    j2 = round(J2s[i],sigdigits=5)
-   old_filename = "/scratch/grovert4/Data/bigboybilayer/firstphasediagram/"*ARGS[1]*"_Jperp=$(jperp),J2=$(j2).h5"
+   old_filename = "/scratch/grovert4/Data/bigboybilayer/firstphasediagram/01.05.2024-Bilayer-decreasingfield_Jperp=$(jperp),J2=$(j2).h5"
    new_filename = "/scratch/grovert4/Data/bigboybilayer/firstphasediagramreconverge/"*ARGS[1]*"_Jperp=$(jperp),J2=$(j2).h5"
 
    if isfile(new_filename) 
