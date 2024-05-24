@@ -92,7 +92,7 @@ function MFT(params, filename)
     Density_up = []
     Density_dn = []
     UParam.value = [U]
-    VParam.value = params["V"]
+    VParam.value = [params["V"]]
 
     for (ind, bas) in enumerate(UC.basis)
         push!(Density, Param(1.0, 2))
