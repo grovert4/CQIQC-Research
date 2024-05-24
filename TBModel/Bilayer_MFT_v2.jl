@@ -95,7 +95,8 @@ function MFT(params, filename)
     VParam.value = [params["V"]]
 
     for (ind, bas) in enumerate(UC.basis)
-        push!(Density, Param(1.0, 2))
+        push!(Density_up, Param(1.0, 2))
+        push!(Density_dn, Param(1.0, 2))
         AddAnisotropicBond!(Density_up[ind], UC, ind, ind, [0, 0], n_top, 0.0, "Dens_up-" * string(ind))
         AddAnisotropicBond!(Density_dn[ind], UC, ind, ind, [0, 0], n_bottom, 0.0, "Dens_dn-" * string(ind))
 
