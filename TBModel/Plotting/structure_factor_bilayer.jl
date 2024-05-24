@@ -69,6 +69,7 @@ const date = "05.05.2024"
 const date = "05.12.2024"
 const date = "05.14.2024"
 const date = "05.15.2024"
+const date = "05.24-0.5.2024"
 
 # const date = "05.16.2024" #DNE 
 # const date = "05.20.2024"
@@ -102,7 +103,7 @@ for p in ps
         if layer == "Monolayer"
             polarizations = data["Expectations"][2:end]
         elseif layer == "Bilayer"
-            polarizations = data["Expectations"]
+            polarizations = data["Expectations"][3:end]
         end
 
         UC = data["UC"]

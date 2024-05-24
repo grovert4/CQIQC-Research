@@ -17,6 +17,7 @@ filename = "05.14.2024_Bilayer" # J = 2, N = 2
 #filename = "05.10.2024_Bilayer"  # J = 1, N = 3
 #filename = "05.16.2024_Bilayer"  # J = 4, N = 3 DNE?
 filename = "05.23.2024_Bilayer"  
+filename = "05.24-1.2024_Bilayer"  
 
 
 

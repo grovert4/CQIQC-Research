@@ -89,20 +89,23 @@ function MFT(params, filename)
         AddAnisotropicBond!(jhParam, UC, ind, ind, [0, 0], mat, 0.0, "Hunds")
     end
     CreateUnitCell!(UC, HoppingParams)
-    Density = []
+    Density_up = []
+    Density_dn = []
     UParam.value = [U]
-    VParam.value = [U] / 4
+    VParam.value = params["V"]
 
     for (ind, bas) in enumerate(UC.basis)
         push!(Density, Param(1.0, 2))
-        AddAnisotropicBond!(Density[ind], UC, ind, ind, [0, 0], 2 * kron(su2spin[3], su2spin[4]), 0.0, "Dens-" * string(ind))
+        AddAnisotropicBond!(Density_up[ind], UC, ind, ind, [0, 0], n_top, 0.0, "Dens_up-" * string(ind))
+        AddAnisotropicBond!(Density_dn[ind], UC, ind, ind, [0, 0], n_bottom, 0.0, "Dens_dn-" * string(ind))
+
         #AddAnisotropicBond!(Sz[ind], UC, ind, ind, [0, 0], 2 * kron(su2spin[4], su2spin[3]), 0.0, "Sz-" * string(ind))
 
     end
     AddIsotropicBonds!(F1Param, UC, 1.0, su4spin[4], "texp")
     AddIsotropicBonds!(F2Param, UC, 1.0, 2 * kron(su2spin[1], su2spin[4]), "tdexp")
 
-    ChiParams = vcat(F1Param, F2Param, Density)
+    ChiParams = vcat(F1Param, F2Param, Density_up, Density_dn)
     ChiParams = Vector{Param{2,Float64}}(ChiParams)
     H = Hamiltonian(UC, bz)
     DiagonalizeHamiltonian!(H)
@@ -115,8 +118,10 @@ function MFT(params, filename)
     GC.gc()
     rand_noise = rand(SkXSize^2 * 3) .- 0.5
     rand_noise = 0.05 .* (rand_noise .- sum(rand_noise) / (SkXSize^2 * 3))
-    init_D = fill(0.01, SkXSize^2 * 3) .+ rand_noise
-    init_guess = vcat([1.0], [0.0001], init_D)
+
+    init_up = fill(filling, SkXSize^2 * 3) .+ rand_noise .- 0.06
+    init_dn = fill(filling, SkXSize^2 * 3) .- rand_noise .+ 0.06
+    init_guess = vcat([1.0], [0.001], init_up, init_dn)
     if isfile(fileName)
         println("TRYING TO LOAD " * fileName)
         try
@@ -127,7 +132,7 @@ function MFT(params, filename)
             if haskey(params, "U_prev")
                 #oldfile = loc * "/$(filename)_p=$(round(filling, digits=3))_U=$(round(params["U_prev"], digits=2))_t1=$(round(t1, digits=2)).jld2"
                 oldfile = loc * "/$(filename)_J=$(round(jh, digits=3))_U=$(round(params["U_prev"], digits=2)).jld2"
-                init_guess = load(oldfile)["outputs"][end] .+ vcat([0.0], [0.00000], rand_noise)
+                init_guess = load(oldfile)["outputs"][end] .+ vcat([0.0], [0.00000], rand_noise, -1 .* rand_noise)
                 SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
             else
                 SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
@@ -137,7 +142,7 @@ function MFT(params, filename)
         if haskey(params, "U_prev")
             #oldfile = loc * "/$(filename)_p=$(round(filling, digits=3))_U=$(round(params["U_prev"], digits=2))_t1=$(round(t1, digits=2)).jld2"
             oldfile = loc * "/$(filename)_J=$(round(jh, digits=3))_U=$(round(params["U_prev"], digits=2)).jld2"
-            init_guess = load(oldfile)["outputs"][end] .+ vcat([0.0000000000], [0.0000], rand_noise)
+            init_guess = load(oldfile)["outputs"][end] .+ vcat([0.0000000000], [0.0000], rand_noise, -1 .* rand_noise)
             SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
         else
             SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
