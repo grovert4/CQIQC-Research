@@ -63,7 +63,7 @@ end
 
 
 # how to make this MPI compatible ? 
-function extract_data!(folderpath::String, date, layer="Monolayer", substring::String=".jld2")
+function extract_data!(folderpath::String, date, layer="Bilayer", substring::String=".jld2")
     MPI.Init()
     comm = MPI.COMM_WORLD
     rank = MPI.Comm_rank(comm)
@@ -130,9 +130,9 @@ function extract_data!(folderpath::String, date, layer="Monolayer", substring::S
                     kys = collect(LinRange(-2 * pi, 2 * pi, 101))
                     ks = [[kx, ky] for kx in kxs, ky in kys]
                     if layer == "Monolayer"
-                        polarizations = data_entry["Expectations"][2:end]
+                        polarizations = dict["Expectations"][3:end]
                     elseif layer == "Bilayer"
-                        polarizations = data_entry["Expectations"]
+                        polarizations = dict["Expectations"][3:end]
                     end
                     dict["ssf"] = SSF(polarizations, TBModel.uc.basis, ks)
                     dict["Convergence"] = norm(data_entry["inputs"][end] - data_entry["outputs"][end]) #[maximum(norm.(data_entry["outputs"][i] - data_entry["inputs"][i])) for i in 1:length(data_entry["inputs"])]#
