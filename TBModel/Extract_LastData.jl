@@ -132,9 +132,14 @@ function extract_data!(folderpath::String, date, layer="Bilayer", substring::Str
                     if layer == "Monolayer"
                         polarizations = dict["Expectations"][3:end]
                     elseif layer == "Bilayer"
-                        polarizations = dict["Expectations"][3:end]
+                        len = length(dict["Expectations"][3:end])
+                        polarization_up = dict["Expectations"][3:div(len, 2)+2]
+                        polarization_dn = dict["Expectations"][3+div(len, 2), end]
+
                     end
-                    dict["ssf"] = SSF(polarizations, TBModel.uc.basis, ks)
+                    dict["ssf_up"] = SSF(polarization_up, TBModel.uc.basis, ks)
+                    dict["ssf_dn"] = SSF(polarization_dn, TBModel.uc.basis, ks)
+
                     dict["Convergence"] = norm(data_entry["inputs"][end] - data_entry["outputs"][end]) #[maximum(norm.(data_entry["outputs"][i] - data_entry["inputs"][i])) for i in 1:length(data_entry["inputs"])]#
                     # save convergences
                     save(folderpath * "/Last_Itr/Last_Itr_" * string(file), dict)
