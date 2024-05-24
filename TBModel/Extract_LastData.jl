@@ -134,7 +134,7 @@ function extract_data!(folderpath::String, date, layer="Bilayer", substring::Str
                     elseif layer == "Bilayer"
                         len = length(dict["Expectations"][3:end])
                         polarization_up = dict["Expectations"][3:div(len, 2)+2]
-                        polarization_dn = dict["Expectations"][3+div(len, 2), end]
+                        polarization_dn = dict["Expectations"][3+div(len, 2):end]
                         println(len)
                         println(length(polarization_dn))
                         println(length(polarization_up))
