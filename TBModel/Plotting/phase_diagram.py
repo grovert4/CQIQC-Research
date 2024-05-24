@@ -16,6 +16,7 @@ filename = "05.14.2024_Bilayer" # J = 2, N = 2
 
 #filename = "05.10.2024_Bilayer"  # J = 1, N = 3
 #filename = "05.16.2024_Bilayer"  # J = 4, N = 3 DNE?
+filename = "05.23.2024_Bilayer"  
 
 
 
@@ -28,12 +29,12 @@ plt.rcParams.update({"text.usetex": True})
 params = yml.safe_load(Path(f"../Input/{filename}.yml").read_text())
 U_array = np.linspace(params["U_min"], params["U_max"], params["U_length"])
 filling_arr = np.linspace(params["filling_min"], params["filling_max"], params["filling_length"]) / (params["filling_max"] *2 )
-filling = filling_arr[6]
+filling = filling_arr[1]
 Uniform_Status = False
 polarization = np.zeros((len(U_array), len(filling_arr)))
 energy = np.zeros((len(U_array), len(filling_arr)))
 conduct = np.zeros((len(U_array), len(filling_arr)))
-for (ind_f, filling) in enumerate(filling_arr):
+for (ind_f, filling) in enumerate(filling_arr[1:]):
     for (ind_u, U_var) in enumerate(U_array):
         if Uniform_Status == True:
             fileName = loc + f"Last_Itr_{filename}_UNIFORM_p={round(filling, 3)}_U={round(U_var, 2)}_t1={round(t1, 2)}.jld2"
@@ -43,9 +44,9 @@ for (ind_f, filling) in enumerate(filling_arr):
         conduct[ind_u, ind_f] =  np.mean(TBResults["Chern Fill"])
         energy[ind_u, ind_f] = TBResults["MFT_Energy"][-1]
         if Uniform_Status == True:
-            polarization[ind_u, ind_f] = np.abs(TBResults["Expectations"][0])
+            polarization[ind_u, ind_f] = np.abs(TBResults["Expectations"][3:])
         else:
-            polarization[ind_u, ind_f] = np.abs(TBResults["Expectations"])[3]#np.mean(np.abs(TBResults["Expectations"]))
+            polarization[ind_u, ind_f] = np.abs(TBResults["Expectations"])[5]#np.mean(np.abs(TBResults["Expectations"]))
 
 
         # need to make this python compatible 
