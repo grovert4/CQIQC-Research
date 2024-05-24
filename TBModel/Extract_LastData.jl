@@ -63,7 +63,7 @@ end
 
 
 # how to make this MPI compatible ? 
-function extract_data!(folderpath::String, date,layer="Monolayer" substring::String=".jld2")
+function extract_data!(folderpath::String, date, layer="Monolayer", substring::String=".jld2")
     MPI.Init()
     comm = MPI.COMM_WORLD
     rank = MPI.Comm_rank(comm)
