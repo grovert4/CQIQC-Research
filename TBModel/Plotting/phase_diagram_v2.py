@@ -92,9 +92,9 @@ plt.show()
 fig = plt.figure(figsize=(8, 8))
 plt.imshow(polarization, aspect='auto', cmap='viridis', origin='lower',
            extent=[J_array.min(), J_array.max(), U_array.min(), U_array.max()])
-plt.colorbar(label=r'$P$')
+plt.colorbar(label=r'$N(k)_{max}$')
 plt.ylabel(r'$U$')
-plt.xlabel(r'$n$')
+plt.xlabel(r'$J$')
 plt.ylim(U_array.min(), min(U_array.max(), 7))
 
 plt.savefig("Plots/Bilayer_Polarization_Extended.pdf")

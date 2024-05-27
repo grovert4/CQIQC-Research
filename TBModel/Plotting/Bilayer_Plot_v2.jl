@@ -30,8 +30,71 @@ function plot_RS(UC::UnitCell, polarizations::Vector{Float64})
         end
 
     end
+    for (index, site) in enumerate(UC.basis .+ Ref(UC.primitives[1]))
+        scatter!(Tuple(site), label="", c=:black, markersize=6.0, markeralpha=0.5)
+
+        if polarizations[index] > 0.0
+            scatter!(Tuple(site), label="", c=:red, markersize=polarizations[index] * 10.0, markeralpha=0.6)
+        else
+            scatter!(Tuple(site), label="", c=:blue, markersize=abs(polarizations[index]) * 10.0, markeralpha=0.6)
+        end
+
+    end
+    for (index, site) in enumerate(UC.basis .+ Ref(UC.primitives[2]))
+        scatter!(Tuple(site), label="", c=:black, markersize=6.0, markeralpha=0.5)
+
+        if polarizations[index] > 0.0
+            scatter!(Tuple(site), label="", c=:red, markersize=polarizations[index] * 10.0, markeralpha=0.6)
+        else
+            scatter!(Tuple(site), label="", c=:blue, markersize=abs(polarizations[index]) * 10.0, markeralpha=0.6)
+        end
+
+    end
+
+    for (index, site) in enumerate(UC.basis .- Ref(UC.primitives[1]))
+        scatter!(Tuple(site), label="", c=:black, markersize=6.0, markeralpha=0.5)
+
+        if polarizations[index] > 0.0
+            scatter!(Tuple(site), label="", c=:red, markersize=polarizations[index] * 10.0, markeralpha=0.6)
+        else
+            scatter!(Tuple(site), label="", c=:blue, markersize=abs(polarizations[index]) * 10.0, markeralpha=0.6)
+        end
+
+    end
+    for (index, site) in enumerate(UC.basis .- Ref(UC.primitives[2]))
+        scatter!(Tuple(site), label="", c=:black, markersize=6.0, markeralpha=0.5)
+
+        if polarizations[index] > 0.0
+            scatter!(Tuple(site), label="", c=:red, markersize=polarizations[index] * 10.0, markeralpha=0.6)
+        else
+            scatter!(Tuple(site), label="", c=:blue, markersize=abs(polarizations[index]) * 10.0, markeralpha=0.6)
+        end
+
+    end
+
+    for (index, site) in enumerate(UC.basis .+ Ref(UC.primitives[1]) .- Ref(UC.primitives[2]))
+        scatter!(Tuple(site), label="", c=:black, markersize=6.0, markeralpha=0.5)
+
+        if polarizations[index] > 0.0
+            scatter!(Tuple(site), label="", c=:red, markersize=polarizations[index] * 10.0, markeralpha=0.6)
+        else
+            scatter!(Tuple(site), label="", c=:blue, markersize=abs(polarizations[index]) * 10.0, markeralpha=0.6)
+        end
+
+    end
+    for (index, site) in enumerate(UC.basis .+ Ref(UC.primitives[2]) .- Ref(UC.primitives[1]))
+        scatter!(Tuple(site), label="", c=:black, markersize=6.0, markeralpha=0.5)
+
+        if polarizations[index] > 0.0
+            scatter!(Tuple(site), label="", c=:red, markersize=polarizations[index] * 10.0, markeralpha=0.6)
+        else
+            scatter!(Tuple(site), label="", c=:blue, markersize=abs(polarizations[index]) * 10.0, markeralpha=0.6)
+        end
+
+    end
 
     return p
+
 end
 
 
@@ -172,11 +235,11 @@ ylims!(-2 * pi, 2 * pi)
 title!(L"N(k), U = %$(U), \bar{n} = %$(filling)")
 
 symmetry_vectors = Vector{Float64}[]
-for (key, value) in bz_triangle.HighSymPoints
+for (key, value) in bz.HighSymPoints
     if key == "M3"
-        push!(symmetry_vectors, value - bz_triangle.basis[2])
+        push!(symmetry_vectors, value - bz.basis[2])
     elseif key == "-M3"
-        push!(symmetry_vectors, value + bz_triangle.basis[2])
+        push!(symmetry_vectors, value + bz.basis[2])
     else
         push!(symmetry_vectors, value)
     end
@@ -187,5 +250,5 @@ scatter!(getindex.(skyrmion_vectors, 1), getindex.(skyrmion_vectors, 2), label="
 scatter!(getindex.(symmetry_vectors, 1), getindex.(symmetry_vectors, 2), label="lattice")
 display(ssf_plot)
 
-RSPlot = plot_RS(UC, ord_array[8, 1:SkXSize^2*3] .- filling)
+RSPlot = plot_RS(UC, ord_array[10, 1:SkXSize^2*3] .- filling)
 display(RSPlot)
