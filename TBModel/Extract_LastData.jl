@@ -130,7 +130,7 @@ function extract_data!(folderpath::String, date, layer="Bilayer", substring::Str
                     kys = collect(LinRange(-2 * pi, 2 * pi, 101))
                     ks = [[kx, ky] for kx in kxs, ky in kys]
                     if layer == "Monolayer"
-                        polarizations = dict["Expectations"][2:end]
+                        polarization = dict["Expectations"][2:end]
                         dict["ssf"] = SSF(polarization, TBModel.uc.basis, ks)
                     elseif layer == "Bilayer"
                         len = length(dict["Expectations"][3:end])
