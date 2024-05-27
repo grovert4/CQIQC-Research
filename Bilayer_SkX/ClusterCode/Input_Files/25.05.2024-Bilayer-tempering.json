@@ -1,6 +1,6 @@
 {
   "tmax":10.0,
-  "tmin":1.0
+  "tmin":1.0,
   "exchangeRate": 6,
   "J_1":1.0,
   "D":0.4,
