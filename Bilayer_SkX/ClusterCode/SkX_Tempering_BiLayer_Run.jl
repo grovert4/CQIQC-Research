@@ -14,7 +14,6 @@ t0 = inputFile["t_max"]
 tf = inputFile["t_min"]
 thermSweeps = inputFile["thermalizationSweeps"]
 measureSweeps = inputFile["measurementSweeps"]
-extfield = inputFile["extfield"]
 
 #Unit Cell Construction
 a1 = (1.0 , 0.0, 0.0)  #-
