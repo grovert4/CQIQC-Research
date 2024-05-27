@@ -67,7 +67,7 @@ for i in 1:length(J2s)
       jperp = round(Jperps[i],sigdigits=5)
       j2 = round(J2s[i],sigdigits=5)
    
-      filename = "/scratch/grovert4/Data/bigboybilayer/higherD/"*ARGS[1]*"_Jperp=$(jperp),J2=$(j2).h5"
+      filename = "/scratch/grovert4/Data/Tempering/phaseonetry/"*ARGS[1]*"_Jperp=$(jperp),J2=$(j2).h5"
       if isfile(filename) 
          println("Already Completed "*filename)
       else
