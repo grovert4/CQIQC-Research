@@ -19,6 +19,9 @@ filename = "05.14.2024_Bilayer" # J = 2, N = 2
 filename = "05.23.2024_Bilayer"  
 filename = "05.01-0.5.2024_Bilayer"  
 
+filename = "05.02-0.25.2024_Bilayer"  
+#filename = "05.02-0.5.2024_Bilayer"  
+
 
 
 plt.style.use("lake.mplstyle")
