@@ -17,7 +17,7 @@ filename = "05.14.2024_Bilayer" # J = 2, N = 2
 #filename = "05.10.2024_Bilayer"  # J = 1, N = 3
 #filename = "05.16.2024_Bilayer"  # J = 4, N = 3 DNE?
 filename = "05.23.2024_Bilayer"  
-filename = "05.24-0.5.2024_Bilayer"  
+filename = "05.01-0.5.2024_Bilayer"  
 
 
 
@@ -46,8 +46,12 @@ for (ind_J,J) in enumerate(J_array):
         if Uniform_Status == True:
             polarization[ind_u, ind_J] = np.abs(TBResults["Expectations"][3:])
         else:
-            polarization[ind_u, ind_J] = np.abs(TBResults["Expectations"])[5]#np.mean(np.abs(TBResults["Expectations"]))
+            temp_up = np.array(TBResults["ssf_up"])
+            temp_dn = np.array(TBResults["ssf_dn"])
+            ssf_up = temp_up['re'] + 1j*temp_up['im']
+            ssf_dn = temp_dn['re'] + 1j*temp_dn['im']
 
+            polarization[ind_u, ind_J] = np.abs(np.max(ssf_up)-np.max(ssf_dn))
 
         # need to make this python compatible 
 U_array_flat = U_array.repeat(len(J_array))

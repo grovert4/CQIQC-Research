@@ -130,7 +130,8 @@ function extract_data!(folderpath::String, date, layer="Bilayer", substring::Str
                     kys = collect(LinRange(-2 * pi, 2 * pi, 101))
                     ks = [[kx, ky] for kx in kxs, ky in kys]
                     if layer == "Monolayer"
-                        polarizations = dict["Expectations"][3:end]
+                        polarizations = dict["Expectations"][2:end]
+                        dict["ssf"] = SSF(polarization, TBModel.uc.basis, ks)
                     elseif layer == "Bilayer"
                         len = length(dict["Expectations"][3:end])
                         polarization_up = dict["Expectations"][3:div(len, 2)+2]
@@ -138,9 +139,10 @@ function extract_data!(folderpath::String, date, layer="Bilayer", substring::Str
                         println(len)
                         println(length(polarization_dn))
                         println(length(polarization_up))
+                        dict["ssf_up"] = SSF(polarization_up, TBModel.uc.basis, ks)
+                        dict["ssf_dn"] = SSF(polarization_dn, TBModel.uc.basis, ks)
                     end
-                    dict["ssf_up"] = SSF(polarization_up, TBModel.uc.basis, ks)
-                    dict["ssf_dn"] = SSF(polarization_dn, TBModel.uc.basis, ks)
+
 
                     dict["Convergence"] = norm(data_entry["inputs"][end] - data_entry["outputs"][end]) #[maximum(norm.(data_entry["outputs"][i] - data_entry["inputs"][i])) for i in 1:length(data_entry["inputs"])]#
                     # save convergences
