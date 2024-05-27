@@ -231,6 +231,39 @@ function runAnnealTWO(H, t0,tf,lat,thermSweeps,MeasureSweeps, coolRate, outfile=
    return monte
 end
 
+function MPIrunAnneal(tmax, tmin, exchangeRate, t0,tf,lat,thermSweeps,MeasureSweeps, coolRate, outfile=nothing, init_rewrite=true)
+   tmax = tmax
+   tmin = tmin
+   exchangeRate = exchangeRate
+   beta = (commSize == 1) ? 1.0/tmin : 1.0 / (reverse([ tmax * (tmin / tmax)^(n/(commSize-1)) for n in 0:commSize-1 ])[commRank+1])
+   ts = [t0 * coolRate^t for t in -500:5000 if t0 >= t0 * coolRate^t >= tf]
+   monte = nothing
+   for ind in 1:length(ts) 
+      thermalizationSweeps = thermSweeps
+      measurementSweeps = 0           
+      if ind == 1
+            thermalizationSweeps = thermSweeps
+            measurementSweeps = 0
+            m = MonteCarlo(lat, beta*(1/coolRate)^ind, thermalizationSweeps, measurementSweeps, replicaExchangeRate=exchangeRate, reportInterval = thermalizationSweeps, rewrite=init_rewrite)
+            run!(m, disableOutput = true)
+      else
+            if (ind == length(ts))
+               thermalizationSweeps = 0
+               measurementSweeps = MeasureSweeps
+            end
+            m = MonteCarlo(monte.lattice, beta*(1/coolRate)^ind, thermalizationSweeps, measurementSweeps,replicaExchangeRate=exchangeRate, reportInterval = max(thermSweeps,MeasureSweeps), rewrite = false);
+            if ind != length(ts)
+               run!(m, disableOutput = true)
+            else
+               run!(m, outfile = outfile)
+            end 
+      end
+      monte = deepcopy(m);
+   end
+   return monte
+end
+
+
 
 function updateSpins!(file, lat)
    file = h5open(file)["mc"]
