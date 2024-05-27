@@ -13,4 +13,4 @@
 module load StdEnv/2020
 module load julia/1.8.5
 
-srun julia SkX_Tempering_BiLayer_Run.jl 25.05.2024-Bilayer-tempering.json
+srun julia SkX_Tempering_BiLayer_Run.jl 25.05.2024-Bilayer-tempering
