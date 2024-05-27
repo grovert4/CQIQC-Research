@@ -159,4 +159,4 @@ function extract_data!(folderpath::String, date, layer="Bilayer", substring::Str
     MPI.Finalize()
 end
 pwd()
-extract_data!("$(ARGS[1])", "$(ARGS[2])")
+extract_data!("$(ARGS[1])", "$(ARGS[2])", "$(ARGS[3])")
