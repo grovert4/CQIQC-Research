@@ -63,7 +63,7 @@ gridsize =inputFile["Jperp_length"]*inputFile["J2_length"]
 j2 = -0.25
 
 for j in 1:length(Jperps)
-      jperp = round(Jperps[i],sigdigits=5)
+      jperp = round(Jperps[j],sigdigits=5)
 
       filename = "/scratch/grovert4/Data/Tempering/phaseonetry/"*ARGS[1]*"_Jperp=$(jperp),J2=$(j2).h5"
       if isfile(filename) 
