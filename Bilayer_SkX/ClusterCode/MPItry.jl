@@ -1,9 +1,10 @@
+using LinearAlgebra, Plots, SpinMC_more_more
+
 using MPI 
-MPI.Initialized() || MPI.Init()
+MPI.Init()
 commSize = MPI.Comm_size(MPI.COMM_WORLD)
 commRank = MPI.Comm_rank(MPI.COMM_WORLD)
 
-using  LinearAlgebra, Plots, SpinMC_more_more
 
 include("functions.jl")
 
