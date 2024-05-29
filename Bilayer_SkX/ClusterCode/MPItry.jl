@@ -1,4 +1,4 @@
-using LinearAlgebra, Plots, SpinMC_more_more
+using LinearAlgebra, SpinMC_more_more
 
 using MPI 
 MPI.Init()
