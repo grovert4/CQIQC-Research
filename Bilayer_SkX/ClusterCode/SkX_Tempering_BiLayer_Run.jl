@@ -52,9 +52,9 @@ for i in 1:length(UCglobal.basis)
 end
 
 
-(Jperparr,J2arr) = ndgrid(range(inputFile["Jperp_min"],inputFile["Jperp_max"],inputFile["Jperp_length"]),range(inputFile["J2_min"],inputFile["J2_max"],inputFile["J2_length"]) )
-Jperps = collect(Iterators.flatten(Jperparr))
-J2s = collect(Iterators.flatten(J2arr))
+# (Jperparr,J2arr) = ndgrid(range(inputFile["Jperp_min"],inputFile["Jperp_max"],inputFile["Jperp_length"]),range(inputFile["J2_min"],inputFile["J2_max"],inputFile["J2_length"]) )
+Jperps = collect(range(inputFile["J2_min"],inputFile["J2_max"],inputFile["J2_length"]))
+# J2s = collect(Iterators.flatten(J2arr))
 
 
 L = (inputFile["System_Size"], inputFile["System_Size"], 1)
