@@ -53,7 +53,7 @@ end
 
 
 # (Jperparr,J2arr) = ndgrid(range(inputFile["Jperp_min"],inputFile["Jperp_max"],inputFile["Jperp_length"]),range(inputFile["J2_min"],inputFile["J2_max"],inputFile["J2_length"]) )
-Jperps = collect(range(inputFile["J2_min"],inputFile["J2_max"],inputFile["J2_length"]))
+Jperps = collect(range(inputFile["Jperp_min"],inputFile["Jperp_max"],inputFile["Jperp_length"]))
 # J2s = collect(Iterators.flatten(J2arr))
 
 
