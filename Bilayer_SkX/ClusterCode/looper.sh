@@ -1,5 +1,6 @@
+#!/bin/bash
+
 string_to_search_for="run_tempering"
-$(cd '.\Tempering Bash Inputs\')
 current_dir=$(pwd)
 for FILE in $(ls $current_dir); do
 	if [[ ${FILE} =~ ${string_to_search_for} ]]; then
@@ -10,9 +11,4 @@ for FILE in $(ls $current_dir); do
 
 done
 
-
 #!/bin/bash
-
-# Get the current directory.
-current_dir=$(pwd)
-
