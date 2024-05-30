@@ -6,7 +6,7 @@ commRank = MPI.Comm_rank(MPI.COMM_WORLD)
 using SpinMC_more_more, LinearAlgebra, JSON, LazyGrids
 include("functions.jl")
 
-inputFile = JSON.parsefile("./Input_Files/Tempering Inputs/"*ARGS[1]*".json")
+inputFile = JSON.parsefile("./Input_Files/Tempering_Input_File/"*ARGS[1]*".json")
 J1 = inputFile["J_1"]
 D = inputFile["D"]
 A_ion = inputFile["A_ion"]
