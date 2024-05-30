@@ -1,5 +1,5 @@
 string_to_search_for="run_tempering"
-$(cd '.\Tempering Inputs\')
+$(cd '.\Tempering Bash Inputs\')
 current_dir=$(pwd)
 for FILE in $(ls $current_dir); do
 	if [[ ${FILE} =~ ${string_to_search_for} ]]; then
