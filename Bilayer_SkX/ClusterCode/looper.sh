@@ -8,4 +8,4 @@ for FILE in $(ls $current_dir); do
 	sleep 1 # pause to be kind to the scheduler
 	fi
 done
-#!/bin/bas
+#!/bin/bash
