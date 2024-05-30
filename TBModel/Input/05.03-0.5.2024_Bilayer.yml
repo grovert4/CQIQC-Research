@@ -1,0 +1,24 @@
+# numerical parameters
+n : 5
+T : 0.005
+max_iter : 250
+tol : 1e-06
+# physical parameters
+t : 1.0
+t_inter : 0.0
+jh : -1.0
+U : 1.0
+V : 0.0
+t_density : 0.0
+filling : 0.5
+U_min : 0.0
+U_max : 5.0
+U_length : 11
+filling_min : 1
+filling_max : 12
+filling_length : 12
+J_min : -2.0
+J_max : 0.0
+J_length : 9
+SkXSize : 2
+SkX: "Bloch"
