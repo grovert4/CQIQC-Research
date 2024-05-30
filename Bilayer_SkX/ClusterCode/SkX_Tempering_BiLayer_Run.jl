@@ -58,7 +58,7 @@ Jperps = collect(range(inputFile["Jperp_min"],inputFile["Jperp_max"],inputFile["
 
 
 L = (inputFile["System_Size"], inputFile["System_Size"], 1)
-gridsize =inputFile["Jperp_length"]*inputFile["J2_length"]
+# gridsize =inputFile["Jperp_length"]*inputFile["J2_length"]
 
 j2 = inputFile["J2"]
 
