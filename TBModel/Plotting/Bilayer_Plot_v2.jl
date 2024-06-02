@@ -251,5 +251,5 @@ scatter!(getindex.(skyrmion_vectors, 1), getindex.(skyrmion_vectors, 2), label="
 scatter!(getindex.(symmetry_vectors, 1), getindex.(symmetry_vectors, 2), label="lattice")
 display(ssf_plot)
 
-RSPlot = plot_RS(UC, ord_array[10, 1:SkXSize^2*3] .- 0.5)
+RSPlot = plot_RS(UC, ord_array[11, 1:SkXSize^2*3] .- 0.5)
 display(RSPlot)
