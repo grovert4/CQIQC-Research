@@ -152,7 +152,7 @@ function extract_data!(folderpath::String, date, layer="Bilayer", substring::Str
                     println("Error Loading $file")
                     println(e)
                     #rethrow(e)
-                    run(`rm $(folderpath)/$(file)`)
+                    run(`yes | rm $(folderpath)/$(file)`)
                 end
             end
         end
