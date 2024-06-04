@@ -149,10 +149,12 @@ function extract_data!(folderpath::String, date, layer="Bilayer", substring::Str
                     save(folderpath * "/Last_Itr/Last_Itr_" * string(file), dict)
                     println("COMPLETED : " * string(file))
                 catch e
+                    using shell_escape
                     println("Error Loading $file")
                     println(e)
                     #rethrow(e)
-                    run(`yes | rm $(folderpath)/$(file)`)
+                    file_path = folderpath * "/" * string(file)
+                    rm(file_path, force=true)
                 end
             end
         end
