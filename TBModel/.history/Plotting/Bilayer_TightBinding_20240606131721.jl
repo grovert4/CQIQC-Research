@@ -63,7 +63,7 @@ t = get!(params, "t", 1.0)
 t_inter = get!(params, "t_inter", 0.0)
 jh = get!(params, "jh", 1.0)
 U = get!(params, "U", 0.0)
-t_density = get!(params, "t_density", 0.0)
+t_density = get!(params, "t_density", 1.0)
 ##### Thermodynamic parameters
 filling = get!(params, "filling", 0.5)
 T = get!(params, "T", 0.0)
@@ -159,7 +159,7 @@ SolveModel!(Mdl; get_gap=true)
 bands = Plot_Band_Structure!(Mdl, [bz.HighSymPoints["G"], bz.HighSymPoints["M1"], bz.HighSymPoints["K1"]], labels=["G", "M", "K"], plot_legend=false);
 plot!(bands, legend=false);
 display(bands)
-savefig(bands, "Plotting/Plots/Bilayer_Band_Structure_$(SkXSize).pdf")
+savefig(bands, "TBModel/Plotting/Plots/Bilayer_Band_Structure_$(SkXSize).pdf")
 
 # filling_arr = LinRange(0.0001, 0.5, 60)
 # #mu_arr = LinRange(-7.5, -1, 100)

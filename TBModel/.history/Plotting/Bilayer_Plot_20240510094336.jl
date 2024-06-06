@@ -45,7 +45,7 @@ filename = "05.11.2024_Bilayer"
 #println(@__DIR__)
 params = YAML.load_file("../Input/$(filename).yml")
 
-U_array = collect(LinRange(params["U_min"], params["U_min"], 1))
+U_array = collect(LinRange(params["U_min"], params["U_max"], params["U_length"]))
 filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / (params["filling_max"] * 2)
 filling = filling_arr[5]
 println(filling, "filling")

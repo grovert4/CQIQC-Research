@@ -77,7 +77,7 @@ HoppingParams = [t1Param, tdParam, tiParam, jhParam]
 su2spin = SpinMats(1 // 2)
 su4spin = SpinMats(3 // 2)
 ##Adding inner-hexagon structure  
-for j = 0:(3*SkXSize-1)
+for j = 0:(SkXSize-1)
     for i = 0:(SkXSize*3-1)
         AddBasisSite!(UC, i .* l1 + j .* l2)
     end

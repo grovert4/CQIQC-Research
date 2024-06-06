@@ -1,18 +1,18 @@
 using Plots, TightBindingToolkit, LinearAlgebra, ColorSchemes, MeanFieldToolkit
 using LaTeXStrings
-# using PyCall
+using PyCall
 
-# pyplot() # or pgfplotsx()
+pyplot() # or pgfplotsx()
 
-# rcParams = PyPlot.PyDict(PyPlot.matplotlib."rcParams")
-# mpl = pyimport("matplotlib")
+rcParams = PyPlot.PyDict(PyPlot.matplotlib."rcParams")
+mpl = pyimport("matplotlib")
 
-# mpl.style.use("./TBModel/Plotting/lake.mplstyle")
-# #mpl.style.use("lake.mplstyle")
+mpl.style.use("./TBModel/Plotting/lake.mplstyle")
+#mpl.style.use("lake.mplstyle")
 
-# rcParams["text.usetex"] = true
+rcParams["text.usetex"] = true
 
-# rcParams["font.family"] = "serif"
+rcParams["font.family"] = "serif"
 
 
 function KuboChern(Ham::Hamiltonian, bz::BZ, mu::Float64)
@@ -63,7 +63,7 @@ t = get!(params, "t", 1.0)
 t_inter = get!(params, "t_inter", 0.0)
 jh = get!(params, "jh", 1.0)
 U = get!(params, "U", 0.0)
-t_density = get!(params, "t_density", 0.0)
+t_density = get!(params, "t_density", 1.0)
 ##### Thermodynamic parameters
 filling = get!(params, "filling", 0.5)
 T = get!(params, "T", 0.0)
@@ -137,9 +137,8 @@ SolveModel!(Mdl; get_gap=true)
 #SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
 
 p = Plot_Fields!(UC; use_lookup=true, site_size=1.0,
-    field_thickness=1.0, range=1, field_opacity=0.9, scale=0.5,
+    field_thickness=1.0, range=2, field_opacity=0.9, scale=0.5,
     cmp=:viridis)
-plot!(p, legend=false)
 
 display(p)
 # p.legend = false##Plotting the unit cell
@@ -159,7 +158,7 @@ SolveModel!(Mdl; get_gap=true)
 bands = Plot_Band_Structure!(Mdl, [bz.HighSymPoints["G"], bz.HighSymPoints["M1"], bz.HighSymPoints["K1"]], labels=["G", "M", "K"], plot_legend=false);
 plot!(bands, legend=false);
 display(bands)
-savefig(bands, "Plotting/Plots/Bilayer_Band_Structure_$(SkXSize).pdf")
+savefig(bands, "TBModel/Plotting/Plots/Bilayer_Band_Structure_$(SkXSize).pdf")
 
 # filling_arr = LinRange(0.0001, 0.5, 60)
 # #mu_arr = LinRange(-7.5, -1, 100)
