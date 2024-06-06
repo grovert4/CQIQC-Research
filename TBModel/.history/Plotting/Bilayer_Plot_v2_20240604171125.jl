@@ -117,7 +117,7 @@ filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], par
 
 J_array = collect(LinRange(params["J_min"], params["J_max"], params["J_length"]))
 
-params["jh"] = J_array[end-3]
+params["jh"] = J_array[end]
 
 filling = 0.5
 println(filling, "filling")

@@ -21,7 +21,7 @@ function plot_RS(UC::UnitCell, polarizations::Vector{Float64})
 
     p = plot(framestyle=:box, aspect_ratio=:equal, xlabel=L"x", ylabel=L"y", grid=false)
     for (index, site) in enumerate(UC.basis)
-        scatter!(Tuple(site), label="", c=:black, markersize=1.0, markeralpha=0.5)
+        scatter!(Tuple(site), label="", c=:black, markersize=6.0, markeralpha=0.5)
 
         if polarizations[index] > 0.0
             scatter!(Tuple(site), label="", c=:red, markersize=polarizations[index] * 10.0, markeralpha=0.6)
@@ -31,7 +31,7 @@ function plot_RS(UC::UnitCell, polarizations::Vector{Float64})
 
     end
     for (index, site) in enumerate(UC.basis .+ Ref(UC.primitives[1]))
-        scatter!(Tuple(site), label="", c=:black, markersize=1.0, markeralpha=0.5)
+        scatter!(Tuple(site), label="", c=:black, markersize=6.0, markeralpha=0.5)
 
         if polarizations[index] > 0.0
             scatter!(Tuple(site), label="", c=:red, markersize=polarizations[index] * 10.0, markeralpha=0.6)
@@ -41,7 +41,7 @@ function plot_RS(UC::UnitCell, polarizations::Vector{Float64})
 
     end
     for (index, site) in enumerate(UC.basis .+ Ref(UC.primitives[2]))
-        scatter!(Tuple(site), label="", c=:black, markersize=1.0, markeralpha=0.5)
+        scatter!(Tuple(site), label="", c=:black, markersize=6.0, markeralpha=0.5)
 
         if polarizations[index] > 0.0
             scatter!(Tuple(site), label="", c=:red, markersize=polarizations[index] * 10.0, markeralpha=0.6)
@@ -52,7 +52,7 @@ function plot_RS(UC::UnitCell, polarizations::Vector{Float64})
     end
 
     for (index, site) in enumerate(UC.basis .- Ref(UC.primitives[1]))
-        scatter!(Tuple(site), label="", c=:black, markersize=1.0, markeralpha=0.5)
+        scatter!(Tuple(site), label="", c=:black, markersize=6.0, markeralpha=0.5)
 
         if polarizations[index] > 0.0
             scatter!(Tuple(site), label="", c=:red, markersize=polarizations[index] * 10.0, markeralpha=0.6)
@@ -62,7 +62,7 @@ function plot_RS(UC::UnitCell, polarizations::Vector{Float64})
 
     end
     for (index, site) in enumerate(UC.basis .- Ref(UC.primitives[2]))
-        scatter!(Tuple(site), label="", c=:black, markersize=1.0, markeralpha=0.5)
+        scatter!(Tuple(site), label="", c=:black, markersize=6.0, markeralpha=0.5)
 
         if polarizations[index] > 0.0
             scatter!(Tuple(site), label="", c=:red, markersize=polarizations[index] * 10.0, markeralpha=0.6)
@@ -73,7 +73,7 @@ function plot_RS(UC::UnitCell, polarizations::Vector{Float64})
     end
 
     for (index, site) in enumerate(UC.basis .+ Ref(UC.primitives[1]) .- Ref(UC.primitives[2]))
-        scatter!(Tuple(site), label="", c=:black, markersize=1.0, markeralpha=0.5)
+        scatter!(Tuple(site), label="", c=:black, markersize=6.0, markeralpha=0.5)
 
         if polarizations[index] > 0.0
             scatter!(Tuple(site), label="", c=:red, markersize=polarizations[index] * 10.0, markeralpha=0.6)
@@ -83,7 +83,7 @@ function plot_RS(UC::UnitCell, polarizations::Vector{Float64})
 
     end
     for (index, site) in enumerate(UC.basis .+ Ref(UC.primitives[2]) .- Ref(UC.primitives[1]))
-        scatter!(Tuple(site), label="", c=:black, markersize=1.0, markeralpha=0.5)
+        scatter!(Tuple(site), label="", c=:black, markersize=6.0, markeralpha=0.5)
 
         if polarizations[index] > 0.0
             scatter!(Tuple(site), label="", c=:red, markersize=polarizations[index] * 10.0, markeralpha=0.6)
@@ -103,7 +103,7 @@ end
 filename = "04.14-Bloch.2024_Bilayer"
 filename = "05.01-0.5.2024_Bilayer"
 filename = "05.03-0.375.2024_Bilayer"
-filename = "05.03-0.5.2024_Bilayer"
+filename = "05.03-0.4.2024_Bilayer"
 #filename = "05.04-0.5.2024_Bilayer"
 
 
@@ -117,7 +117,7 @@ filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], par
 
 J_array = collect(LinRange(params["J_min"], params["J_max"], params["J_length"]))
 
-params["jh"] = J_array[end-3]
+params["jh"] = J_array[2]
 
 filling = 0.5
 println(filling, "filling")
@@ -260,7 +260,7 @@ scatter!(getindex.(skyrmion_vectors, 1), getindex.(skyrmion_vectors, 2), label="
 scatter!(getindex.(symmetry_vectors, 1), getindex.(symmetry_vectors, 2), label="lattice")
 display(ssf_plot)
 
-RSPlot = plot_RS(UC, 4 * ord_array[10, 1:SkXSize^2*3] .- 4 * ord_array[10, SkXSize^2*3+1:SkXSize^2*6])
+RSPlot = plot_RS(UC, ord_array[10, 1:SkXSize^2*3] .- 0.5)
 display(RSPlot)
 # RSPlot = plot_RS(UC, ord_array[1, SkXSize^2*3:SkXSize^2*3*2])
 # display(RSPlot)

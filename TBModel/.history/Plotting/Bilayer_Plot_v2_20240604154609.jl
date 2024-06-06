@@ -103,7 +103,7 @@ end
 filename = "04.14-Bloch.2024_Bilayer"
 filename = "05.01-0.5.2024_Bilayer"
 filename = "05.03-0.375.2024_Bilayer"
-filename = "05.03-0.5.2024_Bilayer"
+filename = "05.03-0.25.2024_Bilayer"
 #filename = "05.04-0.5.2024_Bilayer"
 
 
@@ -117,7 +117,7 @@ filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], par
 
 J_array = collect(LinRange(params["J_min"], params["J_max"], params["J_length"]))
 
-params["jh"] = J_array[end-3]
+params["jh"] = J_array[1]
 
 filling = 0.5
 println(filling, "filling")
