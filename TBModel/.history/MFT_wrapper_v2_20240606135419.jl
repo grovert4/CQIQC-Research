@@ -27,9 +27,7 @@ for i in start_index:end_index
     for (j, U) in enumerate(Us)
         #println(U, " U value")
         params["U"] = round(U, sigdigits=5)
-        #params["V"] = round(Vs[i], sigdigits=5)
-        params["jh"] = round(Js[i], sigdigits=5)
-
+        params["V"] = round(Vs[i], sigdigits=5)
         #params["filling"] = round(fillings[i], sigdigits=5)
         #params["date"] = filename # change to output file name. 
         if j > 2
