@@ -15,5 +15,5 @@ module load StdEnv/2023
 module load julia/1.10.0
 module load intel/2023.2.1
 module load intelmpi
-mpirun julia --project=.. --heap-size-hint=2G MFT_wrapper_v2.jl 05.05-0.5.2024_Bilayer ./Bilayer_MFT_v3.jl
+mpirun julia --project=.. --heap-size-hint=2G MFT_wrapper_v2.jl 05.05-0.5.2024_Bilayer ./Bilayer_MFT_v2.jl
 mpirun julia --project=.. --heap-size-hint=2G Extract_LastData.jl "/scratch/a/aparamek/andykh/Data/Bilayer_Data" 05.05-0. Bilayer
