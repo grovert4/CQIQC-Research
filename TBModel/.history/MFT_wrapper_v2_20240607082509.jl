@@ -17,6 +17,7 @@ Us = collect(range(params["U_min"], params["U_max"], params["U_length"]))
 # gridsize = params["J_length"]
 # elements_per_process = div(params["J_length"], commSize)
 Vs = collect(range(params["V_min"], params["V_max"], params["V_length"]))
+
 gridsize = params["V_length"]
 elements_per_process = div(params["V_length"], commSize)
 remainder = rem(gridsize, commSize)
