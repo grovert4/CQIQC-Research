@@ -9,7 +9,7 @@
 #SBATCH --cpus-per-task=40
 #SBATCH --account=rrg-aparamek
 #SBATCH --time=23:45:00
-#SBATCH --output=/scratch/andykh/SLURMOutputs/slurm-%x-%j.txt
+#SBATCH --output=/scratch/a/aparamek/andykh/SLURMOutputs/slurm-%x-%j.txt
 module load CCEnv
 module load StdEnv/2023
 module load gcc/12 openmpi
