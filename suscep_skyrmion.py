@@ -19,16 +19,16 @@ args = parser.parse_args()
 
 loc = "/scratch/andykh/Data/"
 ###### Pauli matrices ###########
-s1 = np.matrix([[0,1],[1,0]])
-s2 = np.matrix([[0,-1j],[1j,0]])
-s3 = np.matrix([[1,0],[0,-1]])
+s1 = np.ndarray([[0,1],[1,0]])
+s2 = np.ndarray([[0,-1j],[1j,0]])
+s3 = np.ndarray([[1,0],[0,-1]])
 s4 = np.eye(2, dtype=np.complex128)
-sup = np.matrix([[1,0],[0,0]])
-sdo = np.matrix([[0,0],[0,1]])
+sup = np.ndarray([[1,0],[0,0]])
+sdo = np.ndarray([[0,0],[0,1]])
 paulis = [s4, s1, s2, s3]
 
 ##### *return the Hunds coupling matrix
-def hunds(B:list) -> np.matrix:
+def hunds(B: list) -> np.ndarray:
     return B[0]*s1 + B[1]*s2 + B[2]*s3
 
 ##### *Triangular Lattice primitives
@@ -74,7 +74,7 @@ def skyrmion():
     return mat
     
 #######* returns the nearest neighbour hopping matrix ##########
-def hopping(orbital_space: np.matrix, neighbours: list) -> np.matrix:
+def hopping(orbital_space: np.ndarray, neighbours: list) -> np.ndarray:
     mat = np.zeros((24, 24), dtype=np.complex128)
     for neighbour in neighbours:
         i,j = neighbour
@@ -183,7 +183,7 @@ plt.close()
 
 ############################################* BARE BUBBLE #######################################
 #####* returns S^a at site i of total sites N where S^a = [rho, Sx, Sy, Sz].
-def S(i:int, N:int, direction:int) -> np.matrix:
+def S(i:int, N:int, direction:int) -> np.ndarray:
     mat = np.zeros((2*N, 2*N), dtype=np.complex128)
     mat[2*i:2*i+2, 2*i:2*i+2] = paulis[direction]
     return mat
