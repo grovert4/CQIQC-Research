@@ -28,7 +28,7 @@ sdo = np.matrix([[0,0],[0,1]])
 paulis = [s4, s1, s2, s3]
 
 ##### *return the Hunds coupling matrix
-def hunds(B: list) -> np.matrix:
+def hunds(B:list) -> np.matrix:
     return B[0]*s1 + B[1]*s2 + B[2]*s3
 
 ##### *Triangular Lattice primitives
