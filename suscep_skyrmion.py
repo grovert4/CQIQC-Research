@@ -18,6 +18,7 @@ parser.add_argument('B', help='Hunds coupling', type=float, default=0.0)
 args = parser.parse_args()
 
 loc = "/scratch/andykh/Data/"
+loc = "/scratch/a/aparamek/andykh/Data/Bilayer_Data/"
 ###### Pauli matrices ###########
 s1 = np.array([[0,1],[1,0]])
 s2 = np.array([[0,-1j],[1j,0]])
