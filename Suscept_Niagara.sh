@@ -10,10 +10,11 @@
 #SBATCH --account=rrg-aparamek
 #SBATCH --time=23:45:00
 #SBATCH --output=/scratch/andykh/SLURMOutputs/slurm-%x-%j.txt
-MODULES="gcc/12.3 flexiblas openmpi cmake fftw hdf5 boost python/3.10.13 llvm/16 eigen clang"
-module purge
-module load ${MODULES}
-
+module load CCEnv
+module load StdEnv/2023
+module load gcc/12 openmpi
+module load python/3.11 imkl cmake clang mpi4py hdf5 boost fftw
+source ~/triqsvenv/bin/activate
 
 # ===== RAY Configuration =====
 # ===== Call your code below =====
