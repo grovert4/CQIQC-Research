@@ -18,4 +18,11 @@ module load ${MODULES}
 
 # ===== RAY Configuration =====
 # ===== Call your code below =====
-python suscep_skyrmion.py 
+python suscep_skyrmion.py 0
+python suscep_skyrmion.py 1
+python suscep_skyrmion.py 2
+python suscep_skyrmion.py 3
+python suscep_skyrmion.py 4
+
+
+
