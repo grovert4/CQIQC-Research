@@ -15,10 +15,10 @@ Us = collect(range(params["U_min"], params["U_max"], params["U_length"]))
 #fillings = collect(range(params["filling_min"], params["filling_max"], params["filling_length"]) / (params["filling_max"] * 2))
 Js = collect(range(params["J_min"], params["J_max"], params["J_length"]))
 gridsize = params["J_length"]
-# elements_per_process = div(params["J_length"], commSize)
+elements_per_process = div(params["J_length"], commSize)
 #Vs = collect(range(params["V_min"], params["V_max"], params["V_length"]))
-gridsize = params["V_length"]
-elements_per_process = div(params["V_length"], commSize)
+# gridsize = params["V_length"]
+# elements_per_process = div(params["V_length"], commSize)
 remainder = rem(gridsize, commSize)
 
 start_index = commRank * elements_per_process + min(commRank, remainder) + 1
