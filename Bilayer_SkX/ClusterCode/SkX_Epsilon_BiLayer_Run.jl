@@ -80,9 +80,9 @@ for j in 1:length(Jperps)
          addInteraction!(UClocal, i, i, -j2 * I, (1,2,0))
          addInteraction!(UClocal, i, i, -j2 * I, (2,1,0))
 
-         setField!(UClocal, i, [0,0,(-1)^(i + 1) * jperp * 0.05])
+         setField!(UClocal, i, [0,0,(-1)^(i) * jperp])
       end
-      addInteraction!(UClocal, b1, b2, -jperp * Sz , (0,0,0))
+      # addInteraction!(UClocal, b1, b2, -jperp * Sz , (0,0,0))
       latticeLocal = Lattice(UClocal, L)
       updateSpins!(old_filename, latticeLocal)
 
