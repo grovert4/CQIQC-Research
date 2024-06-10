@@ -10,7 +10,7 @@ jh : -1.0
 U : 1.0
 V : 0.0
 t_density : 0.0
-filling : 0.66666666666666
+filling : 0.3333333333333333
 U_min : 0.0
 U_max : 5.0
 U_length : 21
