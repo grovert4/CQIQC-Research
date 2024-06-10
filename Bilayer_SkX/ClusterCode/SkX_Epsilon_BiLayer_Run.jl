@@ -68,7 +68,7 @@ j2 = -0.25
 #println(commSize, " commSize?")
 for j in 1:length(Jperps)
    jperp = round(Jperps[j],sigdigits=5)
-   filename = "/scratch/grovert4/Data/bigboybilayer/epsilon_0.0_j2_-0.25/"*ARGS[1]*"_Jperp=$(jperp),J2=$(j2).h5"
+   filename = "/scratch/grovert4/Data/bigboybilayer/epsilon_0.25_j2_-0.25/"*ARGS[1]*"_Jperp=$(jperp),J2=$(j2).h5"
 
    if isfile(filename) 
       println("Already Completed "*filename)
@@ -80,9 +80,9 @@ for j in 1:length(Jperps)
          addInteraction!(UClocal, i, i, -j2 * I, (1,2,0))
          addInteraction!(UClocal, i, i, -j2 * I, (2,1,0))
 
-         setField!(UClocal, i, [0,0,(-1)^(i) * jperp])
+         setField!(UClocal, i, [0,0,(-1)^(i) * jperp * (1 - epsilon)])
       end
-      # addInteraction!(UClocal, b1, b2, -jperp * Sz , (0,0,0))
+      addInteraction!(UClocal, b1, b2, -jperp * Sz * epsilon , (0,0,0))
       latticeLocal = Lattice(UClocal, L)
 
       mc = MPIrunAnneal(inputFile["tmax"],inputFile["tmin"],inputFile["exchangeRate"],t0,tf,latticeLocal,thermSweeps,measureSweeps,inputFile["coolRate"],filename,true);
