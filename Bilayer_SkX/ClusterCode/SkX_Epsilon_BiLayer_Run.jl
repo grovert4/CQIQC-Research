@@ -84,7 +84,6 @@ for j in 1:length(Jperps)
       end
       # addInteraction!(UClocal, b1, b2, -jperp * Sz , (0,0,0))
       latticeLocal = Lattice(UClocal, L)
-      updateSpins!(old_filename, latticeLocal)
 
       mc = MPIrunAnneal(inputFile["tmax"],inputFile["tmin"],inputFile["exchangeRate"],t0,tf,latticeLocal,thermSweeps,measureSweeps,inputFile["coolRate"],filename,true);
       end
