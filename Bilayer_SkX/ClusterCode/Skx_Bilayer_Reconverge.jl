@@ -75,8 +75,8 @@ end_index = start_index + elements_per_process - 1 + (commRank < remainder ? 1 :
 for i in start_index:end_index
    jperp = round(Jperps[i],sigdigits=5)
    j2 = round(J2s[i],sigdigits=5)
-   old_filename = "/scratch/grovert4/Data/bigboybilayer/firstphasediagramreconverge/22-05-2024-Bilayer-reconverge_Jperp=$(jperp),J2=$(j2).h5"
-   new_filename = "/scratch/grovert4/Data/bigboybilayer/reconvergedfirstphasediagramreconverge/22-05-2024-Bilayer-reconverge_Jperp=$(jperp),J2=$(j2).h5"
+   old_filename = "/scratch/grovert4/Data/bigboybilayer/reconvergedfirstphasediagramreconverge/22-05-2024-Bilayer-reconverge_Jperp=$(jperp),J2=$(j2).h5"
+   new_filename = "/scratch/grovert4/Data/bigboybilayer/thirdreconvergedfirstphasediagramreconverge/22-05-2024-Bilayer-reconverge_Jperp=$(jperp),J2=$(j2).h5"
 
    if isfile(new_filename) 
       println("Already Completed "*new_filename)
