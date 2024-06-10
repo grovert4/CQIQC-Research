@@ -7,7 +7,7 @@
 #SBATCH --ntasks=20
 #SBATCH --cpus-per-task=1 
 #SBATCH --account=def-aparamek
-#SBATCH --time=06:00:00
+#SBATCH --time=08:00:00
 #SBATCH --mem-per-cpu=8000MB
 #SBATCH --output=/scratch/grovert4/SLURM/slurm-%x-%j.txt
 module load StdEnv/2020
