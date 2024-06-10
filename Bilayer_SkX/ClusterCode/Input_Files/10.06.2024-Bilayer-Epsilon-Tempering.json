@@ -16,5 +16,5 @@
   "epsilon":0.0,
   "coolRate":0.995,
   "thermalizationSweeps": 3500,
-  "measurementSweeps": 50000,
+  "measurementSweeps": 50000
 }
