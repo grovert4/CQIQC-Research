@@ -11,9 +11,9 @@
   "J2_length":21,
   "t_max":5,
   "t_min":1E-3,
-  "tmax:10.0",
-  "tmin:1.0",
-  "epsilon:0.0"
+  "tmax":10.0,
+  "tmin":1.0,
+  "epsilon":0.0,
   "coolRate":0.995,
   "thermalizationSweeps": 3500,
   "measurementSweeps": 50000,
