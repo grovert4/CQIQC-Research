@@ -13,4 +13,4 @@
 module load StdEnv/2020
 module load julia/1.8.5
 
-srun julia SkX_Epsilon_BiLayer_Run.jl 10.06.2024-Bilayer-Epsilon_0.5-Tempering
+srun julia SkX_Epsilon_BiLayer_Run.jl 10.06.2024-Bilayer-Epsilon_0.0-Tempering
