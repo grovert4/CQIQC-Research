@@ -94,18 +94,6 @@ plt.ylim(U_array.min(), min(U_array.max(), 7))
 plt.savefig("Plots/Bilayer_Conductivity_Extended.pdf")
 plt.show()
 fig = plt.figure(figsize=(8, 8))
-plt.imshow(np.abs(conduct), aspect='auto', cmap='Blues',vmin = 0, vmax=2, origin='lower',
-           extent=[J_array.min(), J_array.max(), U_array.min(), U_array.max()])
-
-plt.colorbar(label=r'$\sigma_{xy}$')
-plt.ylabel(r'$U$')
-plt.xlabel(r'$J$')
-plt.ylim(U_array.min(), min(U_array.max(), 7))
-
-plt.savefig("Plots/Bilayer_Conductivity_Extended.pdf")
-plt.show()
-
-fig = plt.figure(figsize=(8, 8))
 plt.imshow(polarization, aspect='auto', cmap='viridis', origin='lower',
            extent=[J_array.min(), J_array.max(), U_array.min(), U_array.max()])
 plt.colorbar(label=r'$N(k)_{max}$')

@@ -21,7 +21,7 @@ filename = "05.01-0.5.2024_Bilayer"
 
 filename = "05.02-0.25.2024_Bilayer"  
 #filename = "05.02-0.5.2024_Bilayer"  
-filename = "05.03-0.66.2024_Bilayer"  
+filename = "05.03-0.33.2024_Bilayer"  
 
 
 
@@ -93,18 +93,6 @@ plt.ylim(U_array.min(), min(U_array.max(), 7))
 
 plt.savefig("Plots/Bilayer_Conductivity_Extended.pdf")
 plt.show()
-fig = plt.figure(figsize=(8, 8))
-plt.imshow(np.abs(conduct), aspect='auto', cmap='Blues',vmin = 0, vmax=2, origin='lower',
-           extent=[J_array.min(), J_array.max(), U_array.min(), U_array.max()])
-
-plt.colorbar(label=r'$\sigma_{xy}$')
-plt.ylabel(r'$U$')
-plt.xlabel(r'$J$')
-plt.ylim(U_array.min(), min(U_array.max(), 7))
-
-plt.savefig("Plots/Bilayer_Conductivity_Extended.pdf")
-plt.show()
-
 fig = plt.figure(figsize=(8, 8))
 plt.imshow(polarization, aspect='auto', cmap='viridis', origin='lower',
            extent=[J_array.min(), J_array.max(), U_array.min(), U_array.max()])

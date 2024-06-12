@@ -121,9 +121,9 @@ function MFT(params, filename)
     rand_noise = rand(SkXSize^2 * 3) .- 0.5
     rand_noise = 0.01 .* (rand_noise .- sum(rand_noise) / (SkXSize^2 * 3))
 
-    init_up = fill(filling, SkXSize^2 * 3) .+ rand_noise .- 0.02
-    init_dn = fill(filling, SkXSize^2 * 3) .- rand_noise .+ 0.02
-    init_guess = vcat([1.0], [0.0001], init_up, init_dn)
+    init_up = fill(filling, SkXSize^2 * 3) .+ rand_noise .- 0.06
+    init_dn = fill(filling, SkXSize^2 * 3) .- rand_noise .+ 0.06
+    init_guess = vcat([1.0], [0.001], init_up, init_dn)
     if isfile(fileName)
         println("TRYING TO LOAD " * fileName)
         try
@@ -136,7 +136,7 @@ function MFT(params, filename)
                 oldfile = loc * "/$(filename)_J=$(round(jh, digits=3))_U=$(round(params["U_prev"], digits=2)).jld2"
                 #oldfile = loc * "/$(filename)_V=$(round(V, digits=3))_U=$(round(params["U_prev"], digits=2)).jld2"
 
-                init_guess = load(oldfile)["outputs"][end] .+ vcat([0.0], [0.0], rand_noise, -1 .* rand_noise)
+                init_guess = load(oldfile)["outputs"][end] .+ vcat([0.0], [0.00000], rand_noise, -1 .* rand_noise)
                 SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
             else
                 SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
@@ -148,7 +148,7 @@ function MFT(params, filename)
             oldfile = loc * "/$(filename)_J=$(round(jh, digits=3))_U=$(round(params["U_prev"], digits=2)).jld2"
             #oldfile = loc * "/$(filename)_V=$(round(V, digits=3))_U=$(round(params["U_prev"], digits=2)).jld2"
 
-            init_guess = load(oldfile)["outputs"][end] .+ vcat([0.0], [0.0], rand_noise, -1 .* rand_noise)
+            init_guess = load(oldfile)["outputs"][end] .+ vcat([0.0000000000], [0.0000], rand_noise, -1 .* rand_noise)
             SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
         else
             SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
