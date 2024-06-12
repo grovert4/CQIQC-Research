@@ -105,7 +105,7 @@ filename = "05.01-0.5.2024_Bilayer"
 filename = "05.03-0.375.2024_Bilayer"
 filename = "05.03-0.5.2024_Bilayer"
 filename = "05.04-0.75.2024_Bilayer"
-filename = "05.03-0.66.2024_Bilayer"
+filename = "05.03-0.33.2024_Bilayer"
 
 
 #println(@__DIR__)
@@ -118,9 +118,9 @@ filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], par
 
 J_array = collect(LinRange(params["J_min"], params["J_max"], params["J_length"]))
 
-params["jh"] = J_array[5]
+params["jh"] = J_array[14]
 
-filling = 0.66
+filling = 0.33
 println(filling, "filling")
 #U_var = U_array[end-1]
 #loc = "/Users/ahardy/Library/CloudStorage/GoogleDrive-ahardy@flatironinstitute.org/My Drive/Skyrmion/Bilayer_SkX/TBModel/Monolayer"
@@ -261,11 +261,11 @@ scatter!(getindex.(skyrmion_vectors, 1), getindex.(skyrmion_vectors, 2), label="
 scatter!(getindex.(symmetry_vectors, 1), getindex.(symmetry_vectors, 2), label="lattice")
 display(ssf_plot)
 
-RSPlot = plot_RS(UC, 2 * ord_array[20, 1:SkXSize^2*3] .- 2 * ord_array[10, SkXSize^2*3+1:SkXSize^2*6])
+RSPlot = plot_RS(UC, 2 * ord_array[10, 1:SkXSize^2*3] .- 2 * ord_array[10, SkXSize^2*3+1:SkXSize^2*6])
 display(RSPlot)
 # RSPlot = plot_RS(UC, ord_array[1, SkXSize^2*3:SkXSize^2*3*2])
 # display(RSPlot)
-RSPlot = plot_RS(UC, 4 * ord_array[20, 1:SkXSize^2*3] .- 4 * ord_array[10, SkXSize^2*3+1:SkXSize^2*6])
+RSPlot = plot_RS(UC, 4 * ord_array[10, 1:SkXSize^2*3] .- 4 * ord_array[10, SkXSize^2*3+1:SkXSize^2*6])
 display(RSPlot)
 RSPlot = plot_RS(UC, order_parameter[20,:])
 display(RSPlot)

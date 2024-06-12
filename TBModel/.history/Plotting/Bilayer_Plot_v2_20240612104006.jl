@@ -118,7 +118,7 @@ filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], par
 
 J_array = collect(LinRange(params["J_min"], params["J_max"], params["J_length"]))
 
-params["jh"] = J_array[5]
+params["jh"] = J_array[end-3]
 
 filling = 0.66
 println(filling, "filling")
@@ -173,8 +173,8 @@ for (ind, U_var) in enumerate(U_array[:])
     if Uniform_Status == true
         fileName = loc * "Last_Itr_$(filename)_UNIFORM_p=$(round(params["jh"], digits=3))_U=$(round(U_var, digits=2))_t1=$(round(t1, digits=2)).jld2"
     else
-        fileName = loc * "Last_Itr_$(filename)_J=$(round(params["jh"], digits=3))_U=$(round(U_var, digits=2)).jld2"
-        #fileName = loc * "Last_Itr_$(filename)_V=$(round(params["V"], digits=3))_U=$(round(U_var, digits=2)).jld2"
+        #fileName = loc * "Last_Itr_$(filename)_J=$(round(params["jh"], digits=3))_U=$(round(U_var, digits=2)).jld2"
+        fileName = loc * "Last_Itr_$(filename)_V=$(round(params["V"], digits=3))_U=$(round(U_var, digits=2)).jld2"
 
     end
     println(fileName)
@@ -261,11 +261,9 @@ scatter!(getindex.(skyrmion_vectors, 1), getindex.(skyrmion_vectors, 2), label="
 scatter!(getindex.(symmetry_vectors, 1), getindex.(symmetry_vectors, 2), label="lattice")
 display(ssf_plot)
 
-RSPlot = plot_RS(UC, 2 * ord_array[20, 1:SkXSize^2*3] .- 2 * ord_array[10, SkXSize^2*3+1:SkXSize^2*6])
+RSPlot = plot_RS(UC, 2 * ord_array[10, 1:SkXSize^2*3] .- 2 * ord_array[10, SkXSize^2*3+1:SkXSize^2*6])
 display(RSPlot)
 # RSPlot = plot_RS(UC, ord_array[1, SkXSize^2*3:SkXSize^2*3*2])
 # display(RSPlot)
-RSPlot = plot_RS(UC, 4 * ord_array[20, 1:SkXSize^2*3] .- 4 * ord_array[10, SkXSize^2*3+1:SkXSize^2*6])
-display(RSPlot)
-RSPlot = plot_RS(UC, order_parameter[20,:])
+RSPlot = plot_RS(UC, 4 * ord_array[10, 1:SkXSize^2*3] .- 4 * ord_array[10, SkXSize^2*3+1:SkXSize^2*6])
 display(RSPlot)

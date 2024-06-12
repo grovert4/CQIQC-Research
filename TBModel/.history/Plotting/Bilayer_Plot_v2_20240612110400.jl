@@ -261,11 +261,9 @@ scatter!(getindex.(skyrmion_vectors, 1), getindex.(skyrmion_vectors, 2), label="
 scatter!(getindex.(symmetry_vectors, 1), getindex.(symmetry_vectors, 2), label="lattice")
 display(ssf_plot)
 
-RSPlot = plot_RS(UC, 2 * ord_array[20, 1:SkXSize^2*3] .- 2 * ord_array[10, SkXSize^2*3+1:SkXSize^2*6])
+RSPlot = plot_RS(UC, 2 * ord_array[10, 1:SkXSize^2*3] .- 2 * ord_array[10, SkXSize^2*3+1:SkXSize^2*6])
 display(RSPlot)
 # RSPlot = plot_RS(UC, ord_array[1, SkXSize^2*3:SkXSize^2*3*2])
 # display(RSPlot)
-RSPlot = plot_RS(UC, 4 * ord_array[20, 1:SkXSize^2*3] .- 4 * ord_array[10, SkXSize^2*3+1:SkXSize^2*6])
-display(RSPlot)
-RSPlot = plot_RS(UC, order_parameter[20,:])
+RSPlot = plot_RS(UC, 4 * ord_array[10, 1:SkXSize^2*3] .- 4 * ord_array[10, SkXSize^2*3+1:SkXSize^2*6])
 display(RSPlot)
