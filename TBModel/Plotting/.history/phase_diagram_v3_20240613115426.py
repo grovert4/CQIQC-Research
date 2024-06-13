@@ -14,7 +14,7 @@ os.getcwd()
 #filename = "05.02-0.5.2024_Bilayer"  
 filename = "05.03-0.4.2024_Bilayer"  
 filename = "05.04-0.4.2024_Bilayer"  
-filename = "05.04-0.33.2024_Bilayer"  
+filename = "05.04-0.66.2024_Bilayer"  
 
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
@@ -106,22 +106,21 @@ plt.show()
 fig, ax = plt.subplots(figsize=(8, 8))
 
 # Main plot
-Vidx = np.searchsorted(V_array, 1.5)
-
-im = ax.imshow(polarization[:,:Vidx], aspect='auto', cmap='PuBuGn', origin='lower',
-               extent=[V_array.min(), V_array[Vidx], U_array.min(), U_array.max()])
+im = ax.imshow(polarization, aspect='auto', cmap='PuBuGn', origin='lower',
+               extent=[V_array.min(), V_array.max(), U_array.min(), U_array.max()])
 ax.set_ylabel(r'$U$')
 ax.set_xlabel(r'$V$')
 ax.set_ylim(U_array.min(), min(U_array.max(), 7))
+
 # Inset plot
-axins = inset_axes(ax, width="45%", height="45%", loc='lower right',bbox_to_anchor=(-0.01, 0.06, 0.99, 1.06), bbox_transform=ax.transAxes)
-im_ins = axins.imshow(conduct[:,:Vidx], aspect='auto', cmap='PRGn',vmin = -2, vmax=2, origin='lower',
-                      extent=[V_array.min(), V_array[Vidx], U_array.min(), U_array.max()])
+axins = inset_axes(ax, width="45%", height="45%", loc='lower right',bbox_to_anchor=(0., 0.05, 1.0, 1.05), bbox_transform=ax.transAxes)
+im_ins = axins.imshow(conduct, aspect='auto', cmap='PRGn',vmin = -2, vmax=2, origin='lower',
+                      extent=[V_array.min(), V_array.max(), U_array.min(), U_array.max()])
 cax_1 = inset_axes(ax,
                  width="5%",  # width = 5% of parent_bbox width
                  height="100%",  # height : 100%
                  loc='right',
-                 bbox_to_anchor=(0.15, 0., 1, 1),
+                 bbox_to_anchor=(0.5, 0., 1, 1),
                  bbox_transform=ax.transAxes,
                  borderpad=0,
                  )
@@ -129,17 +128,15 @@ cax_2 = inset_axes(ax,
 width="5%",  # width = 5% of parent_bbox width
 height="100%",  # height : 100%
 loc='right',
-bbox_to_anchor=(0.4, 0., 1, 1),
+bbox_to_anchor=(0.5, 0., 1, 1),
 bbox_transform=ax.transAxes,
 borderpad=0,
 )
-cax_1.set_rasterized(True)
-cax_2.set_rasterized(True)
+cax.set_rasterized(True)
+plt.colorbar(im_ins, cax=cax, label=r'$\sigma_{xy}$')
+plt.colorbar(im, ax=ax, label=r'$N(k)_{max}$')
 
-plt.colorbar(im_ins, cax=cax_2, label=r'$\sigma_{xy}$')
-plt.colorbar(im, cax=cax_1, label=r'$N(k)_{max}$')
-
-plt.savefig("Plots/"+filename+"_U_V.pdf", format = 'pdf')
+plt.savefig("Plots/"+filename+"_U_V.pdf",bbox_inches = 'tight',dpi=1000, format = 'pdf')
 
 plt.show()
 

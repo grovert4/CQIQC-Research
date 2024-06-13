@@ -21,7 +21,7 @@ filename = "05.01-0.5.2024_Bilayer"
 
 filename = "05.02-0.25.2024_Bilayer"  
 #filename = "05.02-0.5.2024_Bilayer"  
-filename = "05.03-0.33.2024_Bilayer"  
+filename = "05.03-0.66.2024_Bilayer"  
 
 
 
@@ -56,7 +56,7 @@ for (ind_J,J) in enumerate(J_array):
             ssf_dn = temp_dn['re'] + 1j*temp_dn['im']
 
             polarization[ind_u, ind_J] = np.abs(np.max(ssf_up)-np.max(ssf_dn))
-        if (polarization[ind_u, ind_J] < 0.05) and (J_array[ind_J] < -1.7):
+        if (polarization[ind_u, ind_J] < 0.06) and (J_array[ind_J] > 1.5):
             polarization[ind_u, ind_J] = 0.0
             conduct[ind_u, ind_J] = 0.0
         # need to make this python compatible 
@@ -66,7 +66,6 @@ conduct_flat = conduct.flatten()
 polarization_flat = polarization.flatten()
 energy_flat = energy.flatten()
 # Create the scatter plot
-J_array = np.abs(J_array)
 plt.scatter(J_array_flat, U_array_flat,c=conduct_flat, cmap='viridis', vmax = 4)
 plt.colorbar(label=r'$\sigma_{xy}$')
 plt.ylabel(r'$U$')
@@ -116,42 +115,34 @@ plt.ylabel(r'$U$')
 plt.xlabel(r'$J$')
 plt.ylim(U_array.min(), min(U_array.max(), 7))
 
+plt.savefig("Plots/Bilayer_Polarization_Extended.pdf")
+
+plt.show()
 fig, ax = plt.subplots(figsize=(8, 8))
 
 # Main plot
-Jidx = np.searchsorted(J_array, 2.5)
-
-im = ax.imshow(np.flip(polarization,1), aspect='auto', cmap='PuBuGn', origin='lower',
+im = ax.imshow(polarization, aspect='auto', cmap='PuBuGn', origin='lower',
                extent=[J_array.min(), J_array.max(), U_array.min(), U_array.max()])
 ax.set_ylabel(r'$U$')
 ax.set_xlabel(r'$J$')
 ax.set_ylim(U_array.min(), min(U_array.max(), 7))
+plt.colorbar(im, ax=ax, label=r'$N(k)_{max}$')
+
 # Inset plot
-axins = inset_axes(ax, width="45%", height="45%", loc='lower right',bbox_to_anchor=(-0.01, 0.06, 0.99, 1.06), bbox_transform=ax.transAxes)
-im_ins = axins.imshow(np.flip(conduct,1), aspect='auto', cmap='PRGn',vmin = -2, vmax=2, origin='lower',
+axins = inset_axes(ax, width="45%", height="45%", loc='lower left',bbox_to_anchor=(0., 0.05, 1.0, 1.05), bbox_transform=ax.transAxes)
+im_ins = axins.imshow(conduct, aspect='auto', cmap='PRGn',vmin = -2, vmax=2, origin='lower',
                       extent=[J_array.min(), J_array.max(), U_array.min(), U_array.max()])
-cax_1 = inset_axes(ax,
+cax = inset_axes(axins,
                  width="5%",  # width = 5% of parent_bbox width
                  height="100%",  # height : 100%
                  loc='right',
-                 bbox_to_anchor=(0.15, 0., 1, 1),
+                 bbox_to_anchor=(0.5, 0., 1, 1),
                  bbox_transform=ax.transAxes,
                  borderpad=0,
                  )
-cax_2 = inset_axes(ax,
-width="5%",  # width = 5% of parent_bbox width
-height="100%",  # height : 100%
-loc='right',
-bbox_to_anchor=(0.4, 0., 1, 1),
-bbox_transform=ax.transAxes,
-borderpad=0,
-)
-cax_1.set_rasterized(True)
-cax_2.set_rasterized(True)
 
-plt.colorbar(im_ins, cax=cax_2, label=r'$\sigma_{xy}$')
-plt.colorbar(im, cax=cax_1, label=r'$N(k)_{max}$')
+plt.colorbar(im_ins, cax=cax, label=r'$\sigma_{xy}$')
 
-plt.savefig("Plots/"+filename+"_U_J.pdf", format = 'pdf')
+plt.savefig("Plots/"+filename+"_U_V.pdf")
 
 plt.show()

@@ -119,17 +119,17 @@ plt.ylim(U_array.min(), min(U_array.max(), 7))
 fig, ax = plt.subplots(figsize=(8, 8))
 
 # Main plot
-Jidx = np.searchsorted(J_array, 2.5)
+Vidx = np.searchsorted(V_array, 1.5)
 
-im = ax.imshow(np.flip(polarization,1), aspect='auto', cmap='PuBuGn', origin='lower',
-               extent=[J_array.min(), J_array.max(), U_array.min(), U_array.max()])
+im = ax.imshow(polarization[:,:Vidx], aspect='auto', cmap='PuBuGn', origin='lower',
+               extent=[V_array.min(), V_array[Vidx], U_array.min(), U_array.max()])
 ax.set_ylabel(r'$U$')
-ax.set_xlabel(r'$J$')
+ax.set_xlabel(r'$V$')
 ax.set_ylim(U_array.min(), min(U_array.max(), 7))
 # Inset plot
 axins = inset_axes(ax, width="45%", height="45%", loc='lower right',bbox_to_anchor=(-0.01, 0.06, 0.99, 1.06), bbox_transform=ax.transAxes)
-im_ins = axins.imshow(np.flip(conduct,1), aspect='auto', cmap='PRGn',vmin = -2, vmax=2, origin='lower',
-                      extent=[J_array.min(), J_array.max(), U_array.min(), U_array.max()])
+im_ins = axins.imshow(conduct[:,:Vidx], aspect='auto', cmap='PRGn',vmin = -2, vmax=2, origin='lower',
+                      extent=[V_array.min(), V_array[Vidx], U_array.min(), U_array.max()])
 cax_1 = inset_axes(ax,
                  width="5%",  # width = 5% of parent_bbox width
                  height="100%",  # height : 100%
@@ -152,6 +152,6 @@ cax_2.set_rasterized(True)
 plt.colorbar(im_ins, cax=cax_2, label=r'$\sigma_{xy}$')
 plt.colorbar(im, cax=cax_1, label=r'$N(k)_{max}$')
 
-plt.savefig("Plots/"+filename+"_U_J.pdf", format = 'pdf')
+plt.savefig("Plots/"+filename+"_U_V.pdf", format = 'pdf')
 
 plt.show()
