@@ -12,7 +12,7 @@ os.getcwd()
 filename = "05.20.2024_Bilayer" # J = 0, N = 2
 #filename = "05.15.2024_Bilayer"  # J = 1, N = 2
 filename = "05.14.2024_Bilayer" # J = 2, N = 2
-filename = "05.12.2024_Bilayer" # J = 4, N = 2
+#filename = "05.12.2024_Bilayer" # J = 4, N = 2
 
 
 
