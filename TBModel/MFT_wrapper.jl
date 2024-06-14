@@ -29,7 +29,7 @@ for i in start_index:end_index
         params["filling"] = round(fillings[i], sigdigits=5)
         #params["date"] = filename # change to output file name. 
         if j > 2
-            params["U_prev"] = Us[j-1]*abs(params["jh"]
+            params["U_prev"] = Us[j-1]*abs(params["jh"])
         else
             println(params["U"], "independent U param")
             delete!(params, "U_prev")
