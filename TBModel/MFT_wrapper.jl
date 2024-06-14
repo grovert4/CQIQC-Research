@@ -28,13 +28,10 @@ for i in start_index:end_index
         #params["jh"] = round(Js[i], sigdigits=5)
         params["filling"] = round(fillings[i], sigdigits=5)
         #params["date"] = filename # change to output file name. 
-        if j > 3
-            params["U_prev"] = Us[j-1]
+        if j > 2
+            params["U_prev"] = Us[j-1]*abs(params["jh"]
         else
             println(params["U"], "independent U param")
-            delete!(params, "U_prev")
-        end
-        if params["U"] < 0.5
             delete!(params, "U_prev")
         end
 
