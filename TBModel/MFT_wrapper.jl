@@ -6,7 +6,7 @@ include("$(ARGS[2])")
 MPI.Init()
 commSize = MPI.Comm_size(MPI.COMM_WORLD)
 commRank = MPI.Comm_rank(MPI.COMM_WORLD)
-println(filename)
+#println(filename)
 println("Hello from $(commRank) of $(commSize)")
 params = YAML.load_file("./Input/$(filename).yml")
 #(Uarr, fillingarr) = ndgrid(range(params["U_min"], params["U_max"], params["U_length"]), range(params["filling_min"], params["filling_max"], params["filling_length"]) / (params["filling_max"] * 2))
@@ -28,10 +28,10 @@ for i in start_index:end_index
         #params["jh"] = round(Js[i], sigdigits=5)
         params["filling"] = round(fillings[i], sigdigits=5)
         #params["date"] = filename # change to output file name. 
-        if j > 2
+        if j > 3
             params["U_prev"] = Us[j-1]
         else
-            print(params["U"])
+            println(params["U"], "independent U param")
             delete!(params, "U_prev")
         end
         if params["U"] < 0.5
