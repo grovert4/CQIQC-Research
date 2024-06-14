@@ -31,8 +31,14 @@ for i in start_index:end_index
         if j > 2
             params["U_prev"] = Us[j-1]
         else
+            print(params["U"])
             delete!(params, "U_prev")
         end
+        if params["U"] < 0.5
+            delete!(params, "U_prev")
+        end
+
+
         if params["filling"] == round(0.0, sigdigits=5)
             continue
         else
