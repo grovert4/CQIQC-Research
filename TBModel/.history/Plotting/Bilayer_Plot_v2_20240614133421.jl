@@ -121,7 +121,7 @@ J_array = collect(LinRange(params["J_min"], params["J_max"], params["J_length"])
 
 params["jh"] = J_array[end-5]
 
-filling = 0.33
+filling = 0.66
 println(filling, "filling")
 #U_var = U_array[end-1]
 #loc = "/Users/ahardy/Library/CloudStorage/GoogleDrive-ahardy@flatironinstitute.org/My Drive/Skyrmion/Bilayer_SkX/TBModel/Monolayer"
