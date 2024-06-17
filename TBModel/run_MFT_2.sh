@@ -18,4 +18,3 @@ module load intelmpi
 mpirun julia --project=.. --heap-size-hint=2G MFT_wrapper_J.jl 05.03-0.75.2024_Bilayer ./Bilayer_MFT_v2.jl
 mpirun julia --project=.. --heap-size-hint=2G MFT_wrapper_J.jl 05.03-0.25.2024_Bilayer ./Bilayer_MFT_v2.jl
 mpirun julia --project=.. --heap-size-hint=2G Extract_LastData.jl "/scratch/a/aparamek/andykh/Data/Bilayer_Data" 05.03- Bilayer
-
