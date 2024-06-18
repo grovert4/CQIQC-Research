@@ -14,7 +14,7 @@ os.getcwd()
 #filename = "05.02-0.5.2024_Bilayer"  
 filename = "05.03-0.4.2024_Bilayer"  
 filename = "05.04-0.4.2024_Bilayer"  
-filename = "06.10-2.2024_Bilayer"  
+filename = "06.10-4.2024_Bilayer"  
 
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
@@ -62,19 +62,19 @@ energy_flat = energy.flatten()
 # Create the scatter plot
 plt.scatter(filling_array_flat, U_array_flat,c=conduct_flat, cmap='viridis', vmax = 4)
 plt.colorbar(label=r'$\sigma_{xy}$')
-plt.ylabel(r'$U$')
+plt.ylabel(r'$U/J$')
 plt.xlabel(r'$n$')
 
 plt.show()
 plt.scatter(filling_array_flat, U_array_flat,c=polarization_flat, cmap='viridis')
 plt.colorbar(label=r'$P$')
-plt.ylabel(r'$U$')
+plt.ylabel(r'$U/J$')
 plt.xlabel(r'$n$')
 
 plt.show()
 plt.scatter(filling_array_flat, U_array_flat,c=energy_flat, cmap='viridis')
 plt.colorbar(label=r'$E$')
-plt.ylabel(r'$U$')
+plt.ylabel(r'$U/J$')
 plt.xlabel(r'$n$')
 
 plt.show()
@@ -83,7 +83,7 @@ plt.imshow(conduct, aspect='auto', cmap='PRGn',vmin = -1.5, vmax=1.5, origin='lo
            extent=[filling_array.min(), filling_array.max(), U_array.min(), U_array.max()])
 
 plt.colorbar(label=r'$\sigma_{xy}$')
-plt.ylabel(r'$U$')
+plt.ylabel(r'$U/J$')
 plt.xlabel(r'$n$')
 plt.ylim(U_array.min(), min(U_array.max(), 7))
 
@@ -93,7 +93,7 @@ fig = plt.figure(figsize=(8, 8))
 plt.imshow(polarization, aspect='auto', cmap='viridis', origin='lower',
            extent=[filling_array.min(), filling_array.max(), U_array.min(), U_array.max()])
 plt.colorbar(label=r'$N(k)_{max}$')
-plt.ylabel(r'$U$')
+plt.ylabel(r'$U/J$')
 plt.xlabel(r'$n$')
 plt.ylim(U_array.min(), min(U_array.max(), 7))
 
@@ -108,7 +108,7 @@ Vidx = np.searchsorted(filling_array, 1.5)
 
 im = ax.imshow(polarization, aspect='auto', cmap='PuBuGn', origin='lower',
                extent=[filling_array.min(), filling_array.max(), U_array.min(), U_array.max()])
-ax.set_ylabel(r'$U$')
+ax.set_ylabel(r'$U/J$')
 ax.set_xlabel(r'$n$')
 ax.set_ylim(U_array.min(), min(U_array.max(), 7))
 # Inset plot
@@ -168,26 +168,26 @@ plt.show()
 # # Create the scatter plot
 # plt.scatter(filling_arr_flat, U_array_flat,c=conduct_flat, cmap='viridis', vmax =1 )
 # plt.colorbar(label=r'$\sigma_{xy}$')
-# plt.ylabel(r'$U$')
+# plt.ylabel(r'$U/J$')
 # plt.xlabel(r'$n$')
 
 # plt.show()
 # plt.scatter(filling_arr_flat, U_array_flat,c=polarization_flat, cmap='viridis')
 # plt.colorbar(label=r'$P$')
-# plt.ylabel(r'$U$')
+# plt.ylabel(r'$U/J$')
 # plt.xlabel(r'$n$')
 
 # plt.show()
 # plt.scatter(filling_arr_flat, U_array_flat,c=energy_2_flat, cmap='viridis')
 # plt.colorbar(label=r'$E$')
-# plt.ylabel(r'$U$')
+# plt.ylabel(r'$U/J$')
 # plt.xlabel(r'$n$')
 
 # plt.show()
 
 # plt.scatter(filling_arr_flat, U_array_flat,c=(energy_flat-energy_2_flat), cmap='viridis')
 # plt.colorbar(label=r'$\Delta E$')
-# plt.ylabel(r'$U$')
+# plt.ylabel(r'$U/J$')
 # plt.xlabel(r'$n$')
 
 # plt.show()
