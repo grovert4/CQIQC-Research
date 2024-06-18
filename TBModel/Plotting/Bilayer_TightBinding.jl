@@ -61,11 +61,11 @@ n = get!(params, "n", 12)
 kSize = 6 * n + 3
 t = get!(params, "t", 1.0)
 t_inter = get!(params, "t_inter", 0.0)
-jh = get!(params, "jh", 1.0)
+jh = get!(params, "jh", 4.0)
 U = get!(params, "U", 0.0)
 t_density = get!(params, "t_density", 0.0)
 ##### Thermodynamic parameters
-filling = get!(params, "filling", 0.5)
+filling = get!(params, "filling", 25/48)
 T = get!(params, "T", 0.0)
 t1 = -t
 tinter_param = Param(t_inter, 2)
@@ -77,7 +77,7 @@ HoppingParams = [t1Param, tdParam, tiParam, jhParam]
 su2spin = SpinMats(1 // 2)
 su4spin = SpinMats(3 // 2)
 ##Adding inner-hexagon structure  
-for j = 0:(3*SkXSize-1)
+for j = 0:(SkXSize-1)
     for i = 0:(SkXSize*3-1)
         AddBasisSite!(UC, i .* l1 + j .* l2)
     end
@@ -152,7 +152,7 @@ FillBZ!(bz, UC)
 path = CombinedBZPath(bz, [bz.HighSymPoints["G"], bz.HighSymPoints["K1"], bz.HighSymPoints["M2"]]; nearest=true)
 H = Hamiltonian(UC, bz)
 DiagonalizeHamiltonian!(H)
-Mdl = Model(UC, bz, H; filling=0.5)
+Mdl = Model(UC, bz, H; filling=filling)
 SolveModel!(Mdl; get_gap=true)
 
 #Plotting the band structure

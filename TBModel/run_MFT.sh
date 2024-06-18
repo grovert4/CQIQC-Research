@@ -15,13 +15,8 @@ module load StdEnv/2023
 module load julia/1.10.0
 module load intel/2023.2.1
 module load intelmpi
-# #mpirun julia --project=.. --heap-size-hint=2G MFT_wrapper_v2.jl 05.04-0.33.2024_Bilayer ./Bilayer_MFT_v2.jl
-# mpirun julia --project=.. --heap-size-hint=2G MFT_wrapper_V.jl 05.04-0.66.2024_Bilayer ./Bilayer_MFT_V.jl
-# mpirun julia --project=.. --heap-size-hint=2G MFT_wrapper_V.jl 05.04-0.33.2024_Bilayer ./Bilayer_MFT_V.jl
-# mpirun julia --project=.. --heap-size-hint=2G Extract_LastData.jl "/scratch/a/aparamek/andykh/Data/Bilayer_Data" 05.04-0. Bilayer
-#mpirun julia --project=.. --heap-size-hint=2G MFT_wrapper_v2.jl 05.04-0.33.2024_Bilayer ./Bilayer_MFT_v2.jl
-#mpirun julia --project=.. --heap-size-hint=2G MFT_wrapper.jl 06.10-1.2024_Bilayer ./Bilayer_MFT_n.jl
-mpirun julia --project=.. --heap-size-hint=2G MFT_wrapper.jl 06.10-2.2024_Bilayer ./Bilayer_MFT_n.jl
-mpirun julia --project=.. --heap-size-hint=2G MFT_wrapper.jl 06.10-3.2024_Bilayer ./Bilayer_MFT_n.jl
-mpirun julia --project=.. --heap-size-hint=2G MFT_wrapper.jl 06.10-4.2024_Bilayer ./Bilayer_MFT_n.jl
-mpirun julia --project=.. --heap-size-hint=2G Extract_LastData.jl "/scratch/a/aparamek/andykh/Data/Bilayer_Data" 06.10- Bilayer
+
+mpirun julia --project=.. --heap-size-hint=2G MFT_wrapper_n.jl 06.17.2024_Bilayer ./Bilayer_MFT_n.jl
+#mpirun julia --project=.. --heap-size-hint=2G MFT_wrapper.jl 06.10-3.2024_Bilayer ./Bilayer_MFT_n.jl
+#mpirun julia --project=.. --heap-size-hint=2G MFT_wrapper.jl 06.10-4.2024_Bilayer ./Bilayer_MFT_n.jl
+mpirun julia --project=.. --heap-size-hint=2G Extract_LastData.jl "/scratch/a/aparamek/andykh/Data/Bilayer_Data" 06.17 Bilayer
