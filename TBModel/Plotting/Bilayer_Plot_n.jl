@@ -106,7 +106,7 @@ filename = "05.03-0.375.2024_Bilayer"
 filename = "05.03-0.5.2024_Bilayer"
 filename = "05.04-0.75.2024_Bilayer"
 filename = "05.03-0.33.2024_Bilayer"
-filename = "06.10-4.2024_Bilayer"
+filename = "06.10-2.2024_Bilayer"
 
 #filename = "05.04-0.66.2024_Bilayer"
 
