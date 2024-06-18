@@ -116,6 +116,8 @@ params = YAML.load_file("../Input/$(filename).yml")
 
 U_array = collect(LinRange(params["U_min"], params["U_max"], params["U_length"]))
 filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / (params["filling_max"] )
+filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / (params["filling_max"] )
+
 # V_array = collect(LinRange(params["V_min"], params["V_max"], params["V_length"]))
 # params["V"] = V_array[1]
 

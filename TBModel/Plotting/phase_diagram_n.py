@@ -15,6 +15,7 @@ os.getcwd()
 filename = "05.03-0.4.2024_Bilayer"  
 filename = "05.04-0.4.2024_Bilayer"  
 filename = "06.10-2.2024_Bilayer"  
+filename = "06.17.2024_Bilayer"  
 
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
@@ -28,6 +29,7 @@ plt.rcParams.update({"text.usetex": True})
 params = yml.safe_load(Path(f"../Input/{filename}.yml").read_text())
 U_array = np.linspace(params["U_min"], params["U_max"], params["U_length"])
 filling_array = np.linspace(params["filling_min"], params["filling_max"], params["filling_length"]) / (params["filling_max"] )
+filling_array = ((24+np.linspace(params["filling_min"], params["filling_max"], params["filling_length"])) / 48 )
 
 Uniform_Status = False
 polarization = np.zeros((params["U_length"], params["filling_length"]))
@@ -79,11 +81,13 @@ plt.xlabel(r'$n$')
 
 plt.show()
 fig = plt.figure(figsize=(8, 8))
-plt.imshow(conduct, aspect='auto', cmap='PRGn',vmin = -1.5, vmax=1.5, origin='lower',
+# plt.imshow(conduct, aspect='auto', cmap='PRGn',vmin = -1.5, vmax=1.5, origin='lower',
+#            extent=[filling_array.min(), filling_array.max(), U_array.min(), U_array.max()])
+plt.imshow(np.abs(conduct), aspect='auto', cmap='PuBuGn',vmin = 0, vmax=1.5, origin='lower',
            extent=[filling_array.min(), filling_array.max(), U_array.min(), U_array.max()])
 
 plt.colorbar(label=r'$\sigma_{xy}$')
-plt.ylabel(r'$U/J$')
+plt.ylabel(r'$U$')
 plt.xlabel(r'$n$')
 plt.ylim(U_array.min(), min(U_array.max(), 7))
 
