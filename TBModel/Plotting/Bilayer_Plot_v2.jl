@@ -107,6 +107,7 @@ filename = "05.03-0.5.2024_Bilayer"
 filename = "05.04-0.75.2024_Bilayer"
 filename = "05.03-0.33.2024_Bilayer"
 #filename = "05.04-0.66.2024_Bilayer"
+filename = "06.18-25.2024_Bilayer"
 
 
 #println(@__DIR__)
@@ -114,14 +115,14 @@ params = YAML.load_file("../Input/$(filename).yml")
 
 U_array = collect(LinRange(params["U_min"], params["U_max"], params["U_length"]))
 filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / (params["filling_max"] * 2)
-# V_array = collect(LinRange(params["V_min"], params["V_max"], params["V_length"]))
-# params["V"] = V_array[1]
+V_array = collect(LinRange(params["V_min"], params["V_max"], params["V_length"]))
+params["V"] = V_array[end]
 
-J_array = collect(LinRange(params["J_min"], params["J_max"], params["J_length"]))
+# J_array = collect(LinRange(params["J_min"], params["J_max"], params["J_length"]))
 
-params["jh"] = J_array[4]
+# params["jh"] = J_array[4]
 
-filling = 0.33
+filling = 25/48
 println(filling, "filling")
 #U_var = U_array[end-1]
 #loc = "/Users/ahardy/Library/CloudStorage/GoogleDrive-ahardy@flatironinstitute.org/My Drive/Skyrmion/Bilayer_SkX/TBModel/Monolayer"
@@ -175,7 +176,7 @@ for (ind, U_var) in enumerate(U_array[:])
         fileName = loc * "Last_Itr_$(filename)_UNIFORM_p=$(round(params["jh"], digits=3))_U=$(round(U_var, digits=2))_t1=$(round(t1, digits=2)).jld2"
     else
         fileName = loc * "Last_Itr_$(filename)_J=$(round(params["jh"], digits=3))_U=$(round(U_var, digits=2)).jld2"
-        #fileName = loc * "Last_Itr_$(filename)_V=$(round(params["V"], digits=3))_U=$(round(U_var, digits=2)).jld2"
+        fileName = loc * "Last_Itr_$(filename)_V=$(round(params["V"], digits=3))_U=$(round(U_var, digits=2)).jld2"
 
     end
     println(fileName)
@@ -266,7 +267,9 @@ RSPlot = plot_RS(UC, 2 * ord_array[20, 1:SkXSize^2*3] .- 2 * ord_array[10, SkXSi
 display(RSPlot)
 # RSPlot = plot_RS(UC, ord_array[1, SkXSize^2*3:SkXSize^2*3*2])
 # display(RSPlot)
-RSPlot = plot_RS(UC, 4 * ord_array[20, 1:SkXSize^2*3] .- 4 * ord_array[10, SkXSize^2*3+1:SkXSize^2*6])
+RSPlot = plot_RS(UC, 10 * ord_array[2, 1:SkXSize^2*3] .- 10 * ord_array[2, SkXSize^2*3+1:SkXSize^2*6])
 display(RSPlot)
 RSPlot = plot_RS(UC, order_parameter[20,:])
+display(RSPlot)
+RSPlot = plot_RS(UC, 1 * ord_array[2, 1:SkXSize^2*3])
 display(RSPlot)

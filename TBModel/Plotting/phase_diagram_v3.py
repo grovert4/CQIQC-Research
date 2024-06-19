@@ -14,7 +14,7 @@ os.getcwd()
 #filename = "05.02-0.5.2024_Bilayer"  
 filename = "05.03-0.4.2024_Bilayer"  
 filename = "05.04-0.4.2024_Bilayer"  
-filename = "05.04-0.33.2024_Bilayer"  
+filename = "06.18-27.2024_Bilayer"  
 
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
@@ -65,28 +65,30 @@ energy_flat = energy.flatten()
 plt.scatter(V_array_flat, U_array_flat,c=conduct_flat, cmap='viridis', vmax = 4)
 plt.colorbar(label=r'$\sigma_{xy}$')
 plt.ylabel(r'$U$')
-plt.xlabel(r'$n$')
+plt.xlabel(r'$V$')
 
 plt.show()
 plt.scatter(V_array_flat, U_array_flat,c=polarization_flat, cmap='viridis')
 plt.colorbar(label=r'$P$')
 plt.ylabel(r'$U$')
-plt.xlabel(r'$n$')
+plt.xlabel(r'$V$')
 
 plt.show()
 plt.scatter(V_array_flat, U_array_flat,c=energy_flat, cmap='viridis')
 plt.colorbar(label=r'$E$')
 plt.ylabel(r'$U$')
-plt.xlabel(r'$n$')
+plt.xlabel(r'$V$')
 
 plt.show()
 fig = plt.figure(figsize=(8, 8))
-plt.imshow(conduct, aspect='auto', cmap='PRGn',vmin = -1.5, vmax=1.5, origin='lower',
+# plt.imshow(conduct, aspect='auto', cmap='PRGn',vmin = -1.5, vmax=1.5, origin='lower',
+#            extent=[V_array.min(), V_array.max(), U_array.min(), U_array.max()])
+plt.imshow(np.abs(conduct), aspect='auto', cmap='PuBuGn',vmin = 0, vmax=2, origin='lower',
            extent=[V_array.min(), V_array.max(), U_array.min(), U_array.max()])
 
 plt.colorbar(label=r'$\sigma_{xy}$')
 plt.ylabel(r'$U$')
-plt.xlabel(r'$n$')
+plt.xlabel(r'$V$')
 plt.ylim(U_array.min(), min(U_array.max(), 7))
 
 plt.savefig("Plots/Bilayer_Conductivity_Extended.pdf")
