@@ -92,10 +92,12 @@ function MFT(params, filename)
     SolveModel!(Mdl)
     mft = TightBindingMFT(Mdl, ChiParams, [UParam], InterQuarticToHopping)
     # add filename to input
-    fileName = loc * "/$(filename)_J=$(round(jh, digits=3))_U=$(round(U, digits=2)).jld2"
+    #fileName = loc * "/$(filename)_J=$(round(jh, digits=3))_U=$(round(U, digits=2)).jld2"
+    fileName = loc * "/$(filename)_n=$(round(filling, digits=3))_U=$(round(U , digits=2)).jld2"
+
     GC.gc()
     rand_noise = rand(SkXSize^2 * 3) .- 0.5
-    rand_noise = 0.1 .* filling .* (rand_noise .- sum(rand_noise) / (SkXSize^2 * 3))
+    rand_noise = 0.05 .* filling .* (rand_noise .- sum(rand_noise) / (SkXSize^2 * 3))
     init_guess = vcat([1.0], fill(filling, SkXSize^2 * 3) .+ rand_noise)   # some random # which
     if isfile(fileName)
         println("TRYING TO LOAD " * fileName)
@@ -107,6 +109,8 @@ function MFT(params, filename)
             println("Error Loading $fileName")
             if haskey(params, "U_prev")
                 oldfile = loc * "/$(filename)_J=$(round(jh, digits=3))_U=$(round(params["U_prev"], digits=2)).jld2"
+                oldfile = loc * "/$(filename)_n=$(round(filling, digits=3))_U=$(round(params["U_prev"] , digits=2)).jld2"
+
                 init_guess = load(oldfile)["outputs"][end] .+ vcat([0.0001], rand_noise)
                 SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
             else
@@ -116,6 +120,8 @@ function MFT(params, filename)
     else
         if haskey(params, "U_prev")
             oldfile = loc * "/$(filename)_J=$(round(jh, digits=3))_U=$(round(params["U_prev"], digits=2)).jld2"
+            oldfile = loc * "/$(filename)_n=$(round(filling, digits=3))_U=$(round(params["U_prev"] , digits=2)).jld2"
+
             init_guess = load(oldfile)["outputs"][end] .+ vcat([0.001], rand_noise)
             SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
         else

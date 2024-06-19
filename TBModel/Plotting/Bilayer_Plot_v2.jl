@@ -116,7 +116,7 @@ params = YAML.load_file("../Input/$(filename).yml")
 U_array = collect(LinRange(params["U_min"], params["U_max"], params["U_length"]))
 filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / (params["filling_max"] * 2)
 V_array = collect(LinRange(params["V_min"], params["V_max"], params["V_length"]))
-params["V"] = V_array[end]
+params["V"] = V_array[1]
 
 # J_array = collect(LinRange(params["J_min"], params["J_max"], params["J_length"]))
 
@@ -267,9 +267,11 @@ RSPlot = plot_RS(UC, 2 * ord_array[20, 1:SkXSize^2*3] .- 2 * ord_array[10, SkXSi
 display(RSPlot)
 # RSPlot = plot_RS(UC, ord_array[1, SkXSize^2*3:SkXSize^2*3*2])
 # display(RSPlot)
-RSPlot = plot_RS(UC, 10 * ord_array[2, 1:SkXSize^2*3] .- 10 * ord_array[2, SkXSize^2*3+1:SkXSize^2*6])
+RSPlot = plot_RS(UC, 50 * ord_array[5, 1:SkXSize^2*3] .- 50 * ord_array[5, SkXSize^2*3+1:SkXSize^2*6])
 display(RSPlot)
 RSPlot = plot_RS(UC, order_parameter[20,:])
 display(RSPlot)
-RSPlot = plot_RS(UC, 1 * ord_array[2, 1:SkXSize^2*3])
+RSPlot = plot_RS(UC, 100 * (ord_array[5, SkXSize^2*3+1:SkXSize^2*6] .- 0.52))
+display(RSPlot)
+RSPlot = plot_RS(UC, 100 * (ord_array[5, 1:SkXSize^2*3] .- 0.50))
 display(RSPlot)
