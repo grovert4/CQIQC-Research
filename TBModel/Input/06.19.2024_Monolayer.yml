@@ -15,7 +15,7 @@ U_min : 0.0
 U_max : 2.0
 U_length : 21
 filling_min : 0
-filling_max : 4
+filling_max : 2
 filling_length : 21
 SkXSize : 2
 SkX: "Bloch"
