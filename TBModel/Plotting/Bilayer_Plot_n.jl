@@ -106,7 +106,7 @@ filename = "05.03-0.375.2024_Bilayer"
 filename = "05.03-0.5.2024_Bilayer"
 filename = "05.04-0.75.2024_Bilayer"
 filename = "05.03-0.33.2024_Bilayer"
-filename = "06.10-2.2024_Bilayer"
+filename = "06.17-1.2024_Bilayer"
 
 #filename = "05.04-0.66.2024_Bilayer"
 
@@ -117,6 +117,7 @@ params = YAML.load_file("../Input/$(filename).yml")
 U_array = collect(LinRange(params["U_min"], params["U_max"], params["U_length"]))
 filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / (params["filling_max"] )
 filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / (params["filling_max"] )
+filling_arr = (24 .+ LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / 48
 
 # V_array = collect(LinRange(params["V_min"], params["V_max"], params["V_length"]))
 # params["V"] = V_array[1]
@@ -125,7 +126,7 @@ filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], par
 
 #params["jh"] = J_array[4]
 
-filling = filling_arr[27]
+filling = filling_arr[11]
 println(filling, "filling")
 #U_var = U_array[end-1]
 #loc = "/Users/ahardy/Library/CloudStorage/GoogleDrive-ahardy@flatironinstitute.org/My Drive/Skyrmion/Bilayer_SkX/TBModel/Monolayer"
