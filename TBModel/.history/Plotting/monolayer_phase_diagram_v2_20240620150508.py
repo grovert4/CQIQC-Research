@@ -27,8 +27,8 @@ params = yml.safe_load(Path(f"../Input/{filename}.yml").read_text())
 U_array = np.linspace(params["U_min"], params["U_max"], params["U_length"])
 filling_arr = np.linspace(params["filling_min"], params["filling_max"], params["filling_length"]) / (params["filling_max"]*2)
 #filling_arr = np.linspace(params["J_min"], params["J_max"], params["J_length"])
-filling_arr = ((12+np.linspace(params["filling_min"], params["filling_max"], params["filling_length"])) / 24 )
-filling_arr[3] = 0.512
+filling_array = ((12+np.linspace(params["filling_min"], params["filling_max"], params["filling_length"])) / 24 )
+filling_array[3] = 0.512
 polarization = np.zeros((len(U_array), len(filling_arr)))
 energy = np.zeros((len(U_array), len(filling_arr)))
 conduct = np.zeros((len(U_array), len(filling_arr)))
@@ -39,8 +39,8 @@ for (ind_n,filling) in enumerate(filling_array):
         fileName = loc + f"Last_Itr_{filename}_n={round(filling, 3)}_U={round(U_var, 2)}.jld2"
 
         TBResults = h5.File(fileName, 'r')
-        conduct[ind_u, ind_n] =  np.mean(TBResults["Chern Fill"])
-        energy[ind_u, ind_n] = TBResults["MFT_Energy"][-1]
+        conduct[ind_u, ind_J] =  np.mean(TBResults["Chern Fill"])
+        energy[ind_u, ind_J] = TBResults["MFT_Energy"][-1]
         temp = np.array(TBResults["ssf"])
         ssf = temp['re'] + 1j*temp['im']
         polarization[ind_u, ind_n] = np.abs(np.max(ssf))

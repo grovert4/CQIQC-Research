@@ -74,7 +74,7 @@ function MFT(params, filename)
     F2Param = Param(1.0, 2)
 
     AddIsotropicBonds!(UParam, UC, 0.0, Hubbard, "Hubbard Interaction")
-    AddIsotropicBonds!(VParam, UC, 1.0, Hubbard_V_up + Hubbard_V_dn, "Hubbard_V Interaction", checkOffsetRange=1)
+    AddIsotropicBonds!(VParam, UC, 0.0, Hubbard_V_up + Hubbard_V_dn, "Hubbard_V Interaction", checkOffsetRange=1)
 
     for (ind, bas) in enumerate(UC.basis)
         closest = [bas, bas - a1, bas - a2, bas - a1 - a2, bas + a1, bas + a2, bas + a1 + a2, bas + a1 - a2, bas - a1 + a2]
@@ -116,25 +116,24 @@ function MFT(params, filename)
     # add filename to input 
     #fileName = loc * "/$(filename)_p=$(round(filling, digits=3))_U=$(round(U, digits=2))_t1=$(round(t1, digits=2)).jld2"
     #fileName = loc * "/$(filename)_J=$(round(jh, digits=3))_U=$(round(U, digits=2)).jld2"
-    fileName = loc * "/$(filename)_V=$(round(V, digits=3))_U=$(round(U, digits=2)).jld2"
+    fileName = loc * "/$(filename)_n=$(round(filling, digits=3))_U=$(round(U , digits=2)).jld2"
     GC.gc()
     rand_noise = rand(SkXSize^2 * 3) .- 0.5
-    rand_noise = 0.025 .* (rand_noise .- sum(rand_noise) / (SkXSize^2 * 3))
+    rand_noise = 0.05 .* (rand_noise .- sum(rand_noise) / (SkXSize^2 * 3))
 
-    init_up = fill(filling, SkXSize^2 * 3) .+ rand_noise .- 0.025
-    init_dn = fill(filling, SkXSize^2 * 3) .- rand_noise .+ 0.025
+    init_up = fill(filling, SkXSize^2 * 3) .+ rand_noise .- 0.05
+    init_dn = fill(filling, SkXSize^2 * 3) .- rand_noise .+ 0.05
     init_guess = vcat([1.0], [0.0001], init_up, init_dn)
     if isfile(fileName)
         println("TRYING TO LOAD " * fileName)
         try
             println("SUCCESFULLY LOADED " * fileName)
-            ResumeMFT!(fileName; max_iter=params["max_iter"], tol=params["tol"])#, Update=BroydenMixing)
+            #ResumeMFT!(fileName; max_iter=params["max_iter"], tol=params["tol"])#, Update=BroydenMixing)
         catch e
             println("Error Loading $fileName")
             if haskey(params, "U_prev")
-                #oldfile = loc * "/$(filename)_p=$(round(filling, digits=3))_U=$(round(params["U_prev"], digits=2))_t1=$(round(t1, digits=2)).jld2"
                 #oldfile = loc * "/$(filename)_J=$(round(jh, digits=3))_U=$(round(params["U_prev"], digits=2)).jld2"
-                oldfile = loc * "/$(filename)_V=$(round(V, digits=3))_U=$(round(params["U_prev"], digits=2)).jld2"
+                oldfile = loc * "/$(filename)_n=$(round(filling, digits=3))_U=$(round(params["U_prev"] , digits=2)).jld2"
 
                 init_guess = load(oldfile)["outputs"][end] .+ vcat([0.0], [0.0], rand_noise, -1 .* rand_noise)
                 SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
@@ -146,7 +145,7 @@ function MFT(params, filename)
         if haskey(params, "U_prev")
             #oldfile = loc * "/$(filename)_p=$(round(filling, digits=3))_U=$(round(params["U_prev"], digits=2))_t1=$(round(t1, digits=2)).jld2"
             #oldfile = loc * "/$(filename)_J=$(round(jh, digits=3))_U=$(round(params["U_prev"], digits=2)).jld2"
-            oldfile = loc * "/$(filename)_V=$(round(V, digits=3))_U=$(round(params["U_prev"], digits=2)).jld2"
+            oldfile = loc * "/$(filename)_n=$(round(filling, digits=3))_U=$(round(params["U_prev"] , digits=2)).jld2"
 
             init_guess = load(oldfile)["outputs"][end] .+ vcat([0.0], [0.0], rand_noise, -1 .* rand_noise)
             SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])

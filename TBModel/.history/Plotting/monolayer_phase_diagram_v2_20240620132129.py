@@ -26,44 +26,44 @@ plt.rcParams.update({"text.usetex": True})
 params = yml.safe_load(Path(f"../Input/{filename}.yml").read_text())
 U_array = np.linspace(params["U_min"], params["U_max"], params["U_length"])
 filling_arr = np.linspace(params["filling_min"], params["filling_max"], params["filling_length"]) / (params["filling_max"]*2)
-#filling_arr = np.linspace(params["J_min"], params["J_max"], params["J_length"])
-filling_arr = ((12+np.linspace(params["filling_min"], params["filling_max"], params["filling_length"])) / 24 )
-filling_arr[3] = 0.512
-polarization = np.zeros((len(U_array), len(filling_arr)))
-energy = np.zeros((len(U_array), len(filling_arr)))
-conduct = np.zeros((len(U_array), len(filling_arr)))
-#for (ind_J, J) in enumerate(filling_arr):
+#J_array = np.linspace(params["J_min"], params["J_max"], params["J_length"])
+filling_array = ((12+np.linspace(params["filling_min"], params["filling_max"], params["filling_length"])) / 24 )
+
+polarization = np.zeros((len(U_array), len(J_array)))
+energy = np.zeros((len(U_array), len(J_array)))
+conduct = np.zeros((len(U_array), len(J_array)))
+#for (ind_J, J) in enumerate(J_array):
 for (ind_n,filling) in enumerate(filling_array):
     for (ind_u, U_var) in enumerate(U_array):
         #fileName = loc + f"Last_Itr_{filename}_J={round(J, 3)}_U={round(U_var, 2)}.jld2"
         fileName = loc + f"Last_Itr_{filename}_n={round(filling, 3)}_U={round(U_var, 2)}.jld2"
 
         TBResults = h5.File(fileName, 'r')
-        conduct[ind_u, ind_n] =  np.mean(TBResults["Chern Fill"])
-        energy[ind_u, ind_n] = TBResults["MFT_Energy"][-1]
+        conduct[ind_u, ind_J] =  np.mean(TBResults["Chern Fill"])
+        energy[ind_u, ind_J] = TBResults["MFT_Energy"][-1]
         temp = np.array(TBResults["ssf"])
         ssf = temp['re'] + 1j*temp['im']
-        polarization[ind_u, ind_n] = np.abs(np.max(ssf))
+        polarization[ind_u, ind_J] = np.abs(np.max(ssf))
 
-U_array_flat = U_array.repeat(len(filling_arr))
-filling_arr_flat = np.tile(filling_arr, len(U_array))
+U_array_flat = U_array.repeat(len(J_array))
+J_array_flat = np.tile(J_array, len(U_array))
 conduct_flat = conduct.flatten()
 polarization_flat = polarization.flatten()
 energy_flat = energy.flatten()
 # Create the scatter plot
-# plt.scatter(filling_arr_flat, U_array_flat,c=conduct_flat, cmap='viridis', vmax = 3)
+# plt.scatter(J_array_flat, U_array_flat,c=conduct_flat, cmap='viridis', vmax = 3)
 # plt.colorbar(label=r'$\sigma_{xy}$')
 # plt.ylabel(r'$U$')
 # plt.xlabel(r'$n$')
 
 # plt.show()
-# plt.scatter(filling_arr_flat, U_array_flat,c=polarization_flat, cmap='viridis')
+# plt.scatter(J_array_flat, U_array_flat,c=polarization_flat, cmap='viridis')
 # plt.colorbar(label=r'$P$')
 # plt.ylabel(r'$U$')
 # plt.xlabel(r'$n$')
 
 # plt.show()
-# plt.scatter(filling_arr_flat, U_array_flat,c=energy_flat, cmap='viridis')
+# plt.scatter(J_array_flat, U_array_flat,c=energy_flat, cmap='viridis')
 # plt.colorbar(label=r'$E$')
 # plt.ylabel(r'$U$')
 # plt.xlabel(r'$n$')
@@ -71,10 +71,10 @@ energy_flat = energy.flatten()
 # plt.show()
 
 # Uniform_Status = False
-# polarization = np.zeros((len(U_array), len(filling_arr)))
-# energy_2 = np.zeros((len(U_array), len(filling_arr)))
-# conduct = np.zeros((len(U_array), len(filling_arr)))
-# for (ind_J, filling) in enumerate(filling_arr):
+# polarization = np.zeros((len(U_array), len(J_array)))
+# energy_2 = np.zeros((len(U_array), len(J_array)))
+# conduct = np.zeros((len(U_array), len(J_array)))
+# for (ind_J, filling) in enumerate(J_array):
 #     for (ind_u, U_var) in enumerate(U_array):
 #         if Uniform_Status == True:
 #             fileName = loc + f"Last_Itr/Last_Itr_{filename}_UNIFORM_p={round(filling, 3)}_U={round(U_var, 2)}_t1={round(t1, 2)}.jld2"
@@ -92,13 +92,13 @@ energy_flat = energy.flatten()
 conduct_flat = conduct.flatten()
 polarization_flat = polarization.flatten()
 # Create the scatter plot
-plt.scatter(filling_arr_flat, U_array_flat,c=conduct_flat, cmap='viridis', vmax =1 )
+plt.scatter(J_array_flat, U_array_flat,c=conduct_flat, cmap='viridis', vmax =1 )
 plt.colorbar(label=r'$\sigma_{xy}$')
 plt.ylabel(r'$U$')
 plt.xlabel(r'$n$')
 
 plt.show()
-plt.scatter(filling_arr_flat, U_array_flat,c=polarization_flat, cmap='viridis')
+plt.scatter(J_array_flat, U_array_flat,c=polarization_flat, cmap='viridis')
 plt.colorbar(label=r'$P$')
 plt.ylabel(r'$U$')
 plt.xlabel(r'$n$')
@@ -109,7 +109,7 @@ plt.show()
 fig = plt.figure(figsize=(8, 8))
 
 plt.imshow(np.round(conduct,3), aspect='auto', cmap='PRGn',vmin = -6, vmax=6, origin='lower',
-           extent=[filling_arr.min(), filling_arr.max(), U_array.min(), U_array.max()])
+           extent=[J_array.min(), J_array.max(), U_array.min(), U_array.max()])
 
 plt.colorbar(label=r'$\sigma_{xy}$')
 plt.ylabel(r'$U_1$')
@@ -122,7 +122,7 @@ plt.show()
 fig = plt.figure(figsize=(8, 8))
 
 plt.imshow(polarization, aspect='auto', cmap='viridis', origin='lower',
-           extent=[filling_arr.min(), filling_arr.max(), U_array.min(), U_array.max()])
+           extent=[J_array.min(), J_array.max(), U_array.min(), U_array.max()])
 plt.colorbar(label=r'$P_1$')
 plt.ylabel(r'$U_1$')
 plt.xlabel(r'$n$')
