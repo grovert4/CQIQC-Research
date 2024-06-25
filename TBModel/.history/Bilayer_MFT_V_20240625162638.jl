@@ -136,7 +136,7 @@ function MFT(params, filename)
 
     init_up = fill(filling, SkXSize^2 * 3) .+ rand_noise 
     init_dn = fill(filling, SkXSize^2 * 3) .- rand_noise
-    init_guess = vcat(fill(1.0,length(hopping_up)*2), fill(1.0,SkXSize^2 * 3), init_up, init_dn)
+    init_guess = vcat(fill([1.0],length(hopping_up)*2), fill([1.0],SkXSize^2 * 3), init_up, init_dn)
     println(length(init_guess))
     println(length(ChiParams))
     if isfile(fileName)

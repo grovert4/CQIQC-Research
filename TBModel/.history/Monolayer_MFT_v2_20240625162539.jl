@@ -101,7 +101,7 @@ function MFT(params, filename)
     GC.gc()
     rand_noise = rand(SkXSize^2 * 3) .- 0.5
     rand_noise = 0.05 .* filling .* (rand_noise .- sum(rand_noise) / (SkXSize^2 * 3))
-    init_guess = vcat(fill(1.0,length(hopping)), fill(filling, SkXSize^2 * 3) .+ rand_noise) 
+    init_guess = vcat(fill([1.0],length(hopping)), fill(filling, SkXSize^2 * 3) .+ rand_noise) 
     println(length(init_guess))
     println(length(ChiParams))  # some random # which
     if isfile(fileName)

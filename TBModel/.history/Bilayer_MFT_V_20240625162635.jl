@@ -136,7 +136,7 @@ function MFT(params, filename)
 
     init_up = fill(filling, SkXSize^2 * 3) .+ rand_noise 
     init_dn = fill(filling, SkXSize^2 * 3) .- rand_noise
-    init_guess = vcat(fill(1.0,length(hopping_up)*2), fill(1.0,SkXSize^2 * 3), init_up, init_dn)
+    init_guess = vcat(fill([1.0],length(hopping_up)*2), fill([1.0],SkXSize^2 * 3), init_up, init_dn)
     println(length(init_guess))
     println(length(ChiParams))
     if isfile(fileName)
@@ -151,7 +151,7 @@ function MFT(params, filename)
                 #oldfile = loc * "/$(filename)_J=$(round(jh, digits=3))_U=$(round(params["U_prev"], digits=2)).jld2"
                 oldfile = loc * "/$(filename)_V=$(round(V, digits=3))_U=$(round(params["U_prev"], digits=2)).jld2"
 
-                init_guess = load(oldfile)["outputs"][end] .+ vcat(fill(0.001,length(hopping_up)*2), fill(0.001,SkXSize^2 * 3), rand_noise, -1 .* rand_noise)
+                init_guess = load(oldfile)["outputs"][end] .+ vcat(fill(0.001,length(hopping_up)*2), fill(0.0001,SkXSize^2 * 3), rand_noise, -1 .* rand_noise)
                 SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
             else
                 SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
