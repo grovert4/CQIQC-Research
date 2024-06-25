@@ -196,8 +196,7 @@ mu_arr = LinRange(-7.5, 0, 150)
 c_fill = zeros(length(mu_arr))
 berry = Curvature(H, [13])
 ssf_plot = plot(framestyle=:box, aspect_ratio=:equal, xlabel=L"k_x", ylabel=L"k_y", grid=false, legend=:outerright)
-
-heatmap!(berry, color=:viridis, clims= (0,2))  # Adjust the size as needed
+heatmap!(berry, color=:viridis)  # Adjust the size as needed
 display(ssf_plot)
 GetVelocity!(H, bz)
 geo = GeoTensor(H, bz, Mdl.mu, [13],2,2)# #for (i, filling) in enumerate(filling_arr)

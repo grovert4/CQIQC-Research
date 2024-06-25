@@ -27,10 +27,10 @@ function GeoTensor(Ham::Hamiltonian, bz::BZ, mu::Float64, subset::Vector{Int64},
         if ind == 1 || ind == length(Es)
             continue
         else
-            #for i in 1:ind-1
-            for (g, i) in enumerate(subset)
-                #for j in length(Es)
-                for j in ind:length(Es)
+            for i in 1:ind-1
+            #for (g, i) in enumerate(subset)
+                for j in length(Es)
+                #for j in ind:length(Es)
                     if !(j in subset)
                         geotensor[k] += (v1[i, j] * v2[j, i] ) / ((Es[j] - Es[i])^2)
                     end   
@@ -196,8 +196,7 @@ mu_arr = LinRange(-7.5, 0, 150)
 c_fill = zeros(length(mu_arr))
 berry = Curvature(H, [13])
 ssf_plot = plot(framestyle=:box, aspect_ratio=:equal, xlabel=L"k_x", ylabel=L"k_y", grid=false, legend=:outerright)
-
-heatmap!(berry, color=:viridis, clims= (0,2))  # Adjust the size as needed
+heatmap!(berry, color=:viridis)  # Adjust the size as needed
 display(ssf_plot)
 GetVelocity!(H, bz)
 geo = GeoTensor(H, bz, Mdl.mu, [13],2,2)# #for (i, filling) in enumerate(filling_arr)
@@ -207,14 +206,8 @@ b1 = [bz.basis[1]; 0.0]
 b2 = [bz.basis[2]; 0.0]
 bzUnitArea = cross(b1, b2)[3] / (4 * pi^2)
 
-imag(sum(geo)) * bzUnitArea * 4 * pi / length(H.bands)
+imag(sum(geo)) * bzUnitArea * 2 * pi / length(H.bands)
 (1/(2*pi)) * sum(berry)
-
-
-geoxx = real(GeoTensor(H, bz, Mdl.mu, [13],1,1))# #for (i, filling) in enumerate(filling_arr)
-geoyy = real(GeoTensor(H, bz, Mdl.mu, [13],2,2))
-geoxy = imag(GeoTensor(H, bz, Mdl.mu, [13],1,2))
-geoyx = imag(GeoTensor(H, bz, Mdl.mu, [13],2,1))
 # for (i, mu) in enumerate(mu_arr)
 # DiagonalizeHamiltonian!(H)
 # GetVelocity!(H, bz)

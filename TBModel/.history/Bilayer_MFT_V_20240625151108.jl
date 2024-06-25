@@ -91,24 +91,21 @@ function MFT(params, filename)
     CreateUnitCell!(UC, HoppingParams)
     Density_up = []
     Density_dn = []
-    hopping_int =[]
-
     UParam.value = [U]
     VParam.value = [params["V"]]
     V = params["V"]
     for (ind, bas) in enumerate(UC.basis)
         push!(Density_up, Param(1.0, 2))
         push!(Density_dn, Param(1.0, 2))
-        push!(hopping_int, Param(1.0, 2))
         AddAnisotropicBond!(Density_up[ind], UC, ind, ind, [0, 0], n_top, 0.0, "Dens_up-" * string(ind))
         AddAnisotropicBond!(Density_dn[ind], UC, ind, ind, [0, 0], n_bottom, 0.0, "Dens_dn-" * string(ind))
-        AddAnisotropicBonds!(hopping_int[ind], UC, ind,ind,[0,0],2 * kron(su2spin[1], su2spin[4]),0.0, "t_inter-" * string(ind))
 
         #AddAnisotropicBond!(Sz[ind], UC, ind, ind, [0, 0], 2 * kron(su2spin[4], su2spin[3]), 0.0, "Sz-" * string(ind))
 
     end
     hopping_up = []
     hopping_dn = []
+
     for (ind,bond) in enumerate(t1Param.unitBonds)
         push!(hopping_up, Param(1.0, 2))
         AddAnisotropicBonds!(hopping_up[ind], UC, bond.base, bond.target,bond.offset, n_top,bond.dist, "t_up-" * string(ind))
@@ -117,9 +114,10 @@ function MFT(params, filename)
         push!(hopping_dn, Param(1.0, 2))
         AddAnisotropicBonds!(hopping_dn[ind], UC, bond.base, bond.target,bond.offset, n_bottom,bond.dist, "t_dn-" * string(ind))
     end
-  
+        AddIsotropicBonds!(F1Param, UC, 1.0, su4spin[4], "texp")
+    AddIsotropicBonds!(F2Param, UC, 0.0, 2 * kron(su2spin[1], su2spin[4]), "tdexp")
 
-    ChiParams = vcat(hopping_up, hopping_dn, hopping_int, Density_up, Density_dn)
+    ChiParams = vcat(hopping_up, hopping_dn, F2Param, Density_up, Density_dn)
     ChiParams = Vector{Param{2,Float64}}(ChiParams)
     H = Hamiltonian(UC, bz)
     DiagonalizeHamiltonian!(H)

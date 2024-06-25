@@ -58,6 +58,7 @@ function MFT(params, filename)
     Hubbard = DensityToPartonCoupling(n_tot, n_tot)
     UParam = Param(1.0, 4)
     Nexp = []
+    tParam = Param(1.0, 2)
     UParam.value = [U]
     AddIsotropicBonds!(UParam, UC, 1.0, Hubbard, "Hubbard Interaction", checkOffsetRange=1) # Do I need to add this to all sites?
     for (ind, bas) in enumerate(UC.basis)
@@ -84,7 +85,7 @@ function MFT(params, filename)
         AddAnisotropicBond!(Nexp[ind], UC, ind, ind, [0, 0], n_tot, 0.0, "Ntotal-" * string(ind))
     end
 
-    ChiParams = vcat(hopping, Nexp)
+    ChiParams = vcat(tParam, Nexp)
     ChiParams = Vector{Param{2,Float64}}(ChiParams)
     ##Creating BZ and Hamiltonian Model
     bz = BZ(kSize)
