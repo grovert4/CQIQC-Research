@@ -102,7 +102,7 @@ function MFT(params, filename)
         push!(hopping_int, Param(1.0, 2))
         AddAnisotropicBond!(Density_up[ind], UC, ind, ind, [0, 0], n_top, 0.0, "Dens_up-" * string(ind))
         AddAnisotropicBond!(Density_dn[ind], UC, ind, ind, [0, 0], n_bottom, 0.0, "Dens_dn-" * string(ind))
-        AddAnisotropicBond!(hopping_int[ind], UC, ind,ind,[0,0],2 * kron(su2spin[1], su2spin[4]),0.0, "t_inter-" * string(ind))
+        AddAnisotropicBonds!(hopping_int[ind], UC, ind,ind,[0,0],2 * kron(su2spin[1], su2spin[4]),0.0, "t_inter-" * string(ind))
 
         #AddAnisotropicBond!(Sz[ind], UC, ind, ind, [0, 0], 2 * kron(su2spin[4], su2spin[3]), 0.0, "Sz-" * string(ind))
 
