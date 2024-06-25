@@ -168,8 +168,6 @@ function MFT(params, filename)
                 init_guess = load(oldfile)["outputs"][end] .+ vcat(fill(0.001,length(hopping_up)*2), fill(0.0001,SkXSize^2 * 3), rand_noise, -1 .* rand_noise)
                 SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
             catch e
-                SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
-            end
         else
             SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
         end
