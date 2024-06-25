@@ -108,7 +108,6 @@ filename = "05.04-0.75.2024_Bilayer"
 filename = "05.03-0.33.2024_Bilayer"
 #filename = "05.04-0.66.2024_Bilayer"
 filename = "06.18-25.2024_Bilayer"
-filename = "06.25-25.2024_Bilayer"
 
 
 #println(@__DIR__)
@@ -171,10 +170,8 @@ gap_array = zeros((length(U_array), 2))
 ord_array = Array{Float64}(undef, (length(U_array), 2 * SkXSize^2 * 3))
 eng_array = Array{Float64}(undef, (length(U_array)))
 
-for (ind, V_var) in enumerate(V_array[:])
-    U_var = 0.0
+for (ind, U_var) in enumerate(U_array[:])
     println(U_var)
-    params["V"] = V_var
     if Uniform_Status == true
         fileName = loc * "Last_Itr_$(filename)_UNIFORM_p=$(round(params["jh"], digits=3))_U=$(round(U_var, digits=2))_t1=$(round(t1, digits=2)).jld2"
     else
@@ -274,7 +271,7 @@ RSPlot = plot_RS(UC, 50 * ord_array[5, 1:SkXSize^2*3] .- 50 * ord_array[5, SkXSi
 display(RSPlot)
 RSPlot = plot_RS(UC, order_parameter[20,:])
 display(RSPlot)
-RSPlot = plot_RS(UC, 20 * (ord_array[5, SkXSize^2*3+1:SkXSize^2*6] .- 0.53))
+RSPlot = plot_RS(UC, 100 * (ord_array[5, SkXSize^2*3+1:SkXSize^2*6] .- 0.52))
 display(RSPlot)
-RSPlot = plot_RS(UC, 10 * (ord_array[5, 1:SkXSize^2*3] .- 0.50))
+RSPlot = plot_RS(UC, 100 * (ord_array[5, 1:SkXSize^2*3] .- 0.50))
 display(RSPlot)
