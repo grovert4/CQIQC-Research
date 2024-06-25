@@ -136,7 +136,7 @@ function MFT(params, filename)
 
     init_up = fill(filling, SkXSize^2 * 3) .+ rand_noise 
     init_dn = fill(filling, SkXSize^2 * 3) .- rand_noise
-    init_guess = vcat(fill([1.0],SkXSize*2), fill([1.0],SkXSize), init_up, init_dn)
+    init_guess = vcat(fill([1.0]SkXSize*2), [0.0001], init_up, init_dn)
     if isfile(fileName)
         println("TRYING TO LOAD " * fileName)
         try
@@ -149,7 +149,7 @@ function MFT(params, filename)
                 #oldfile = loc * "/$(filename)_J=$(round(jh, digits=3))_U=$(round(params["U_prev"], digits=2)).jld2"
                 oldfile = loc * "/$(filename)_V=$(round(V, digits=3))_U=$(round(params["U_prev"], digits=2)).jld2"
 
-                init_guess = load(oldfile)["outputs"][end] .+ vcat(fill([0.001],SkXSize*2), fill([0.0001],SkXSize), rand_noise, -1 .* rand_noise)
+                init_guess = load(oldfile)["outputs"][end] .+ vcat([0.0], [0.0], rand_noise, -1 .* rand_noise)
                 SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
             else
                 SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
@@ -161,7 +161,7 @@ function MFT(params, filename)
             #oldfile = loc * "/$(filename)_J=$(round(jh, digits=3))_U=$(round(params["U_prev"], digits=2)).jld2"
             oldfile = loc * "/$(filename)_V=$(round(V, digits=3))_U=$(round(params["U_prev"], digits=2)).jld2"
 
-            init_guess = load(oldfile)["outputs"][end] .+ vcat(fill([0.001],SkXSize*2), fill([0.0001],SkXSize), rand_noise, -1 .* rand_noise)
+            init_guess = load(oldfile)["outputs"][end] .+ vcat([0.0], [0.0], rand_noise, -1 .* rand_noise)
             SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
         else
             SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])

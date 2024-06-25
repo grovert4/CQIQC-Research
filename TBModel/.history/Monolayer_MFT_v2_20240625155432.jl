@@ -101,7 +101,7 @@ function MFT(params, filename)
     GC.gc()
     rand_noise = rand(SkXSize^2 * 3) .- 0.5
     rand_noise = 0.05 .* filling .* (rand_noise .- sum(rand_noise) / (SkXSize^2 * 3))
-    init_guess = vcat(fill([1.0],SkXSize*2), fill(filling, SkXSize^2 * 3) .+ rand_noise)   # some random # which
+    init_guess = vcat([1.0], fill(filling, SkXSize^2 * 3) .+ rand_noise)   # some random # which
     if isfile(fileName)
         println("TRYING TO LOAD " * fileName)
         try
@@ -125,7 +125,7 @@ function MFT(params, filename)
             oldfile = loc * "/$(filename)_J=$(round(jh, digits=3))_U=$(round(params["U_prev"], digits=2)).jld2"
             oldfile = loc * "/$(filename)_n=$(round(filling, digits=3))_U=$(round(params["U_prev"] , digits=2)).jld2"
 
-            init_guess = load(oldfile)["outputs"][end] .+ vcat(fill([0.001],SkXSize*2), rand_noise)
+            init_guess = load(oldfile)["outputs"][end] .+ vcat(fill([0.0001],SkXSize*2), rand_noise)
             SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
         else
             SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
