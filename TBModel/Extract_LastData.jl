@@ -32,6 +32,35 @@ function KuboChern(Ham::Hamiltonian, bz::BZ, mu::Float64)
     return imag(chern) * bzUnitArea * 2 * pi / length(Ham.bands)
 
 end
+
+function GeoTensor(Ham::Hamiltonian, bz::BZ, mu::Float64, subset::Vector{Int64})
+
+    Vx = conj.(permutedims.(Ham.states)) .* Ham.velocity[1] .* Ham.states
+    Vy = conj.(permutedims.(Ham.states)) .* Ham.velocity[2] .* Ham.states
+
+    geotensor = zeros(length(Ham.states))
+    for k in eachindex(Ham.bands)
+        Es = Ham.bands[k][subset]
+        vx = Vx[k][subset]
+        vy = Vy[k][subset]
+
+        ind = searchsortedfirst(Es, mu)
+        if ind == 1 || ind == length(Es)
+            continue
+        else
+            for i in 1:ind-1
+                for j in ind:length(Es)
+                    geotensor[k] += (vx[i, j] * vy[j, i] - vx[j, i] * vy[i, j]) / ((Es[j] - Es[i])^2)
+                end
+            end
+        end
+
+    end
+    return geotensor
+
+end
+end
+
 function SSF(values::Vector{Float64}, positions::Vector{Vector{Float64}}, k::Vector{Float64})
     phases = exp.(-im .* dot.(Ref(k), positions))
     return sum((values .- (sum(values) / length(values))) .* phases) / length(values)
