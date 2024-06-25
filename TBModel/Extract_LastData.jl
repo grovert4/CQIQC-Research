@@ -29,26 +29,27 @@ function KuboChern(Ham::Hamiltonian, bz::BZ, mu::Float64)
     b2 = [bz.basis[2]; 0.0]
     bzUnitArea = cross(b1, b2)[3] / (4 * pi^2)
 
-    return imag(chern) * bzUnitArea * 2 * pi / length(Ham.bands)
+    return -1*imag(chern) * bzUnitArea * 2 * pi / length(Ham.bands)
 
 end
-
 function GeoTensor(Ham::Hamiltonian, bz::BZ, mu::Float64, subset::Vector{Int64})
 
     Vx = conj.(permutedims.(Ham.states)) .* Ham.velocity[1] .* Ham.states
     Vy = conj.(permutedims.(Ham.states)) .* Ham.velocity[2] .* Ham.states
 
-    geotensor = zeros(length(Ham.states))
+    geotensor = zeros(length(Ham.states)) .+0.0im
     for k in eachindex(Ham.bands)
-        Es = Ham.bands[k][subset]
-        vx = Vx[k][subset]
-        vy = Vy[k][subset]
+        Es = Ham.bands[k]
+        vx = Vx[k]
+        vy = Vy[k]
 
         ind = searchsortedfirst(Es, mu)
+        geotensor[k] = 0.0 + 0.0im
         if ind == 1 || ind == length(Es)
             continue
         else
-            for i in 1:ind-1
+            #for i in 1:ind-1
+            for (g, i) in enumerate(subset)
                 for j in ind:length(Es)
                     geotensor[k] += (vx[i, j] * vy[j, i] - vx[j, i] * vy[i, j]) / ((Es[j] - Es[i])^2)
                 end
@@ -56,11 +57,22 @@ function GeoTensor(Ham::Hamiltonian, bz::BZ, mu::Float64, subset::Vector{Int64})
         end
 
     end
-    return geotensor
+    geotensor_reshape = reshape(geotensor, size(Ham.states))
+    return geotensor_reshape
 
 end
-end
 
+function Curvature(Ham::Hamiltonian, subset::Vector{Int64} ; check_validity::Bool = false)::Matrix{Float64}
+
+    # if check_validity
+    #     CheckValidity(Ham, subset)
+    # end
+
+    Links   =   FindLinks(Ham, subset)
+    Field   =   FieldStrength(Links)
+    curvature = angle.(Field)
+    return curvature
+end
 function SSF(values::Vector{Float64}, positions::Vector{Vector{Float64}}, k::Vector{Float64})
     phases = exp.(-im .* dot.(Ref(k), positions))
     return sum((values .- (sum(values) / length(values))) .* phases) / length(values)
@@ -131,12 +143,11 @@ function extract_data!(folderpath::String, date, layer="Bilayer", substring::Str
                     idx = IsBandGapped(TBModel.Ham)
                     band_list = 1:length(idx[1, :])
                     c = Array{Float32}(undef, length(idx[1, :]))
+                    geo = Array{Float32}(undef, (length(idx[1, :]),kSize,kSize))
                     for i in 1:length(idx[1, :])
                         println(.!idx[i, :])
                         c[i] = ChernNumber(TBModel.Ham, band_list[.!idx[i, :]])#, TBModel.mu)
-                        #c[i] = PartialChernNumber(TBModel.Ham, i)#, TBModel.mu)
-                        #println(round(c[i]), "Chern")
-                        # This has an error for some reason ? 
+                        #geo[i,:,:] = GeoTensor(TBModel.Ham, TBModel.bz, TBModel.mu, band_list[idx[i, :]])
                     end
 
                     GetVelocity!(TBModel.Ham, TBModel.bz)
@@ -150,11 +161,12 @@ function extract_data!(folderpath::String, date, layer="Bilayer", substring::Str
                     dict["Labels"] = label_indices
                     dict["BZ_Path"] = bzpath
                     dict["UC"] = TBModel.uc
-                    dict["Gap"] = TBModel.gap # I seem to have done this wrong? 
+                    dict["Gap"] = TBModel.gap 
                     dict["mu"] = TBModel.mu
                     dict["Expectations"] = data_entry["outputs"][end]
                     dict["Chern"] = c
                     dict["Chern Fill"] = c_fill
+
                     kxs = collect(LinRange(-2 * pi, 2 * pi, 101))
                     kys = collect(LinRange(-2 * pi, 2 * pi, 101))
                     ks = [[kx, ky] for kx in kxs, ky in kys]

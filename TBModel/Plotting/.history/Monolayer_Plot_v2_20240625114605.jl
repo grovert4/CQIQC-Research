@@ -109,7 +109,7 @@ params = YAML.load_file("../Input/$(filename).yml")
 
 U_array = collect(LinRange(params["U_min"], params["U_max"], params["U_length"]))
 filling_arr = (12 .+ collect(LinRange(params["filling_min"], params["filling_max"], params["filling_length"]))) ./ (24)
-filling = filling_arr[6]
+filling = filling_arr[5]
 # J_array = collect(LinRange(params["J_min"], params["J_max"], params["J_length"]))
 # params["jh"] = J_array[2]
 #U_var = U_array[end-1]
@@ -255,5 +255,5 @@ scatter!(getindex.(skyrmion_vectors, 1), getindex.(skyrmion_vectors, 2), label="
 scatter!(getindex.(symmetry_vectors, 1), getindex.(symmetry_vectors, 2), label="lattice")
 display(ssf_plot)
 
-RSPlot = plot_RS(UC, 100 .*(order_parameter[10, 1:SkXSize^2*3].-0.52))
+RSPlot = plot_RS(UC, 20 .*(order_parameter[10, 1:SkXSize^2*3].-0.52))
 display(RSPlot)

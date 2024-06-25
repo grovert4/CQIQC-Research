@@ -61,7 +61,7 @@ n = get!(params, "n", 20)
 kSize = 6 * n + 3
 t = get!(params, "t", 1.0)
 t_inter = get!(params, "t_inter", 0.0)
-jh = get!(params, "jh", -4.0)
+jh = get!(params, "jh", 4.0)
 U = get!(params, "U", 0.0)
 t_density = get!(params, "t_density", 0.0)
 ##### Thermodynamic parameters

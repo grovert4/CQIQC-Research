@@ -33,7 +33,7 @@ polarization = np.zeros((len(U_array), len(filling_arr)))
 energy = np.zeros((len(U_array), len(filling_arr)))
 conduct = np.zeros((len(U_array), len(filling_arr)))
 #for (ind_J, J) in enumerate(filling_arr):
-for (ind_n,filling) in enumerate(filling_arr):
+for (ind_n,filling) in enumerate(filling_array):
     for (ind_u, U_var) in enumerate(U_array):
         #fileName = loc + f"Last_Itr_{filename}_J={round(J, 3)}_U={round(U_var, 2)}.jld2"
         fileName = loc + f"Last_Itr_{filename}_n={round(filling, 3)}_U={round(U_var, 2)}.jld2"

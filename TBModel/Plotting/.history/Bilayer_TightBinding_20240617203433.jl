@@ -57,11 +57,11 @@ l1 = [1.0, 0]
 l2 = [-0.5, sqrt(3) / 2]
 UC = UnitCell([a1, a2], 4)
 ##Parameters
-n = get!(params, "n", 20)
+n = get!(params, "n", 12)
 kSize = 6 * n + 3
 t = get!(params, "t", 1.0)
 t_inter = get!(params, "t_inter", 0.0)
-jh = get!(params, "jh", -4.0)
+jh = get!(params, "jh", 4.0)
 U = get!(params, "U", 0.0)
 t_density = get!(params, "t_density", 0.0)
 ##### Thermodynamic parameters
@@ -159,7 +159,7 @@ SolveModel!(Mdl; get_gap=true)
 bands = Plot_Band_Structure!(Mdl, [bz.HighSymPoints["G"], bz.HighSymPoints["M1"], bz.HighSymPoints["K1"]], labels=["G", "M", "K"], plot_legend=false);
 plot!(bands, legend=false);
 display(bands)
-savefig(bands, "Plots/Bilayer_Band_Structure_$(SkXSize).pdf")
+savefig(bands, "Plotting/Plots/Bilayer_Band_Structure_$(SkXSize).pdf")
 
 # filling_arr = LinRange(0.0001, 0.5, 60)
 # #mu_arr = LinRange(-7.5, -1, 100)

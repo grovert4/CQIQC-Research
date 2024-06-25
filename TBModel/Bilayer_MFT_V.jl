@@ -104,7 +104,7 @@ function MFT(params, filename)
 
     end
     AddIsotropicBonds!(F1Param, UC, 1.0, su4spin[4], "texp")
-    AddIsotropicBonds!(F2Param, UC, 1.0, 2 * kron(su2spin[1], su2spin[4]), "tdexp")
+    AddIsotropicBonds!(F2Param, UC, 0.0, 2 * kron(su2spin[1], su2spin[4]), "tdexp")
 
     ChiParams = vcat(F1Param, F2Param, Density_up, Density_dn)
     ChiParams = Vector{Param{2,Float64}}(ChiParams)
@@ -121,8 +121,8 @@ function MFT(params, filename)
     rand_noise = rand(SkXSize^2 * 3) .- 0.5
     rand_noise = 0.025 .* (rand_noise .- sum(rand_noise) / (SkXSize^2 * 3))
 
-    init_up = fill(filling, SkXSize^2 * 3) .+ rand_noise .- 0.025
-    init_dn = fill(filling, SkXSize^2 * 3) .- rand_noise .+ 0.025
+    init_up = fill(filling, SkXSize^2 * 3) .+ rand_noise 
+    init_dn = fill(filling, SkXSize^2 * 3) .- rand_noise 
     init_guess = vcat([1.0], [0.0001], init_up, init_dn)
     if isfile(fileName)
         println("TRYING TO LOAD " * fileName)
