@@ -117,6 +117,8 @@ function extract_data!(folderpath::String, date, layer="Bilayer", substring::Str
 
     for i in start_index:end_index
         file = file_list[i]
+        println("LOOKING FOR FILES")
+
         if occursin(substring, string(file)) && occursin(date, string(file))
             if isfile(folderpath * "/Last_Itr/Last_Itr_" * string(file))
                 println("FILE EXISTS : " * string(file))
@@ -203,4 +205,5 @@ function extract_data!(folderpath::String, date, layer="Bilayer", substring::Str
     MPI.Finalize()
 end
 pwd()
+println("STARTING RUN")
 extract_data!("$(ARGS[1])", "$(ARGS[2])", "$(ARGS[3])")
