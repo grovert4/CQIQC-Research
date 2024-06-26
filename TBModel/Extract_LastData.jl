@@ -174,12 +174,11 @@ function extract_data!(folderpath::String, date, layer="Bilayer", substring::Str
                     SkXsize = length(TBModel.uc.basis)
                     print(SkXsize)
                     if layer == "Monolayer"
-                        polarization = dict["Expectations"][(end-SkXsize):end]
+                        polarization = dict["Expectations"][(end-SkXsize)+1:end]
                         dict["ssf"] = SSF(polarization, TBModel.uc.basis, ks)
                     elseif layer == "Bilayer"
                         polarization_up = dict["Expectations"][(end-2*SkXsize)+1:(end-SkXsize)]
                         polarization_dn = dict["Expectations"][(end-SkXsize)+1:end]
-                        println(len)
                         println(length(polarization_dn))
                         println(length(polarization_up))
                         dict["ssf_up"] = SSF(polarization_up, TBModel.uc.basis, ks)
