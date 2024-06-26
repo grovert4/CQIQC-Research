@@ -168,7 +168,6 @@ function extract_data!(folderpath::String, date, layer="Bilayer", substring::Str
                     dict["Expectations"] = data_entry["outputs"][end]
                     dict["Chern"] = c
                     dict["Chern Fill"] = c_fill
-
                     kxs = collect(LinRange(-2 * pi, 2 * pi, 101))
                     kys = collect(LinRange(-2 * pi, 2 * pi, 101))
                     ks = [[kx, ky] for kx in kxs, ky in kys]
@@ -178,7 +177,7 @@ function extract_data!(folderpath::String, date, layer="Bilayer", substring::Str
                         polarization = dict["Expectations"][(end-SkXsize):end]
                         dict["ssf"] = SSF(polarization, TBModel.uc.basis, ks)
                     elseif layer == "Bilayer"
-                        polarization_up = dict["Expectations"][(end-2*SkXsize):(end-SkXsize)]
+                        polarization_up = dict["Expectations"][(end-2*SkXsize)+1:(end-SkXsize)]
                         polarization_dn = dict["Expectations"][(end-SkXsize)+1:end]
                         println(len)
                         println(length(polarization_dn))
