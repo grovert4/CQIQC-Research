@@ -197,7 +197,7 @@ function extract_data!(folderpath::String, date, layer="Bilayer", substring::Str
                     println(e)
                     #rethrow(e)
                     file_path = folderpath * "/" * string(file)
-                    rm(file_path, force=true)
+                    #rm(file_path, force=true)
                 end
             end
         end
