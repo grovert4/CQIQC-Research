@@ -10,8 +10,13 @@ t1 = -1.0
 os.chdir("/home/andrewhardy/Documents/Graduate/Codes/Skyrmion/TBModel/Plotting")
 os.getcwd()
 
- 
-filename = "06.27-27.2024_Bilayer"  
+
+#filename = "05.02-0.5.2024_Bilayer"  
+filename = "05.03-0.4.2024_Bilayer"  
+filename = "05.04-0.4.2024_Bilayer"  
+filename = "06.18-27.2024_Bilayer"  
+filename = "06.25-27.2024_Bilayer"  
+filename = "06.27-25.2024_Bilayer"  
 
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
