@@ -20,7 +20,7 @@ k_points:
 k_size: 24 # 48?
 mus:
   n: 11 # exact chemical potential for flat bands
-n_matsubara: 60
+n_matsubara: 129
 output: /scratch/a/aparamek/andykh/Data/Monolayer_Data/RPA/SkX # change to scratch
 plots: /scratch/a/aparamek/andykh/Data/Monolayer_Data/RPA/SkX
 triqs_environment: triqs
