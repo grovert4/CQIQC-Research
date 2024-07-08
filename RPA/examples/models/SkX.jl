@@ -41,6 +41,7 @@ s11 = sigmav(1, 1)
 s12 = sigmav(1, 2)
 s21 = sigmav(2, 1)
 s22 = sigmav(2, 2)
+intermat(s) = [dot(s, s11) dot(s, s12); dot(s, s21) dot(s, s22)]
 
 for (ind, bas) in enumerate(UC.basis)
     closest = [bas, bas - a1, bas - a2, bas - a1 - a2, bas + a1, bas + a2, bas + a1 + a2, bas + a1 - a2, bas - a1 + a2]
