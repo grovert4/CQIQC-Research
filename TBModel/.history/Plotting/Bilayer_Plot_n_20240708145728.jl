@@ -248,7 +248,7 @@ kxs = collect(LinRange(-2 * pi, 2 * pi, 201))
 kys = collect(LinRange(-2 * pi, 2 * pi, 201))
 
 ks = [[kx, ky] for kx in kxs, ky in kys]
-ssf = SSF(ord_array[4, 1:SkXSize^2*3], UC.basis, ks)
+ssf = SSF(ord_array[8, 1:SkXSize^2*3], UC.basis, ks)
 ssf_plot = plot(framestyle=:box, aspect_ratio=:equal, xlabel=L"k_x", ylabel=L"k_y", grid=false)
 heatmap!(kxs, kys, abs.(ssf)', c=:inferno, clim=(0, maximum(abs.(ssf))))
 xlims!(-2 * pi, 2 * pi)
@@ -271,11 +271,11 @@ scatter!(getindex.(skyrmion_vectors, 1), getindex.(skyrmion_vectors, 2), label="
 scatter!(getindex.(symmetry_vectors, 1), getindex.(symmetry_vectors, 2), label="lattice")
 display(ssf_plot)
 
-RSPlot = plot_RS(UC, 2 * ord_array[4, 1:SkXSize^2*3] .- 2 * ord_array[4, SkXSize^2*3+1:SkXSize^2*6])
+RSPlot = plot_RS(UC, 2 * ord_array[10, 1:SkXSize^2*3] .- 2 * ord_array[10, SkXSize^2*3+1:SkXSize^2*6])
 display(RSPlot)
 # RSPlot = plot_RS(UC, ord_array[1, SkXSize^2*3:SkXSize^2*3*2])
 # display(RSPlot)
-RSPlot = plot_RS(UC, 10 * ord_array[4, 1:SkXSize^2*3] .- 10 * ord_array[4, SkXSize^2*3+1:SkXSize^2*6])
+RSPlot = plot_RS(UC, 10 * ord_array[10, 1:SkXSize^2*3] .- 10 * ord_array[10, SkXSize^2*3+1:SkXSize^2*6])
 display(RSPlot)
-RSPlot = plot_RS(UC, order_parameter[4,:])
+RSPlot = plot_RS(UC, order_parameter[10,:])
 display(RSPlot)
