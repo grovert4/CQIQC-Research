@@ -1,4 +1,4 @@
-using JLD2, TightBindingToolkit
+using JLD2, TightBindingToolkit, LinearAlgebra
 
 #####* Define the honeycomb lattice unit vectors
 params = Dict()
