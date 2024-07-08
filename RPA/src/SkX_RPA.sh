@@ -17,4 +17,4 @@ module load python/3.11 imkl cmake clang mpi4py hdf5 boost fftw
 source ~/triqsvenv/bin/activate
 julia --project=../../TBModel ../examples/models/SkX.jl
 julia --project=../../TBModel ../examples/interactions/SkX_NN.jl
-julia --project=../../TBModel .run_RPA.jl --input ../Inputs/SkX.yml --run_bare true
+julia --project=../../TBModel run_RPA.jl --input ../Inputs/SkX.yml --run_bare true
