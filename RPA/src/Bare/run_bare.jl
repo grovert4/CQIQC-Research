@@ -34,7 +34,9 @@ if abspath(PROGRAM_FILE) == @__FILE__
     input["unitcell"]["triqs"] = triqs_input
     YAML.write_file(parsed_args["input"], input)
 
-    command = `conda run -n $(input["triqs_environment"]) python ./Bare/run_bare.py $(parsed_args["input"])`
+    #command = `conda run -n $(input["triqs_environment"]) python ./Bare/run_bare.py $(parsed_args["input"])`
+    command = `python ./Bare/run_bare.py $(parsed_args["input"])`
+
     run(command)
 
 end
