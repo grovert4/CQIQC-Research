@@ -12,7 +12,7 @@ params = YAML.load_file("./Input/$(filename).yml")
 #(Uarr, fillingarr) = ndgrid(range(params["U_min"], params["U_max"], params["U_length"]), range(params["filling_min"], params["filling_max"], params["filling_length"]) / (params["filling_max"] * 2))
 Us = collect(range(params["U_min"], params["U_max"], params["U_length"]))
 fillings = (24 .+ LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / 48
-#fillings = (12 .+ LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / 24
+fillings = (12 .+ LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / 24
 
 #Js = collect(range(params["J_min"], params["J_max"], params["J_length"]))
 #gridsize = params["J_length"]

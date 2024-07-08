@@ -133,7 +133,7 @@ function MFT(params, filename)
 
     init_up = fill(filling, SkXSize^2 * 3) .+ rand_noise .- 0.5
     init_dn = fill(filling, SkXSize^2 * 3) .- rand_noise .+ 0.5
-    init_guess = vcat(fill(1.0,length(hopping_up)*2), fill(0.00,SkXSize^2 * 3), init_up, init_dn)
+    init_guess = vcat(fill(0.0,length(hopping_up)*2), fill(0.00,SkXSize^2 * 3), init_up, init_dn)
     if isfile(fileName)
         println("TRYING TO LOAD " * fileName)
         try

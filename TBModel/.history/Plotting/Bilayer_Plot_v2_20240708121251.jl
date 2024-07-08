@@ -106,28 +106,25 @@ filename = "05.03-0.375.2024_Bilayer"
 filename = "05.03-0.5.2024_Bilayer"
 filename = "05.04-0.75.2024_Bilayer"
 filename = "05.03-0.33.2024_Bilayer"
-filename = "06.17-1.2024_Bilayer"
-filename = "07.04.2024_Bilayer"
-
 #filename = "05.04-0.66.2024_Bilayer"
+filename = "06.18-25.2024_Bilayer"
+filename = "06.25-25.2024_Bilayer"
+filename = "06.27-25.2024_Bilayer"
 
 
 #println(@__DIR__)
 params = YAML.load_file("../Input/$(filename).yml")
 
 U_array = collect(LinRange(params["U_min"], params["U_max"], params["U_length"]))
-filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / (params["filling_max"] )
-filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / (params["filling_max"] )
-filling_arr = (24 .+ LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / 48
+filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / (params["filling_max"] * 2)
+V_array = collect(LinRange(params["V_min"], params["V_max"], params["V_length"]))
+params["V"] = V_array[1]
 
-# V_array = collect(LinRange(params["V_min"], params["V_max"], params["V_length"]))
-# params["V"] = V_array[1]
+# J_array = collect(LinRange(params["J_min"], params["J_max"], params["J_length"]))
 
-#J_array = collect(LinRange(params["J_min"], params["J_max"], params["J_length"]))
+# params["jh"] = J_array[4]
 
-#params["jh"] = J_array[4]
-
-filling = filling_arr[8]
+filling = 25/48
 println(filling, "filling")
 #U_var = U_array[end-1]
 #loc = "/Users/ahardy/Library/CloudStorage/GoogleDrive-ahardy@flatironinstitute.org/My Drive/Skyrmion/Bilayer_SkX/TBModel/Monolayer"
@@ -175,21 +172,21 @@ gap_array = zeros((length(U_array), 2))
 ord_array = Array{Float64}(undef, (length(U_array), 2 * SkXSize^2 * 3))
 eng_array = Array{Float64}(undef, (length(U_array)))
 
+#for (ind, V_var) in enumerate(V_array[:])
 for (ind, U_var) in enumerate(U_array[:])
+
+    #U_var = 0.0
     println(U_var)
+    #params["V"] = V_var
     if Uniform_Status == true
         fileName = loc * "Last_Itr_$(filename)_UNIFORM_p=$(round(params["jh"], digits=3))_U=$(round(U_var, digits=2))_t1=$(round(t1, digits=2)).jld2"
     else
-        #fileName = loc * "Last_Itr_$(filename)_J=$(round(params["jh"], digits=3))_U=$(round(U_var, digits=2)).jld2"
-        #fileName = loc * "Last_Itr_$(filename)_V=$(round(params["V"], digits=3))_U=$(round(U_var, digits=2)).jld2"
-        fileName = loc * "Last_Itr_$(filename)_n=$(round(filling, digits=3))_U=$(round(U_var, digits=2)).jld2"
-
+        fileName = loc * "Last_Itr_$(filename)_J=$(round(params["jh"], digits=3))_U=$(round(U_var, digits=2)).jld2"
+        fileName = loc * "Last_Itr_$(filename)_V=$(round(params["V"], digits=3))_U=$(round(U_var, digits=2)).jld2"
 
     end
     println(fileName)
     TBResults = load(fileName) #MeanFieldToolkit.MFTResume.ReadMFT(fileName)
-    #println(length(TBResults["UC"].basis))
-    SkXsize = length(TBResults["UC"].basis)
 
     gap_array[ind, 1] = U_var
     gap_array[ind, 2] = TBResults["Gap"]
@@ -198,10 +195,10 @@ for (ind, U_var) in enumerate(U_array[:])
     #println(TBResults["Gap"])
     c_arr[ind, :] = abs.(TBResults["Chern"])
     c_fill[ind] = abs.(TBResults["Chern Fill"])
-    len = length(TBResults["Expectations"][(end-2*SkXsize)+1:(end)])
-    order_parameter[ind, :] = TBResults["Expectations"][(end-2*SkXsize)+1:(end-SkXsize)] .- TBResults["Expectations"][(end-SkXsize)+1:end]
+    len = length(TBResults["Expectations"][(end-2*SkXSize)+1:(end)])
+    order_parameter[ind, :] = TBResults["Expectations"][(end-2*SkXSize)+1:(end-SkXSize)] .- TBResults["Expectations"][(end-SkXSize)+1:end]
     #println(length(ords))
-    ord_array[ind, :] = TBResults["Expectations"][(end-2*SkXsize)+1:(end)]#(mean(abs.(ords)))
+    ord_array[ind, :] = TBResults["Expectations"][(end-2*SkXSize)+1:(end)]#(mean(abs.(ords)))
 
     #plot = Plot_Band_Data!(TBResults, [L"\Gamma", L"M_2", L"M_3"])
     H = Hamiltonian(TBResults["UC"], bz)
@@ -233,7 +230,7 @@ println(ord_array)
 display(ords)
 energy_plot = scatter(U_array, eng_array, xlabel="U", ylabel="Energy")
 display(energy_plot)
-ords2 = scatter(U_array, abs.(order_parameter), xlabel="U", ylabel="ΔP")
+ords2 = scatter(V_array, abs.(order_parameter), xlabel="V", ylabel="ΔP")
 display(ords2)
 println("ords2")
 
@@ -245,8 +242,8 @@ C_plot = scatter(U_array, c_fill, xlabel="U", ylabel="σ(0)")
 display(C_plot)
 savefig(loc * "Chern.png")
 
-kxs = collect(LinRange(-2 * pi, 2 * pi, 201))
-kys = collect(LinRange(-2 * pi, 2 * pi, 201))
+kxs = collect(LinRange(-2 * pi, 2 * pi, 401))
+kys = collect(LinRange(-2 * pi, 2 * pi, 401))
 
 ks = [[kx, ky] for kx in kxs, ky in kys]
 ssf = SSF(ord_array[8, 1:SkXSize^2*3], UC.basis, ks)
@@ -272,11 +269,15 @@ scatter!(getindex.(skyrmion_vectors, 1), getindex.(skyrmion_vectors, 2), label="
 scatter!(getindex.(symmetry_vectors, 1), getindex.(symmetry_vectors, 2), label="lattice")
 display(ssf_plot)
 
-RSPlot = plot_RS(UC, 2 * ord_array[10, 1:SkXSize^2*3] .- 2 * ord_array[10, SkXSize^2*3+1:SkXSize^2*6])
+RSPlot = plot_RS(UC, 2 * ord_array[20, 1:SkXSize^2*3] .- 2 * ord_array[10, SkXSize^2*3+1:SkXSize^2*6])
 display(RSPlot)
 # RSPlot = plot_RS(UC, ord_array[1, SkXSize^2*3:SkXSize^2*3*2])
 # display(RSPlot)
-RSPlot = plot_RS(UC, 10 * ord_array[10, 1:SkXSize^2*3] .- 10 * ord_array[10, SkXSize^2*3+1:SkXSize^2*6])
+RSPlot = plot_RS(UC, 20 * ord_array[5, 1:SkXSize^2*3] .- 20 * ord_array[5, SkXSize^2*3+1:SkXSize^2*6])
 display(RSPlot)
-RSPlot = plot_RS(UC, order_parameter[10,:])
+RSPlot = plot_RS(UC, order_parameter[20,:])
+display(RSPlot)
+RSPlot = plot_RS(UC, 50 * (ord_array[5, SkXSize^2*3+1:SkXSize^2*6] .- 0.52))
+display(RSPlot)
+RSPlot = plot_RS(UC, 50 * (ord_array[5, 1:SkXSize^2*3] .- 0.52))
 display(RSPlot)

@@ -127,7 +127,7 @@ filling_arr = (24 .+ LinRange(params["filling_min"], params["filling_max"], para
 
 #params["jh"] = J_array[4]
 
-filling = filling_arr[8]
+filling = filling_arr[11]
 println(filling, "filling")
 #U_var = U_array[end-1]
 #loc = "/Users/ahardy/Library/CloudStorage/GoogleDrive-ahardy@flatironinstitute.org/My Drive/Skyrmion/Bilayer_SkX/TBModel/Monolayer"
@@ -189,8 +189,6 @@ for (ind, U_var) in enumerate(U_array[:])
     println(fileName)
     TBResults = load(fileName) #MeanFieldToolkit.MFTResume.ReadMFT(fileName)
     #println(length(TBResults["UC"].basis))
-    SkXsize = length(TBResults["UC"].basis)
-
     gap_array[ind, 1] = U_var
     gap_array[ind, 2] = TBResults["Gap"]
     #println(TBResults["MFT_Energy"])
@@ -272,11 +270,11 @@ scatter!(getindex.(skyrmion_vectors, 1), getindex.(skyrmion_vectors, 2), label="
 scatter!(getindex.(symmetry_vectors, 1), getindex.(symmetry_vectors, 2), label="lattice")
 display(ssf_plot)
 
-RSPlot = plot_RS(UC, 2 * ord_array[10, 1:SkXSize^2*3] .- 2 * ord_array[10, SkXSize^2*3+1:SkXSize^2*6])
+RSPlot = plot_RS(UC, 2 * ord_array[20, 1:SkXSize^2*3] .- 2 * ord_array[10, SkXSize^2*3+1:SkXSize^2*6])
 display(RSPlot)
 # RSPlot = plot_RS(UC, ord_array[1, SkXSize^2*3:SkXSize^2*3*2])
 # display(RSPlot)
-RSPlot = plot_RS(UC, 10 * ord_array[10, 1:SkXSize^2*3] .- 10 * ord_array[10, SkXSize^2*3+1:SkXSize^2*6])
+RSPlot = plot_RS(UC, 10 * ord_array[20, 1:SkXSize^2*3] .- 10 * ord_array[10, SkXSize^2*3+1:SkXSize^2*6])
 display(RSPlot)
-RSPlot = plot_RS(UC, order_parameter[10,:])
+RSPlot = plot_RS(UC, order_parameter[20,:])
 display(RSPlot)
