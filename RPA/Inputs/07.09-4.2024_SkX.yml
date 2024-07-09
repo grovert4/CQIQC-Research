@@ -30,7 +30,7 @@ mus:
   - 0.8999999999999999
   - 1.2000000000000002
   - 0.4608341678114277
-n_matsubara: 85
+n_matsubara: 65
 output: /scratch/a/aparamek/andykh/Data/Monolayer_Data/RPA/SkX # change to scratch
 plots: /scratch/a/aparamek/andykh/Data/Monolayer_Data/RPA/SkX
 triqs_environment: triqs
