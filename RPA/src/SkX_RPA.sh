@@ -15,6 +15,12 @@ module load StdEnv/2023
 module load gcc/12 openmpi
 module load python/3.11 imkl cmake clang mpi4py hdf5 boost fftw
 source ~/triqsvenv/bin/activate
-julia --project=../../TBModel ../examples/models/SkX.jl
+julia --project=../../TBModel ../examples/models/SkX_0.jl
 julia --project=../../TBModel ../examples/interactions/SkX_NN.jl
-julia --project=../../TBModel run_RPA.jl --input ../Inputs/SkX.yml --run_bare true
+julia --project=../../TBModel run_RPA.jl --input ../Inputs/07.09-0.2024_SkX.yml --run_bare true
+julia --project=../../TBModel ../examples/models/SkX_2.jl
+julia --project=../../TBModel ../examples/interactions/SkX_NN.jl
+julia --project=../../TBModel run_RPA.jl --input ../Inputs/07.09-2.2024_SkX.yml --run_bare true
+julia --project=../../TBModel ../examples/models/SkX_4.jl
+julia --project=../../TBModel ../examples/interactions/SkX_NN.jl
+julia --project=../../TBModel run_RPA.jl --input ../Inputs/07.09-4.2024_SkX.yml --run_bare true

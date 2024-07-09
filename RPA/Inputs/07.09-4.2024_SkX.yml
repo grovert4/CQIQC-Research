@@ -1,0 +1,39 @@
+beta: 10.0
+contract: path
+directions:
+- 0
+interactions: /scratch/a/aparamek/andykh/Data/Monolayer_Data/RPA/SkX_NN.jld2
+k_labels:
+- \Gamma
+- K_1
+- M_2
+k_points:
+- - 0.0
+  - 0.0
+  - 0.0
+- - 0.666666666667
+  - 0.333333333333
+  - 0.0
+- - 0.5
+  - 0.5
+  - 0.0
+k_size: 24 # 48?
+mus:
+  values: 
+  - -1.2000000000000002
+  - -0.8999999999999999
+  - -0.6000000000000001
+  - -0.30000000000000027
+  - 0.0
+  - 0.2999999999999998
+  - 0.5999999999999996
+  - 0.8999999999999999
+  - 1.2000000000000002
+  - 0.4608341678114277
+n_matsubara: 129
+output: /scratch/a/aparamek/andykh/Data/Monolayer_Data/RPA/SkX # change to scratch
+plots: /scratch/a/aparamek/andykh/Data/Monolayer_Data/RPA/SkX
+triqs_environment: triqs
+unitcell:
+  julia: /scratch/a/aparamek/andykh/Data/Monolayer_Data/RPA/SkX_4.jld2
+  triqs: /scratch/a/aparamek/andykh/Data/Monolayer_Data/RPA/SkX.npz
