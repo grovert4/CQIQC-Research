@@ -129,13 +129,13 @@ function MFT(params, filename)
     # add filename to input 
     #fileName = loc * "/$(filename)_p=$(round(filling, digits=3))_U=$(round(U, digits=2))_t1=$(round(t1, digits=2)).jld2"
     #fileName = loc * "/$(filename)_J=$(round(jh, digits=3))_U=$(round(U, digits=2)).jld2"
-    fileName = loc * "/$(filename)_V=$(round(V, digits=3))_U=$(round(U, digits=2)).jld2"
+    fileName = loc * "/$(filename)_n=$(round(filling, digits=3))_U=$(round(U , digits=2)).jld2"
     GC.gc()
     rand_noise = rand(SkXSize^2 * 3) .- 0.5
     rand_noise = 0.05 .* (rand_noise .- sum(rand_noise) / (SkXSize^2 * 3))
 
-    init_up = fill(filling, SkXSize^2 * 3) .+ rand_noise #.- 0.05
-    init_dn = fill(filling, SkXSize^2 * 3) .- rand_noise #.+ 0.05
+    init_up = fill(filling, SkXSize^2 * 3) .+ rand_noise .- 0.05
+    init_dn = fill(filling, SkXSize^2 * 3) .- rand_noise .+ 0.05
     init_guess = vcat(fill(0.0,length(hopping_up)*2), fill(0.00,SkXSize^2 * 3), init_up, init_dn)
     if isfile(fileName)
         println("TRYING TO LOAD " * fileName)
