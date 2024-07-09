@@ -107,8 +107,8 @@ filename = "05.03-0.5.2024_Bilayer"
 filename = "05.04-0.75.2024_Bilayer"
 filename = "05.03-0.33.2024_Bilayer"
 filename = "06.17-1.2024_Bilayer"
-# filename = "07.04-3.2024_Bilayer"
-# filename = "07.04-4.2024_Bilayer"
+filename = "07.04-3.2024_Bilayer"
+filename = "07.04-4.2024_Bilayer"
 
 #filename = "05.04-0.66.2024_Bilayer"
 
@@ -127,7 +127,7 @@ filling_arr = (24 .+ LinRange(params["filling_min"], params["filling_max"], para
 #J_array = collect(LinRange(params["J_min"], params["J_max"], params["J_length"]))
 
 #params["jh"] = J_array[4]
-filling = filling_arr[11] # 3
+filling = filling_arr[3]
 println(filling, "filling")
 #U_var = U_array[end-1]
 #loc = "/Users/ahardy/Library/CloudStorage/GoogleDrive-ahardy@flatironinstitute.org/My Drive/Skyrmion/Bilayer_SkX/TBModel/Monolayer"
