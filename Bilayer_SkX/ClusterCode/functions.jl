@@ -263,6 +263,44 @@ function MPIrunAnneal(tmax, tmin, exchangeRate, t0,tf,lat,thermSweeps,MeasureSwe
    return monte
 end
 
+function MPIAnneal2(uc, jperp, size, exchangeRate, t0,tf,thermSweeps,MeasureSweeps, coolRate, outfile=nothing, init_rewrite=true)
+    Sz = [0.0 0.0 0.0; 0.0 0.0 0.0; 0.0 0.0 1.0]
+    ep = (commSize == 1) ? 1.0 : [round(n/(commSize-1), sigdigits=5) for n in 0:commSize-1][commRank+1]
+    variableH(ϵ) = (1 - ϵ) * (-jperp)
+    variableJ(ϵ) = ϵ * jperp
+    for i in 1:length(uc.basis)
+        setField!(uc, i, (-1)^(i) * variableH(ep) * [0,0,1])      
+    end
+    addInteraction!(uc, b1, b2, -variableJ(ep) * Sz , (0,0,0))
+    latticeLocal = Lattice(uc, (size, size, 1))
+   
+   ts = [t0 * coolRate^t for t in -500:5000 if t0 >= t0 * coolRate^t >= tf]
+   monte = nothing
+   for ind in 1:length(ts) 
+      thermalizationSweeps = thermSweeps
+      measurementSweeps = 0           
+      if ind == 1
+            thermalizationSweeps = thermSweeps
+            measurementSweeps = 0
+            m = MonteCarlo(latticeLocal, 1/i, thermalizationSweeps, measurementSweeps, replicaExchangeRate=exchangeRate, reportInterval = thermalizationSweeps, rewrite=init_rewrite)
+            run!(m, disableOutput = true)
+      else
+            if (ind == length(ts))
+               thermalizationSweeps = 0
+               measurementSweeps = MeasureSweeps
+            end
+            m = MonteCarlo(monte.lattice, 1/i, thermalizationSweeps, measurementSweeps,replicaExchangeRate=exchangeRate, reportInterval = max(thermSweeps,MeasureSweeps), rewrite = false);
+            if ind != length(ts)
+               run!(m, disableOutput = true)
+            else
+               run!(m, outfile = outfile)
+            end 
+      end
+      monte = deepcopy(m);
+   end
+   return monte
+end
+
 
 
 function updateSpins!(file, lat)
