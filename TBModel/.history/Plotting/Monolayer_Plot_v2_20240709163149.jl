@@ -102,7 +102,7 @@ end
 
 filename = "05.01-0.5.2024_Monolayer"
 filename = "06.27.2024_Monolayer"
-filename = "07.04.2024_Monolayer"
+#filename = "07.04.2024_Monolayer"
 
 
 #println(@__DIR__)
@@ -111,9 +111,8 @@ params = YAML.load_file("../Input/$(filename).yml")
 U_array = collect(LinRange(params["U_min"], params["U_max"], params["U_length"]))
 filling_arr = (12 .+ collect(LinRange(params["filling_min"], params["filling_max"], params["filling_length"]))) ./ (24)
 filling_arr = (24 .+ collect(LinRange(params["filling_min"], params["filling_max"], params["filling_length"]))) ./ (48)
-filling = filling_arr[3] # 6
 
-#filling = filling_arr[6] # 6
+filling = filling_arr[6] # 6
 # J_array = collect(LinRange(params["J_min"], params["J_max"], params["J_length"]))
 # params["jh"] = J_array[2]
 #U_var = U_array[end-1]
@@ -196,7 +195,7 @@ for (ind, U_var) in enumerate(U_array)
     global Mdl = Model(TBResults["UC"], bz, H; filling=filling)
     SolveModel!(Mdl; get_gap=true)
 
-    bands = Plot_Band_Structure!(Mdl, [bz.HighSymPoints["G"], bz.HighSymPoints["K1"], bz.HighSymPoints["M2"]], labels=["G", "K1", "M2"], plot_legend=false)
+    bands = Plot_Band_Structure!(Mdl, [bz.HighSymPoints["G"], bz.HighSymPoints["M1"], bz.HighSymPoints["K1"]], labels=["G", "M1", "K1"], plot_legend=false)
     plot!(bands, legend=false)
     display(bands)
 

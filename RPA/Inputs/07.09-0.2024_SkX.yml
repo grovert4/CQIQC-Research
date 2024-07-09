@@ -31,9 +31,9 @@ mus:
   - 1.2000000000000002
   - 0.9793052673339848
 n_matsubara: 65
-output: /scratch/a/aparamek/andykh/Data/Monolayer_Data/RPA/SkX # change to scratch
-plots: /scratch/a/aparamek/andykh/Data/Monolayer_Data/RPA/SkX
+output: /scratch/a/aparamek/andykh/Data/Monolayer_Data/RPA/SkX_0 # change to scratch
+plots: /scratch/a/aparamek/andykh/Data/Monolayer_Data/RPA/SkX_0
 triqs_environment: triqs
 unitcell:
   julia: /scratch/a/aparamek/andykh/Data/Monolayer_Data/RPA/SkX_0.jld2
-  triqs: /scratch/a/aparamek/andykh/Data/Monolayer_Data/RPA/SkX.npz
+  triqs: /scratch/a/aparamek/andykh/Data/Monolayer_Data/RPA/SkX_0.npz

@@ -196,7 +196,7 @@ for (ind, U_var) in enumerate(U_array)
     global Mdl = Model(TBResults["UC"], bz, H; filling=filling)
     SolveModel!(Mdl; get_gap=true)
 
-    bands = Plot_Band_Structure!(Mdl, [bz.HighSymPoints["G"], bz.HighSymPoints["K1"], bz.HighSymPoints["M2"]], labels=["G", "K1", "M2"], plot_legend=false)
+    bands = Plot_Band_Structure!(Mdl, [bz.HighSymPoints["G"], bz.HighSymPoints["K1"], bz.HighSymPoints["M2"]], labels=["G", "M1", "K1"], plot_legend=false)
     plot!(bands, legend=false)
     display(bands)
 
