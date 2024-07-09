@@ -73,6 +73,9 @@ function MFT(params, filename)
     F1Param = Param(1.0, 2)
     F2Param = Param(1.0, 2)
 
+    AddIsotropicBonds!(UParam, UC, 0.0, Hubbard, "Hubbard Interaction")
+    AddIsotropicBonds!(VParam, UC, 1.0, Hubbard_V_up + Hubbard_V_dn, "Hubbard_V Interaction", checkOffsetRange=1)
+
     for (ind, bas) in enumerate(UC.basis)
         closest = [bas, bas - a1, bas - a2, bas - a1 - a2, bas + a1, bas + a2, bas + a1 + a2, bas + a1 - a2, bas - a1 + a2]
         minimal = findmin(x -> norm(x), closest)[2]
@@ -131,8 +134,8 @@ function MFT(params, filename)
     rand_noise = rand(SkXSize^2 * 3) .- 0.5
     rand_noise = 0.05 .* (rand_noise .- sum(rand_noise) / (SkXSize^2 * 3))
 
-    init_up = fill(filling, SkXSize^2 * 3) .+ rand_noise .- 1
-    init_dn = fill(filling, SkXSize^2 * 3) .- rand_noise .+ 1
+    init_up = fill(filling, SkXSize^2 * 3) .+ rand_noise .- 0.05
+    init_dn = fill(filling, SkXSize^2 * 3) .- rand_noise .+ 0.05
     init_guess = vcat(fill(0.0,length(hopping_up)*2), fill(0.00,SkXSize^2 * 3), init_up, init_dn)
     if isfile(fileName)
         println("TRYING TO LOAD " * fileName)

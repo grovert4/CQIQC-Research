@@ -70,8 +70,9 @@ function MFT(params, filename)
 
     UParam = Param(1.0, 4)
     VParam = Param(1.0, 4)
-    F1Param = Param(1.0, 2)
-    F2Param = Param(1.0, 2)
+
+    AddIsotropicBonds!(UParam, UC, 0.0, Hubbard, "Hubbard Interaction")
+    AddIsotropicBonds!(VParam, UC, 0.0, Hubbard_V_up + Hubbard_V_dn, "Hubbard_V Interaction", checkOffsetRange=1)
 
     for (ind, bas) in enumerate(UC.basis)
         closest = [bas, bas - a1, bas - a2, bas - a1 - a2, bas + a1, bas + a2, bas + a1 + a2, bas + a1 - a2, bas - a1 + a2]
