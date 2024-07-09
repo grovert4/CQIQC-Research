@@ -282,14 +282,14 @@ function MPIAnneal2(uc, jperp, size, exchangeRate, t0,tf,thermSweeps,MeasureSwee
       if ind == 1
             thermalizationSweeps = thermSweeps
             measurementSweeps = 0
-            m = MonteCarlo(latticeLocal, 1/i, thermalizationSweeps, measurementSweeps, replicaExchangeRate=exchangeRate, reportInterval = thermalizationSweeps, rewrite=init_rewrite)
+            m = MonteCarlo(latticeLocal, 1/ts[ind], thermalizationSweeps, measurementSweeps, replicaExchangeRate=exchangeRate, reportInterval = thermalizationSweeps, rewrite=init_rewrite)
             run!(m, disableOutput = true)
       else
             if (ind == length(ts))
                thermalizationSweeps = 0
                measurementSweeps = MeasureSweeps
             end
-            m = MonteCarlo(monte.lattice, 1/i, thermalizationSweeps, measurementSweeps,replicaExchangeRate=exchangeRate, reportInterval = max(thermSweeps,MeasureSweeps), rewrite = false);
+            m = MonteCarlo(monte.lattice, 1/ts[ind], thermalizationSweeps, measurementSweeps,replicaExchangeRate=exchangeRate, reportInterval = max(thermSweeps,MeasureSweeps), rewrite = false);
             if ind != length(ts)
                run!(m, disableOutput = true)
             else
