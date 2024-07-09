@@ -275,7 +275,7 @@ RSPlot = plot_RS(UC, 2 * ord_array[4, 1:SkXSize^2*3] .- 2 * ord_array[4, SkXSize
 display(RSPlot)
 # RSPlot = plot_RS(UC, ord_array[1, SkXSize^2*3:SkXSize^2*3*2])
 # display(RSPlot)
-RSPlot = plot_RS(UC, 10 * ord_array[2, 1:SkXSize^2*3] .- 10 * ord_array[4, SkXSize^2*3+1:SkXSize^2*6])
+RSPlot = plot_RS(UC, 10 * ord_array[4, 1:SkXSize^2*3] .- 10 * ord_array[4, SkXSize^2*3+1:SkXSize^2*6])
 display(RSPlot)
 RSPlot = plot_RS(UC, order_parameter[4,:])
 display(RSPlot)
