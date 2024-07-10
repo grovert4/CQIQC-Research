@@ -122,13 +122,13 @@ filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], par
 filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / (params["filling_max"] )
 filling_arr = (24 .+ LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / 48
 
-V_array = collect(LinRange(params["V_min"], params["V_max"], params["V_length"]))
-params["V"] = V_array[1]
+# V_array = collect(LinRange(params["V_min"], params["V_max"], params["V_length"]))
+# params["V"] = V_array[1]
 
 #J_array = collect(LinRange(params["J_min"], params["J_max"], params["J_length"]))
 
 #params["jh"] = J_array[4]
-filling = params["filling"]
+filling = filling_arr[3] # 3
 println(filling, "filling")
 #U_var = U_array[end-1]
 #loc = "/Users/ahardy/Library/CloudStorage/GoogleDrive-ahardy@flatironinstitute.org/My Drive/Skyrmion/Bilayer_SkX/TBModel/Monolayer"
@@ -176,17 +176,14 @@ gap_array = zeros((length(U_array), 2))
 ord_array = Array{Float64}(undef, (length(U_array), 2 * SkXSize^2 * 3))
 eng_array = Array{Float64}(undef, (length(U_array)))
 
-#for (ind, U_var) in enumerate(U_array[:])
-for (ind, V_var) in enumerate(V_array[:])
-    U_var = U_array[1]
-    params["V"] = V_var
-    println(V_var)
+for (ind, U_var) in enumerate(U_array[:])
+    println(U_var)
     if Uniform_Status == true
         fileName = loc * "Last_Itr_$(filename)_UNIFORM_p=$(round(params["jh"], digits=3))_U=$(round(U_var, digits=2))_t1=$(round(t1, digits=2)).jld2"
     else
         #fileName = loc * "Last_Itr_$(filename)_J=$(round(params["jh"], digits=3))_U=$(round(U_var, digits=2)).jld2"
-        fileName = loc * "Last_Itr_$(filename)_V=$(round(params["V"], digits=3))_U=$(round(U_var, digits=2)).jld2"
-        #fileName = loc * "Last_Itr_$(filename)_n=$(round(filling, digits=3))_U=$(round(U_var, digits=2)).jld2"
+        #fileName = loc * "Last_Itr_$(filename)_V=$(round(params["V"], digits=3))_U=$(round(U_var, digits=2)).jld2"
+        fileName = loc * "Last_Itr_$(filename)_n=$(round(filling, digits=3))_U=$(round(U_var, digits=2)).jld2"
 
 
     end
