@@ -2,7 +2,7 @@ using JLD2, Plots, LaTeXStrings, LinearAlgebra
 
 using JLD2, Plots, LaTeXStrings, LinearAlgebra
 loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Monolayer_Data/"
-datas =  load(loc * "SkX_combined.jld2")
+datas =  load(loc * "SkX_4_combined.jld2")
 label = "NN_repulsive_density-density"
 
 mus = Float64[]
