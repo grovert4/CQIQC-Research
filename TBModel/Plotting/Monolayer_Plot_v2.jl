@@ -104,6 +104,7 @@ filename = "05.01-0.5.2024_Monolayer"
 filename = "06.27.2024_Monolayer"
 #filename = "07.04.2024_Monolayer"
 #filename = "07.00.2024_Monolayer"
+filename = "07.04.2024_Monolayer"
 
 
 #println(@__DIR__)
@@ -111,8 +112,8 @@ params = YAML.load_file("../Input/$(filename).yml")
 
 U_array = collect(LinRange(params["U_min"], params["U_max"], params["U_length"]))
 filling_arr = (12 .+ collect(LinRange(params["filling_min"], params["filling_max"], params["filling_length"]))) ./ (24)
-#filling_arr = (24 .+ collect(LinRange(params["filling_min"], params["filling_max"], params["filling_length"]))) ./ (48)
-filling = filling_arr[6] # 6
+filling_arr = (24 .+ collect(LinRange(params["filling_min"], params["filling_max"], params["filling_length"]))) ./ (48)
+filling = filling_arr[3] # 6
 
 #filling = filling_arr[6] # 6
 # J_array = collect(LinRange(params["J_min"], params["J_max"], params["J_length"]))
@@ -261,9 +262,9 @@ scatter!(getindex.(skyrmion_vectors, 1), getindex.(skyrmion_vectors, 2), label="
 scatter!(getindex.(symmetry_vectors, 1), getindex.(symmetry_vectors, 2), label="lattice")
 display(ssf_plot)
 
-RSPlot = plot_RS(UC, 1 .*(order_parameter[21, 1:SkXSize^2*3].-filling))
+RSPlot = plot_RS(UC, 2 .*(order_parameter[25, 1:SkXSize^2*3].-filling))
 display(RSPlot)
-ssf = SSF(order_parameter[5, 1:SkXSize^2*3], UC.basis, ks)
+ssf = SSF(order_parameter[25, 1:SkXSize^2*3], UC.basis, ks)
 ssf_plot = plot(framestyle=:box, aspect_ratio=:equal, xlabel=L"k_x", ylabel=L"k_y", grid=false)
 heatmap!(kxs, kys, abs.(ssf)', c=:inferno, clim=(0, maximum(abs.(ssf))))
 xlims!(-2 * pi, 2 * pi)

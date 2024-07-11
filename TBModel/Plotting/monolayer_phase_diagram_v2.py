@@ -12,6 +12,7 @@ filename = "02.05.2024_Monolayer" # J = 4, N = 2
 
 filename = "05.01-0.5.2024_Monolayer"
 filename = "06.27.2024_Monolayer"
+filename = "07.04.2024_Monolayer"
 
 
 os.chdir("/home/andrewhardy/Documents/Graduate/Codes/Skyrmion/TBModel/Plotting")
@@ -28,7 +29,9 @@ U_array = np.linspace(params["U_min"], params["U_max"], params["U_length"])
 filling_arr = np.linspace(params["filling_min"], params["filling_max"], params["filling_length"]) / (params["filling_max"]*2)
 #filling_arr = np.linspace(params["J_min"], params["J_max"], params["J_length"])
 filling_arr = ((12+np.linspace(params["filling_min"], params["filling_max"], params["filling_length"])) / 24 )
-filling_arr[3] = 0.512
+filling_arr = ((24+np.linspace(params["filling_min"], params["filling_max"], params["filling_length"])) / 48 )
+
+#filling_arr[3] = 0.512
 polarization = np.zeros((len(U_array), len(filling_arr)))
 energy = np.zeros((len(U_array), len(filling_arr)))
 conduct = np.zeros((len(U_array), len(filling_arr)))
@@ -62,13 +65,13 @@ energy_flat = energy.flatten()
 # plt.ylabel(r'$U$')
 # plt.xlabel(r'$n$')
 
-# plt.show()
-# plt.scatter(filling_arr_flat, U_array_flat,c=energy_flat, cmap='viridis')
-# plt.colorbar(label=r'$E$')
-# plt.ylabel(r'$U$')
-# plt.xlabel(r'$n$')
+plt.show()
+plt.scatter(filling_arr_flat, U_array_flat,c=energy_flat, cmap='viridis')
+plt.colorbar(label=r'$E$')
+plt.ylabel(r'$U$')
+plt.xlabel(r'$n$')
 
-# plt.show()
+plt.show()
 
 # Uniform_Status = False
 # polarization = np.zeros((len(U_array), len(filling_arr)))
@@ -123,7 +126,7 @@ fig = plt.figure(figsize=(8, 8))
 
 plt.imshow(polarization, aspect='auto', cmap='viridis', origin='lower',
            extent=[filling_arr.min(), filling_arr.max(), U_array.min(), U_array.max()])
-plt.colorbar(label=r'$P_1$')
+plt.colorbar(label=r'$N(Q_{max})$')
 plt.ylabel(r'$U_1$')
 plt.xlabel(r'$n$')
 #plt.ylim(U_array.min(), min(U_array.max(), 5))

@@ -13,7 +13,7 @@ os.getcwd()
  
 filename = "06.27-27.2024_Bilayer"  
 filename = "07.09-25.2024_Bilayer"  
-filename = "07.12-25.2024_Bilayer"
+filename = "07.10-25.2024_Bilayer"
 
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
@@ -26,7 +26,7 @@ plt.rcParams["font.serif"] = ["Computer Modern Roman"] + plt.rcParams["font.seri
 plt.rcParams.update({"text.usetex": True})
 params = yml.safe_load(Path(f"../Input/{filename}.yml").read_text())
 U_array = np.linspace(params["U_min"], params["U_max"], params["U_length"])
-#filling_arr = np.linspace(params["filling_min"], params["filling_max"], params["filling_length"]) / (params["filling_max"] *2 )
+filling_arr = np.linspace(params["filling_min"], params["filling_max"], params["filling_length"]) / (params["filling_max"] *2 )
 V_array = np.linspace(params["V_min"], params["V_max"], params["V_length"])
 V_array = np.linspace(params["V_min"], params["V_max"], params["V_length"])
 

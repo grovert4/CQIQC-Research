@@ -178,7 +178,7 @@ eng_array = Array{Float64}(undef, (length(U_array)))
 
 #for (ind, U_var) in enumerate(U_array[:])
 for (ind, V_var) in enumerate(V_array[:])
-    U_var = U_array[1]
+    U_var = U_array[5]
     params["V"] = V_var
     println(V_var)
     if Uniform_Status == true
