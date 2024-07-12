@@ -104,7 +104,7 @@ filename = "05.01-0.5.2024_Monolayer"
 filename = "06.27.2024_Monolayer"
 #filename = "07.04.2024_Monolayer"
 #filename = "07.00.2024_Monolayer"
-filename = "07.04.2024_Monolayer"
+filename = "07.02.2024_Monolayer"
 
 
 #println(@__DIR__)
@@ -112,7 +112,7 @@ params = YAML.load_file("../Input/$(filename).yml")
 
 U_array = collect(LinRange(params["U_min"], params["U_max"], params["U_length"]))
 filling_arr = (12 .+ collect(LinRange(params["filling_min"], params["filling_max"], params["filling_length"]))) ./ (24)
-filling_arr = (24 .+ collect(LinRange(params["filling_min"], params["filling_max"], params["filling_length"]))) ./ (48)
+#filling_arr = (24 .+ collect(LinRange(params["filling_min"], params["filling_max"], params["filling_length"]))) ./ (48)
 filling = filling_arr[3] # 6
 
 #filling = filling_arr[6] # 6
