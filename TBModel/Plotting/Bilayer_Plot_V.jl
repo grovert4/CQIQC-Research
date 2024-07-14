@@ -113,6 +113,7 @@ filename = "06.17-1.2024_Bilayer"
 #filename = "05.04-0.66.2024_Bilayer"
 
 filename = "07.09-25.2024_Bilayer"
+filename = "07.15-25.2024_Bilayer"
 
 #println(@__DIR__)
 params = YAML.load_file("../Input/$(filename).yml")
@@ -195,8 +196,8 @@ for (ind, V_var) in enumerate(V_array[:])
     #println(length(TBResults["UC"].basis))
     SkXsize = length(TBResults["UC"].basis)
 
-    gap_array[ind, 1] = U_var
-    gap_array[ind, 2] = TBResults["Gap"]
+    gap_array[ind, 1] = V_var
+    gap_array[ind, 2] = TBResults["Bands"][1][26]-TBResults["Bands"][1][25] #TBResults["Gap"]
     #println(TBResults["MFT_Energy"])
     eng_array[ind] = TBResults["MFT_Energy"][end]
     #println(TBResults["Gap"])

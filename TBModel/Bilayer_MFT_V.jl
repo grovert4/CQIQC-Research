@@ -134,8 +134,8 @@ function MFT(params, filename)
     rand_noise = rand(SkXSize^2 * 3) .- 0.5
     rand_noise = 0.05 .* (rand_noise .- sum(rand_noise) / (SkXSize^2 * 3))
 
-    init_up = fill(filling, SkXSize^2 * 3) .+ rand_noise .- 0.05
-    init_dn = fill(filling, SkXSize^2 * 3) .- rand_noise .+ 0.05
+    init_up = fill(filling, SkXSize^2 * 3) .+ rand_noise .- 0.01
+    init_dn = fill(filling, SkXSize^2 * 3) .- rand_noise .+ 0.01
     init_guess = vcat(fill(0.01,length(hopping_up)*2), fill(0.01,SkXSize^2 * 3), init_up, init_dn)
     if isfile(fileName)
         println("TRYING TO LOAD " * fileName)

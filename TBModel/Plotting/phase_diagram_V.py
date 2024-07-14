@@ -14,6 +14,7 @@ os.getcwd()
 filename = "06.27-27.2024_Bilayer"  
 #filename = "07.09-25.2024_Bilayer"  
 #filename = "07.12-25.2024_Bilayer"
+filename = "07.15-29.2024_Bilayer"
 
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
@@ -34,6 +35,7 @@ Uniform_Status = False
 polarization = np.zeros((params["U_length"], params["V_length"]))
 energy = np.zeros((params["U_length"], params["V_length"]))
 conduct = np.zeros((params["U_length"], params["V_length"]))
+gap = np.zeros((params["U_length"], params["V_length"]))
 for (ind_V,V) in enumerate(V_array):
     for (ind_u, U_var) in enumerate(U_array):
         print(V)
@@ -43,6 +45,7 @@ for (ind_V,V) in enumerate(V_array):
             TBResults = h5.File(fileName, 'r')
             conduct[ind_u, ind_V] =  np.mean(TBResults["Chern Fill"])
             energy[ind_u, ind_V] = TBResults["MFT_Energy"][-1]
+            gap[ind_u, ind_V] = np.mean(TBResults["Gap"])
 
             temp_up = np.array(TBResults["ssf_up"])
             temp_dn = np.array(TBResults["ssf_dn"])
@@ -102,6 +105,20 @@ plt.ylim(U_array.min(), min(U_array.max(), 7))
 plt.savefig("Plots/Bilayer_Polarization_Extended.pdf")
 
 plt.show()
+
+fig = plt.figure(figsize=(8, 8))
+plt.imshow(gap, aspect='auto', cmap='viridis', origin='lower',
+           extent=[V_array.min(), V_array.max(), U_array.min(), U_array.max()])
+plt.colorbar(label=r'$\Delta$')
+plt.ylabel(r'$U$')
+plt.xlabel(r'$V$')
+plt.ylim(U_array.min(), min(U_array.max(), 7))
+
+plt.savefig("Plots/Bilayer_Polarization_Extended.pdf")
+
+plt.show()
+
+
 
 fig, ax = plt.subplots(figsize=(8, 8))
 
