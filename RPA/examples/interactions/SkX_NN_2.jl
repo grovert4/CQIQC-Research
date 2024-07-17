@@ -46,6 +46,6 @@ params = [VParam]
 values["NN_repulsive_density-density"] = [1.0]
 #values["NN_attractive_density-density"] = [0.0, 0.0, -1.0]
 #####* Saving the unit cell in a JLD2 file
-file_name = "/scratch/a/aparamek/andykh/Data/Monolayer_Data/RPA/SkX_NN.jld2"
+file_name = "/scratch/a/aparamek/andykh/Data/Monolayer_Data/RPA/SkX_NN_2.jld2"
 #save(file_name, Dict("parameters" => params))
 save(file_name, Dict("parameters" => params, "values" => values))
