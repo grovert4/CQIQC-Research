@@ -2,7 +2,7 @@ using JLD2, Plots, LaTeXStrings, LinearAlgebra
 
 using JLD2, Plots, LaTeXStrings, LinearAlgebra
 loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Monolayer_Data/"
-datas =  load(loc * "SkX_4_combined.jld2")
+datas =  load(loc * "SkX_0_combined.jld2")
 label = "NN_repulsive_density-density"
 
 mus = Float64[]
@@ -36,7 +36,7 @@ Qplot = plot(fillings, norm.(Qs), marker=:o, lw = 2.0,
 hline!(Qplot, [4*pi/3], lw=2.0, l=:dash, c=:green, label=L"K")
 hline!(Qplot, [2*pi/sqrt(3)], lw=2.0, l=:dash, c=:turquoise, label=L"M")
 display(Qplot)
-Iplot = plot(fillings, Vs, marker=:o, lw = 2.0,
+Iplot = plot(fillings, Vs/4, marker=:o, lw = 2.0,
     label = "", ylabel=L"|V_{crit}|", xlabel = L"\langle n \rangle",
     framestyle=:box, grid=false)
 display(Iplot)
