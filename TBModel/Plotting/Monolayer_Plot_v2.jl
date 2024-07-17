@@ -262,7 +262,7 @@ scatter!(getindex.(skyrmion_vectors, 1), getindex.(skyrmion_vectors, 2), label="
 scatter!(getindex.(symmetry_vectors, 1), getindex.(symmetry_vectors, 2), label="lattice")
 display(ssf_plot)
 
-RSPlot = plot_RS(UC, 2 .*(order_parameter[25, 1:SkXSize^2*3].-filling))
+RSPlot = plot_RS(UC, 50 .*(order_parameter[5, 1:SkXSize^2*3].-filling))
 display(RSPlot)
 ssf = SSF(order_parameter[25, 1:SkXSize^2*3], UC.basis, ks)
 ssf_plot = plot(framestyle=:box, aspect_ratio=:equal, xlabel=L"k_x", ylabel=L"k_y", grid=false)
