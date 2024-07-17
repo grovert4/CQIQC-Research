@@ -14,7 +14,7 @@ UC = UnitCell([a1, a2], 2, 2)
 n = get!(params, "n", 20)
 kSize = 6 * n + 3
 t = get!(params, "t", 1.0)
-jh = get!(params, "jh", 5.0)
+jh = get!(params, "jh", 2.0)
 U = get!(params, "U", 0.0)
 ##### Thermodynamic parameters
 filling = get!(params, "filling", 12.5/24)

@@ -2,7 +2,7 @@ beta: 10.0
 contract: path
 directions:
 - 0
-interactions: /scratch/a/aparamek/andykh/Data/Monolayer_Data/RPA/SkX_NN.jld2
+interactions: /scratch/a/aparamek/andykh/Data/Monolayer_Data/RPA/SkX_NN_4.jld2
 k_labels:
 - \Gamma
 - K_1
