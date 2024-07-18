@@ -63,4 +63,4 @@ CreateUnitCell!(UC, HoppingParams)
 #####* Saving the unit cell in a JLD2 file
 file_name = "/scratch/a/aparamek/andykh/Data/Monolayer_Data/RPA/SkX_Coulomb_0.jld2"
 # change to scratch
-save(file_name, Dict("unit cell" => UC, "parameters" => HoppingParams))
+save(file_name, Dict("unit_cell" => UC, "parameters" => HoppingParams))

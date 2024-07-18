@@ -25,7 +25,7 @@ if abspath(PROGRAM_FILE) == @__FILE__
 
     model = load(input["unitcell"]["julia"])
 
-    unitcell = model["unit cell"]
+    unitcell = model["unit_cell"]
     parameters = model["parameters"]
     #triqs_input = input["unitcell"]["julia"][1:end-5] * ".npz"
 
