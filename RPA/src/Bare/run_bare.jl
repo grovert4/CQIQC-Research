@@ -27,11 +27,11 @@ if abspath(PROGRAM_FILE) == @__FILE__
 
     unitcell = model["unit cell"]
     parameters = model["parameters"]
-    triqs_input = input["unitcell"]["julia"][1:end-5] * ".npz"
+    #triqs_input = input["unitcell"]["julia"][1:end-5] * ".npz"
 
-    parse_unitcell(unitcell, triqs_input)
+    parse_unitcell(unitcell, input["unitcell"]["triqs"])
 
-    input["unitcell"]["triqs"] = triqs_input
+    #input["unitcell"]["triqs"] = triqs_input
     #YAML.write_file(parsed_args["input"], input)
 
     #command = `conda run -n $(input["triqs_environment"]) python ./Bare/run_bare.py $(parsed_args["input"])`
