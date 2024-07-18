@@ -64,8 +64,8 @@ VParams = Param{2, Float64}[]
 for (d, distance) in enumerate(distances[2:end])
 
     if counts[d+1] % 6 ==0
-        param   =   Param(4.0, 2)
-        AddIsotropicBonds!(param, UC , distance, [1.0;;] / distance , "V_$(d)" ; checkOffsetRange = 10)
+        param   =   Param(1.0, 2)
+        AddIsotropicBonds!(param, UC , distance, [4.0;;] / distance , "V_$(d)" ; checkOffsetRange = 10)
         push!(VParams, param)
     end
 
