@@ -63,13 +63,4 @@ CreateUnitCell!(UC, HoppingParams)
 #####* Saving the unit cell in a JLD2 file
 file_name = "/scratch/a/aparamek/andykh/Data/Monolayer_Data/RPA/SkX_Coulomb_4.jld2"
 # change to scratch
-#save(file_name, Dict("unit cell" => UC, "parameters" => HoppingParams))
-kSize = 5*6 + 3
-bz = BZ(kSize)
-FillBZ!(bz, UC)
-H = Hamiltonian(UC, bz)
-DiagonalizeHamiltonian!(H)
-global Mdl = Model(UC, bz, H; filling=filling)
-SolveModel!(Mdl; get_gap=true)
-
-bands = Plot_Band_Structure!(Mdl, [bz.HighSymPoints["G"], bz.HighSymPoints["K1"], bz.HighSymPoints["M2"]], labels=["G", "K1", "M2"], plot_legend=false)
+save(file_name, Dict("unit_cell" => UC, "parameters" => HoppingParams))
