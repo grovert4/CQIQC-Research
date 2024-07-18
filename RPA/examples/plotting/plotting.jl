@@ -2,9 +2,9 @@ using JLD2, Plots, LaTeXStrings, LinearAlgebra
 
 using JLD2, Plots, LaTeXStrings, LinearAlgebra
 loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Monolayer_Data/"
-datas =  load(loc * "SkX_0_combined.jld2")
-label = "NN_repulsive_density-density"
-
+datas =  load(loc * "SkX_2_combined.jld2")
+#label = "NN_repulsive_density-density"
+label = "Coulomb_Repulsion"
 mus = Float64[]
 fillings = Float64[]
 
@@ -32,11 +32,11 @@ Qs = Qs[args]
 
 Qplot = plot(fillings, norm.(Qs), marker=:o, lw = 2.0,
     label = "", ylabel=L"|Q_{crit}|", xlabel = L"\langle n \rangle",
-    framestyle=:box, grid=false)
+    framestyle=:box, grid=false, ylims = (0, 4.5))
 hline!(Qplot, [4*pi/3], lw=2.0, l=:dash, c=:green, label=L"K")
 hline!(Qplot, [2*pi/sqrt(3)], lw=2.0, l=:dash, c=:turquoise, label=L"M")
 display(Qplot)
-Iplot = plot(fillings, Vs/4, marker=:o, lw = 2.0,
+Iplot = plot(fillings, Vs, marker=:o, lw = 2.0,
     label = "", ylabel=L"|V_{crit}|", xlabel = L"\langle n \rangle",
-    framestyle=:box, grid=false)
+    framestyle=:box, grid=false, ylims = (0,11))
 display(Iplot)

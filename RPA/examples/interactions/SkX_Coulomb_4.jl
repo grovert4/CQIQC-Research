@@ -78,6 +78,6 @@ params = VParams
 values["Coulomb_Repulsion"] = repeat([1.0], length(params))
 
 #####* Saving the unit cell in a JLD2 file
-file_name = "/scratch/a/aparamek/andykh/Data/Monolayer_Data/RPA/SkX_Coulomb_4.jld2"
+file_name = "/scratch/a/aparamek/andykh/Data/Monolayer_Data/RPA/SkX_Coulomb_Interact_4.jld2"
 save(file_name, Dict("parameters" => params))
 save(file_name, Dict("parameters" => params, "values" => values))
