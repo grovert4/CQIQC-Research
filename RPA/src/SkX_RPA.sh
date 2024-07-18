@@ -18,9 +18,9 @@ source ~/triqsvenv/bin/activate
 julia --project=../../TBModel ../examples/models/SkX_0.jl
 julia --project=../../TBModel ../examples/interactions/SkX_Coulomb_0.jl
 julia --project=../../TBModel run_RPA.jl --input ../Inputs/07.17-0.2024_SkX.yml --run_bare true
-julia --project=../../TBModel ../examples/models/SkX_2.jl
-julia --project=../../TBModel ../examples/interactions/SkX_Coulomb_2.jl
-julia --project=../../TBModel run_RPA.jl --input ../Inputs/07.17-2.2024_SkX.yml --run_bare true
-julia --project=../../TBModel ../examples/models/SkX_4.jl
-julia --project=../../TBModel ../examples/interactions/SkX_Coulomb_4.jl
-julia --project=../../TBModel run_RPA.jl --input ../Inputs/07.17-4.2024_SkX.yml --run_bare true
+# julia --project=../../TBModel ../examples/models/SkX_2.jl
+# julia --project=../../TBModel ../examples/interactions/SkX_Coulomb_2.jl
+# julia --project=../../TBModel run_RPA.jl --input ../Inputs/07.17-2.2024_SkX.yml --run_bare true
+# julia --project=../../TBModel ../examples/models/SkX_4.jl
+# julia --project=../../TBModel ../examples/interactions/SkX_Coulomb_4.jl
+# julia --project=../../TBModel run_RPA.jl --input ../Inputs/07.17-4.2024_SkX.yml --run_bare true

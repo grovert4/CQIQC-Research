@@ -39,7 +39,7 @@ if abspath(PROGRAM_FILE) == @__FILE__
     localDim = length(input["directions"])
     model = load(input["unitcell"]["julia"])
     println("Unit Cell loaded!")
-
+    println(input["unitcell"]["julia"])
     #####* Extracting the unit cell and parameters from the model
     unitcell = model["unit cell"]
     parameters = model["parameters"]
