@@ -23,4 +23,4 @@ julia --project=../../TBModel ../examples/interactions/SkX_NN_2.jl
 julia --project=../../TBModel run_RPA.jl --input ../Inputs/07.09-2.2024_SkX.yml --run_bare false
 julia --project=../../TBModel ../examples/models/SkX_4.jl
 julia --project=../../TBModel ../examples/interactions/SkX_NN_4.jl
-julia --project=../../TBModel run_RPA.jl --input ../Inputs/07.17-4.2024_SkX.yml --run_bare false
+julia --project=../../TBModel run_RPA.jl --input ../Inputs/07.09-4.2024_SkX.yml --run_bare false
