@@ -15,7 +15,7 @@ filename = "06.27-27.2024_Bilayer"
 #filename = "07.09-25.2024_Bilayer"  
 filename = "07.13-29.2024_Bilayer"
 #filename = "07.15-29.2024_Bilayer"
-#filename = "07.15-25.2024_Bilayer"
+filename = "07.20-25.2024_Bilayer"
 
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
@@ -46,7 +46,7 @@ for (ind_V,V) in enumerate(V_array):
             TBResults = h5.File(fileName, 'r')
             conduct[ind_u, ind_V] =  np.mean(TBResults["Chern Fill"])
             energy[ind_u, ind_V] = TBResults["MFT_Energy"][-1]
-            gap[ind_u, ind_V] = np.mean(TBResults["Gap"])
+            gap[ind_u, ind_V]    =  float(TBResults[TBResults["Bands"][1]][25]-TBResults[TBResults["Bands"][1]][24])#np.mean(TBResults["Gap"])
 
             temp_up = np.array(TBResults["ssf_up"])
             temp_dn = np.array(TBResults["ssf_dn"])
@@ -128,7 +128,7 @@ X, Y = np.meshgrid(V_array[:Vidx], U_array)
 
 # im = ax.imshow(gap[:,:Vidx], aspect='auto', cmap='PuBuGn', origin='lower',
 #                extent=[V_array.min(), V_array[Vidx], U_array.min(), U_array.max()])
-im = ax.pcolormesh(X, Y, gap[:,:Vidx], cmap='PuBuGn', vmin=0, vmax=0.25, shading='auto')
+im = ax.pcolormesh(X, Y, gap[:,:Vidx], cmap='PuBuGn', vmin=0, vmax=0.25, shading='gouraud')
 
 ax.set_ylabel(r'$U$')
 ax.set_xlabel(r'$V$')
@@ -137,7 +137,7 @@ ax.set_ylim(U_array.min(), min(U_array.max(), 7))
 axins = inset_axes(ax, width="45%", height="45%", loc='upper right', bbox_to_anchor=(-0.02, -0.02, 0.98, 0.98),bbox_transform=ax.transAxes)
 #im_ins = axins.imshow(np.abs(conduct[:,:Vidx]), aspect='auto', cmap='PuBuGn',vmin = 0, vmax=2, origin='lower',
 #                      extent=[V_array.min(), V_array[Vidx], U_array.min(), U_array.max()])
-im_ins = axins.pcolormesh(X, Y, np.abs(conduct[:,:Vidx]), cmap='PuBuGn', vmin=0, vmax=2, shading='auto')
+im_ins = axins.pcolormesh(X, Y, np.abs(conduct[:,:Vidx]), cmap='PuBuGn', vmin=0, vmax=2, shading='gouraud')
 #shading='gouraud'
 axins.xaxis.set_minor_locator(mpl.ticker.AutoMinorLocator(2))
 axins.yaxis.set_minor_locator(mpl.ticker.AutoMinorLocator(2))

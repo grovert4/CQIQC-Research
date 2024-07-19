@@ -17,6 +17,7 @@ filename = "05.04-0.4.2024_Bilayer"
 filename = "06.10-2.2024_Bilayer"  
 filename = "06.17-1.2024_Bilayer"  
 #filename = "07.02.2024_Bilayer"  
+filename = "07.19.2024_Bilayer"
 
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
@@ -34,6 +35,8 @@ filling_array = ((24+np.linspace(params["filling_min"], params["filling_max"], p
 
 Uniform_Status = False
 polarization = np.zeros((params["U_length"], params["filling_length"]))
+gap = np.zeros((params["U_length"], params["filling_length"]))
+
 energy = np.zeros((params["U_length"], params["filling_length"]))
 conduct = np.zeros((params["U_length"], params["filling_length"]))
 for (ind_n,filling) in enumerate(filling_array):
@@ -44,7 +47,9 @@ for (ind_n,filling) in enumerate(filling_array):
             TBResults = h5.File(fileName, 'r')
             conduct[ind_u, ind_n] =  np.mean(TBResults["Chern Fill"])
             energy[ind_u, ind_n] = TBResults["MFT_Energy"][-1]
-            #gap[ind_u, ind_n] = np.mean(TBResults["Gap"])
+            print("got here")
+            print(np.array(TBResults["Gap"]))
+            gap[ind_u, ind_n] = float(TBResults[TBResults["Bands"][1]][25]-TBResults[TBResults["Bands"][1]][24])
 
             if Uniform_Status == True:
                 polarization[ind_u, ind_n] = np.abs(TBResults["Expectations"][3:])
@@ -56,6 +61,7 @@ for (ind_n,filling) in enumerate(filling_array):
 
                 polarization[ind_u, ind_n] = np.abs(np.max(ssf_up)-np.max(ssf_dn))
         except:
+            print("wtf")
             continue
 
         # need to make this python compatible 
@@ -150,8 +156,10 @@ plt.show()
 fig, ax = plt.subplots(figsize=(8, 8))
 ax.xaxis.set_minor_locator(mpl.ticker.AutoMinorLocator(2))
 ax.yaxis.set_minor_locator(mpl.ticker.AutoMinorLocator(2))
-plt.plot(U_array, polarization[:,11]/polarization[-1,11], linewidth = 2, markersize = 15,marker = "^", label = r"$\Delta$")
-plt.plot(U_array, np.abs(conduct[:,11]), linewidth = 2, markersize = 10,marker = "o", label = r"$|\sigma_{xy}|$")
+
+plt.plot(U_array, gap[:,1]/gap[-1,1], linewidth = 2, markersize = 15,marker = "^", label = r"$\Delta$")
+plt.plot(U_array, np.abs(conduct[:,1]), linewidth = 2, markersize = 10,marker = "o", label = r"$|\sigma_{xy}|$")
+plt.plot(U_array, polarization[:,1]/np.max(polarization[:,1]), linewidth = 2, markersize = 15,marker = "X", label = r"$N(Q)$")
 
 plt.legend(fontsize = 20)
 plt.xlabel(r"$U$", fontsize = 20)
