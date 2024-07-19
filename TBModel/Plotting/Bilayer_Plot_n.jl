@@ -108,12 +108,12 @@ filename = "05.04-0.75.2024_Bilayer"
 filename = "05.03-0.33.2024_Bilayer"
 filename = "06.17-1.2024_Bilayer"
 # filename = "07.04-3.2024_Bilayer"
-# filename = "07.04-4.2024_Bilayer"
+filename = "07.04-4.2024_Bilayer"
 
 #filename = "05.04-0.66.2024_Bilayer"
 
-filename = "07.09.2024_Bilayer"
-filename = "07.10-25.2024_Bilayer"
+#filename = "07.09.2024_Bilayer"
+#filename = "07.10-25.2024_Bilayer"
 
 #println(@__DIR__)
 params = YAML.load_file("../Input/$(filename).yml")

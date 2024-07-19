@@ -3,7 +3,7 @@ import yaml as yml
 from pathlib import Path
 import os,sys
 import numpy as np
-
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Bilayer_Data/"
 t1 = -1.0
@@ -120,19 +120,27 @@ plt.savefig("Plots/Bilayer_Polarization_Extended.pdf")
 plt.show()
 
 fig, ax = plt.subplots(figsize=(8, 8))
-
+ax.xaxis.set_minor_locator(mpl.ticker.AutoMinorLocator(2))
+ax.yaxis.set_minor_locator(mpl.ticker.AutoMinorLocator(2))
 # Main plot
 Vidx = np.searchsorted(V_array, 2.0)
+X, Y = np.meshgrid(V_array[:Vidx], U_array)
 
-im = ax.imshow(gap[:,:Vidx], aspect='auto', cmap='PuBuGn', origin='lower',
-               extent=[V_array.min(), V_array[Vidx], U_array.min(), U_array.max()])
+# im = ax.imshow(gap[:,:Vidx], aspect='auto', cmap='PuBuGn', origin='lower',
+#                extent=[V_array.min(), V_array[Vidx], U_array.min(), U_array.max()])
+im = ax.pcolormesh(X, Y, gap[:,:Vidx], cmap='PuBuGn', vmin=0, vmax=0.25, shading='auto')
+
 ax.set_ylabel(r'$U$')
 ax.set_xlabel(r'$V$')
 ax.set_ylim(U_array.min(), min(U_array.max(), 7))
 # Inset plot
 axins = inset_axes(ax, width="45%", height="45%", loc='upper right', bbox_to_anchor=(-0.02, -0.02, 0.98, 0.98),bbox_transform=ax.transAxes)
-im_ins = axins.imshow(np.abs(conduct[:,:Vidx]), aspect='auto', cmap='PuBuGn',vmin = 0, vmax=2, origin='lower',
-                      extent=[V_array.min(), V_array[Vidx], U_array.min(), U_array.max()])
+#im_ins = axins.imshow(np.abs(conduct[:,:Vidx]), aspect='auto', cmap='PuBuGn',vmin = 0, vmax=2, origin='lower',
+#                      extent=[V_array.min(), V_array[Vidx], U_array.min(), U_array.max()])
+im_ins = axins.pcolormesh(X, Y, np.abs(conduct[:,:Vidx]), cmap='PuBuGn', vmin=0, vmax=2, shading='auto')
+#shading='gouraud'
+axins.xaxis.set_minor_locator(mpl.ticker.AutoMinorLocator(2))
+axins.yaxis.set_minor_locator(mpl.ticker.AutoMinorLocator(2))
 cax_1 = inset_axes(ax,
                  width="5%",  # width = 5% of parent_bbox width
                  height="100%",  # height : 100%
@@ -149,6 +157,8 @@ bbox_to_anchor=(0.4, 0., 1, 1),
 bbox_transform=ax.transAxes,
 borderpad=0,
 )
+axins.set_rasterized(True)
+
 cax_1.set_rasterized(True)
 cax_2.set_rasterized(True)
 
