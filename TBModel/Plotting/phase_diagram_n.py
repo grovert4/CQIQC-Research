@@ -3,7 +3,7 @@ import yaml as yml
 from pathlib import Path
 import os,sys
 import numpy as np
-
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Bilayer_Data/"
 t1 = -1.0
@@ -15,8 +15,8 @@ os.getcwd()
 filename = "05.03-0.4.2024_Bilayer"  
 filename = "05.04-0.4.2024_Bilayer"  
 filename = "06.10-2.2024_Bilayer"  
-filename = "06.17-2.2024_Bilayer"  
-filename = "07.02.2024_Bilayer"  
+filename = "06.17-1.2024_Bilayer"  
+#filename = "07.02.2024_Bilayer"  
 
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
@@ -44,6 +44,8 @@ for (ind_n,filling) in enumerate(filling_array):
             TBResults = h5.File(fileName, 'r')
             conduct[ind_u, ind_n] =  np.mean(TBResults["Chern Fill"])
             energy[ind_u, ind_n] = TBResults["MFT_Energy"][-1]
+            #gap[ind_u, ind_n] = np.mean(TBResults["Gap"])
+
             if Uniform_Status == True:
                 polarization[ind_u, ind_n] = np.abs(TBResults["Expectations"][3:])
             else:
@@ -142,9 +144,20 @@ cax_2.set_rasterized(True)
 plt.colorbar(im_ins, cax=cax_2, label=r'$\sigma_{xy}$')
 plt.colorbar(im, cax=cax_1, label=r'$N(k)_{max}$')
 
-plt.savefig("Plots/"+filename+"_U_V.pdf", format = 'pdf')
+plt.savefig("Plots/"+filename+"_U_n.pdf", format = 'pdf')
 
 plt.show()
+fig, ax = plt.subplots(figsize=(8, 8))
+ax.xaxis.set_minor_locator(mpl.ticker.AutoMinorLocator(2))
+ax.yaxis.set_minor_locator(mpl.ticker.AutoMinorLocator(2))
+plt.plot(U_array, polarization[:,11]/polarization[-1,11], linewidth = 2, markersize = 15,marker = "^", label = r"$\Delta$")
+plt.plot(U_array, np.abs(conduct[:,11]), linewidth = 2, markersize = 10,marker = "o", label = r"$|\sigma_{xy}|$")
+
+plt.legend(fontsize = 20)
+plt.xlabel(r"$U$", fontsize = 20)
+plt.savefig("Plots/"+filename+"_U.pdf", format = 'pdf')
+plt.show()
+
 
 
 
