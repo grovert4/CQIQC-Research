@@ -19,4 +19,4 @@ mpirun julia --project=.. --heap-size-hint=2G MFT_wrapper_V.jl 07.23-25.2024_Bil
 #mpirun julia --project=.. --heap-size-hint=2G MFT_wrapper_V.jl 07.19-27.2024_Bilayer ./Bilayer_MFT_V.jl
 #mpirun julia --project=.. --heap-size-hint=2G MFT_wrapper_V.jl 07.19-29.2024_Bilayer ./Bilayer_MFT_V.jl
 
-mpirun julia --project=.. --heap-size-hint=2G Extract_LastData.jl "/scratch/a/aparamek/andykh/Data/Bilayer_Data" 07.22 Bilayer
+mpirun julia --project=.. --heap-size-hint=2G Extract_LastData.jl "/scratch/a/aparamek/andykh/Data/Bilayer_Data" 07.23 Bilayer

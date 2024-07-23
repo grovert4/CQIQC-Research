@@ -30,68 +30,68 @@ function plot_RS(UC::UnitCell, polarizations::Vector{Float64})
         end
 
     end
-    for (index, site) in enumerate(UC.basis .+ Ref(UC.primitives[1]))
-        scatter!(Tuple(site), label="", c=:black, markersize=1.0, markeralpha=0.5)
+    # for (index, site) in enumerate(UC.basis .+ Ref(UC.primitives[1]))
+    #     scatter!(Tuple(site), label="", c=:black, markersize=1.0, markeralpha=0.5)
 
-        if polarizations[index] > 0.0
-            scatter!(Tuple(site), label="", c=:red, markersize=polarizations[index] * 10.0, markeralpha=0.6)
-        else
-            scatter!(Tuple(site), label="", c=:blue, markersize=abs(polarizations[index]) * 10.0, markeralpha=0.6)
-        end
+    #     if polarizations[index] > 0.0
+    #         scatter!(Tuple(site), label="", c=:red, markersize=polarizations[index] * 10.0, markeralpha=0.6)
+    #     else
+    #         scatter!(Tuple(site), label="", c=:blue, markersize=abs(polarizations[index]) * 10.0, markeralpha=0.6)
+    #     end
 
-    end
-    for (index, site) in enumerate(UC.basis .+ Ref(UC.primitives[2]))
-        scatter!(Tuple(site), label="", c=:black, markersize=1.0, markeralpha=0.5)
+    # end
+    # for (index, site) in enumerate(UC.basis .+ Ref(UC.primitives[2]))
+    #     scatter!(Tuple(site), label="", c=:black, markersize=1.0, markeralpha=0.5)
 
-        if polarizations[index] > 0.0
-            scatter!(Tuple(site), label="", c=:red, markersize=polarizations[index] * 10.0, markeralpha=0.6)
-        else
-            scatter!(Tuple(site), label="", c=:blue, markersize=abs(polarizations[index]) * 10.0, markeralpha=0.6)
-        end
+    #     if polarizations[index] > 0.0
+    #         scatter!(Tuple(site), label="", c=:red, markersize=polarizations[index] * 10.0, markeralpha=0.6)
+    #     else
+    #         scatter!(Tuple(site), label="", c=:blue, markersize=abs(polarizations[index]) * 10.0, markeralpha=0.6)
+    #     end
 
-    end
+    # end
 
-    for (index, site) in enumerate(UC.basis .- Ref(UC.primitives[1]))
-        scatter!(Tuple(site), label="", c=:black, markersize=1.0, markeralpha=0.5)
+    # for (index, site) in enumerate(UC.basis .- Ref(UC.primitives[1]))
+    #     scatter!(Tuple(site), label="", c=:black, markersize=1.0, markeralpha=0.5)
 
-        if polarizations[index] > 0.0
-            scatter!(Tuple(site), label="", c=:red, markersize=polarizations[index] * 10.0, markeralpha=0.6)
-        else
-            scatter!(Tuple(site), label="", c=:blue, markersize=abs(polarizations[index]) * 10.0, markeralpha=0.6)
-        end
+    #     if polarizations[index] > 0.0
+    #         scatter!(Tuple(site), label="", c=:red, markersize=polarizations[index] * 10.0, markeralpha=0.6)
+    #     else
+    #         scatter!(Tuple(site), label="", c=:blue, markersize=abs(polarizations[index]) * 10.0, markeralpha=0.6)
+    #     end
 
-    end
-    for (index, site) in enumerate(UC.basis .- Ref(UC.primitives[2]))
-        scatter!(Tuple(site), label="", c=:black, markersize=1.0, markeralpha=0.5)
+    # end
+    # for (index, site) in enumerate(UC.basis .- Ref(UC.primitives[2]))
+    #     scatter!(Tuple(site), label="", c=:black, markersize=1.0, markeralpha=0.5)
 
-        if polarizations[index] > 0.0
-            scatter!(Tuple(site), label="", c=:red, markersize=polarizations[index] * 10.0, markeralpha=0.6)
-        else
-            scatter!(Tuple(site), label="", c=:blue, markersize=abs(polarizations[index]) * 10.0, markeralpha=0.6)
-        end
+    #     if polarizations[index] > 0.0
+    #         scatter!(Tuple(site), label="", c=:red, markersize=polarizations[index] * 10.0, markeralpha=0.6)
+    #     else
+    #         scatter!(Tuple(site), label="", c=:blue, markersize=abs(polarizations[index]) * 10.0, markeralpha=0.6)
+    #     end
 
-    end
+    # end
 
-    for (index, site) in enumerate(UC.basis .+ Ref(UC.primitives[1]) .- Ref(UC.primitives[2]))
-        scatter!(Tuple(site), label="", c=:black, markersize=1.0, markeralpha=0.5)
+    # for (index, site) in enumerate(UC.basis .+ Ref(UC.primitives[1]) .- Ref(UC.primitives[2]))
+    #     scatter!(Tuple(site), label="", c=:black, markersize=1.0, markeralpha=0.5)
 
-        if polarizations[index] > 0.0
-            scatter!(Tuple(site), label="", c=:red, markersize=polarizations[index] * 10.0, markeralpha=0.6)
-        else
-            scatter!(Tuple(site), label="", c=:blue, markersize=abs(polarizations[index]) * 10.0, markeralpha=0.6)
-        end
+    #     if polarizations[index] > 0.0
+    #         scatter!(Tuple(site), label="", c=:red, markersize=polarizations[index] * 10.0, markeralpha=0.6)
+    #     else
+    #         scatter!(Tuple(site), label="", c=:blue, markersize=abs(polarizations[index]) * 10.0, markeralpha=0.6)
+    #     end
 
-    end
-    for (index, site) in enumerate(UC.basis .+ Ref(UC.primitives[2]) .- Ref(UC.primitives[1]))
-        scatter!(Tuple(site), label="", c=:black, markersize=1.0, markeralpha=0.5)
+    # end
+    # for (index, site) in enumerate(UC.basis .+ Ref(UC.primitives[2]) .- Ref(UC.primitives[1]))
+    #     scatter!(Tuple(site), label="", c=:black, markersize=1.0, markeralpha=0.5)
 
-        if polarizations[index] > 0.0
-            scatter!(Tuple(site), label="", c=:red, markersize=polarizations[index] * 10.0, markeralpha=0.6)
-        else
-            scatter!(Tuple(site), label="", c=:blue, markersize=abs(polarizations[index]) * 10.0, markeralpha=0.6)
-        end
+    #     if polarizations[index] > 0.0
+    #         scatter!(Tuple(site), label="", c=:red, markersize=polarizations[index] * 10.0, markeralpha=0.6)
+    #     else
+    #         scatter!(Tuple(site), label="", c=:blue, markersize=abs(polarizations[index]) * 10.0, markeralpha=0.6)
+    #     end
 
-    end
+    # end
 
     return p
 
@@ -124,7 +124,7 @@ filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], par
 filling_arr = (24 .+ LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / 48
 
 V_array = collect(LinRange(params["V_min"], params["V_max"], params["V_length"]))
-params["V"] = V_array[15]
+params["V"] = V_array[19]
 
 #J_array = collect(LinRange(params["J_min"], params["J_max"], params["J_length"]))
 
@@ -277,11 +277,12 @@ scatter!(getindex.(skyrmion_vectors, 1), getindex.(skyrmion_vectors, 2), label="
 scatter!(getindex.(symmetry_vectors, 1), getindex.(symmetry_vectors, 2), label="lattice")
 display(ssf_plot)
 
-RSPlot = plot_RS(UC, 2 * ord_array[4, 1:SkXSize^2*3] .- 2 * ord_array[4, SkXSize^2*3+1:SkXSize^2*6])
+RSPlot = plot_RS(UC, 1 * ord_array[15, 1:SkXSize^2*3] .- 1 * ord_array[15, SkXSize^2*3+1:SkXSize^2*6])
 display(RSPlot)
+data = 1 * ord_array[15, 1:SkXSize^2*3] .- 1 * ord_array[15, SkXSize^2*3+1:SkXSize^2*6]
 # RSPlot = plot_RS(UC, ord_array[1, SkXSize^2*3:SkXSize^2*3*2])
 # display(RSPlot)
-RSPlot = plot_RS(UC, 10 * ord_array[2, 1:SkXSize^2*3] .- 10 * ord_array[4, SkXSize^2*3+1:SkXSize^2*6])
+RSPlot = plot_RS(UC, 10 * ord_array[4, 1:SkXSize^2*3] .- 10 * ord_array[4, SkXSize^2*3+1:SkXSize^2*6])
 display(RSPlot)
 RSPlot = plot_RS(UC, order_parameter[4,:])
 display(RSPlot)
