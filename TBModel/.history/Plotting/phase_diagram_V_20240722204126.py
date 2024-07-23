@@ -16,7 +16,7 @@ filename = "06.27-27.2024_Bilayer"
 #filename = "07.13-29.2024_Bilayer"
 filename = "07.15-27.2024_Bilayer"
 #filename = "07.20-25.2024_Bilayer"
-filename = "07.22-25.2024_Bilayer"
+filename = "07.21-25.2024_Bilayer"
 #filename = "07.19-29.2024_Bilayer"
 
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
@@ -136,7 +136,7 @@ ax.set_ylabel(r'$U$')
 ax.set_xlabel(r'$V$')
 ax.set_ylim(U_array.min(), min(U_array.max(), 7))
 # Inset plot
-axins = inset_axes(ax, width="45%", height="45%", loc='upper left', bbox_to_anchor=(-0.02, -0.02, 0.98, 0.98),bbox_transform=ax.transAxes)
+axins = inset_axes(ax, width="45%", height="45%", loc='upper right', bbox_to_anchor=(-0.02, -0.02, 0.98, 0.98),bbox_transform=ax.transAxes)
 #im_ins = axins.imshow(np.abs(conduct[:,:Vidx]), aspect='auto', cmap='PuBuGn',vmin = 0, vmax=2, origin='lower',
 #                      extent=[V_array.min(), V_array[Vidx], U_array.min(), U_array.max()])
 im_ins = axins.pcolormesh(X, Y, np.abs(conduct[:,:Vidx]), cmap='Blues', vmin=0, vmax=1, shading='auto')

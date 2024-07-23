@@ -113,7 +113,7 @@ filename = "06.17-1.2024_Bilayer"
 #filename = "05.04-0.66.2024_Bilayer"
 
 filename = "07.09-25.2024_Bilayer"
-filename = "07.22-25.2024_Bilayer"
+filename = "07.21-25.2024_Bilayer"
 
 #println(@__DIR__)
 params = YAML.load_file("../Input/$(filename).yml")
@@ -124,7 +124,7 @@ filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], par
 filling_arr = (24 .+ LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / 48
 
 V_array = collect(LinRange(params["V_min"], params["V_max"], params["V_length"]))
-params["V"] = V_array[15]
+params["V"] = V_array[16]
 
 #J_array = collect(LinRange(params["J_min"], params["J_max"], params["J_length"]))
 
