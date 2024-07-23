@@ -13,11 +13,10 @@ os.getcwd()
  
 filename = "06.27-27.2024_Bilayer"  
 #filename = "07.09-25.2024_Bilayer"  
-#filename = "07.13-29.2024_Bilayer"
-filename = "07.15-27.2024_Bilayer"
-#filename = "07.20-25.2024_Bilayer"
+filename = "07.13-29.2024_Bilayer"
+#filename = "07.15-29.2024_Bilayer"
+filename = "07.20-25.2024_Bilayer"
 filename = "07.21-25.2024_Bilayer"
-filename = "07.19-25.2024_Bilayer"
 
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
@@ -98,7 +97,7 @@ plt.ylim(U_array.min(), min(U_array.max(), 7))
 plt.savefig("Plots/Bilayer_Conductivity_Extended.pdf")
 plt.show()
 fig = plt.figure(figsize=(8, 8))
-plt.imshow(polarization, aspect='auto', cmap='viridis', origin='lower', vmax = 0.005,
+plt.imshow(polarization, aspect='auto', cmap='viridis', origin='lower',
            extent=[V_array.min(), V_array.max(), U_array.min(), U_array.max()])
 plt.colorbar(label=r'$N(k)_{max}$')
 plt.ylabel(r'$U$')
@@ -130,7 +129,7 @@ X, Y = np.meshgrid(V_array[:Vidx], U_array)
 
 # im = ax.imshow(gap[:,:Vidx], aspect='auto', cmap='PuBuGn', origin='lower',
 #                extent=[V_array.min(), V_array[Vidx], U_array.min(), U_array.max()])
-im = ax.pcolormesh(X, Y, gap[:,:Vidx], cmap='Purples', vmin=0, vmax=0.2, shading='auto')
+im = ax.pcolormesh(X, Y, gap[:,:Vidx], cmap='PuBuGn', vmin=0, vmax=0.25, shading='auto')
 
 ax.set_ylabel(r'$U$')
 ax.set_xlabel(r'$V$')
@@ -159,8 +158,6 @@ bbox_to_anchor=(0.4, 0., 1, 1),
 bbox_transform=ax.transAxes,
 borderpad=0,
 )
-ax.set_rasterized(True)
-
 axins.set_rasterized(True)
 
 cax_1.set_rasterized(True)

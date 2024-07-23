@@ -14,10 +14,10 @@ os.getcwd()
 filename = "06.27-27.2024_Bilayer"  
 #filename = "07.09-25.2024_Bilayer"  
 #filename = "07.13-29.2024_Bilayer"
-filename = "07.15-27.2024_Bilayer"
-#filename = "07.20-25.2024_Bilayer"
+#filename = "07.15-29.2024_Bilayer"
+filename = "07.20-25.2024_Bilayer"
 filename = "07.21-25.2024_Bilayer"
-filename = "07.19-25.2024_Bilayer"
+filename = "07.19-27.2024_Bilayer"
 
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
@@ -98,7 +98,7 @@ plt.ylim(U_array.min(), min(U_array.max(), 7))
 plt.savefig("Plots/Bilayer_Conductivity_Extended.pdf")
 plt.show()
 fig = plt.figure(figsize=(8, 8))
-plt.imshow(polarization, aspect='auto', cmap='viridis', origin='lower', vmax = 0.005,
+plt.imshow(polarization, aspect='auto', cmap='viridis', origin='lower',
            extent=[V_array.min(), V_array.max(), U_array.min(), U_array.max()])
 plt.colorbar(label=r'$N(k)_{max}$')
 plt.ylabel(r'$U$')
