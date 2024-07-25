@@ -16,9 +16,9 @@ filename = "06.27-27.2024_Bilayer"
 #filename = "07.13-29.2024_Bilayer"
 filename = "07.15-27.2024_Bilayer"
 #filename = "07.20-25.2024_Bilayer"
-filename = "07.22-25.2024_Bilayer"
+filename = "07.21-25.2024_Bilayer"
 #filename = "07.19-29.2024_Bilayer"
-filename = "07.23-25.2024_Bilayer"
+#filename = "07.24-25.2024_Bilayer"
 
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
@@ -49,7 +49,7 @@ for (ind_V,V) in enumerate(V_array):
             TBResults = h5.File(fileName, 'r')
             conduct[ind_u, ind_V] =  np.mean(TBResults["Chern Fill"])
             energy[ind_u, ind_V] = TBResults["MFT_Energy"][-1]
-            gap[ind_u, ind_V]    =  float(TBResults[TBResults["Bands"][1]][25]-TBResults[TBResults["Bands"][1]][24])#np.mean(TBResults["Gap"])
+            gap[ind_u, ind_V]    = np.abs(TBResults["Gap"])#float(TBResults[TBResults["Bands"][1]][25]-TBResults[TBResults["Bands"][1]][24])#np.mean(TBResults["Gap"])
 
             temp_up = np.array(TBResults["ssf_up"])
             temp_dn = np.array(TBResults["ssf_dn"])
@@ -57,6 +57,10 @@ for (ind_V,V) in enumerate(V_array):
             ssf_dn = temp_dn['re'] + 1j*temp_dn['im']
 
             polarization[ind_u, ind_V] = np.abs(np.max(ssf_up)-np.max(ssf_dn))
+            # if V < 1.1:
+            #     polarization[ind_u, ind_V] = 0.000
+            # if polarization[ind_u, ind_V] < 0.05:
+            #     polarization[ind_u, ind_V] = 0.000
         except:
             continue
 
@@ -126,18 +130,18 @@ fig, ax = plt.subplots(figsize=(8, 8))
 ax.xaxis.set_minor_locator(mpl.ticker.AutoMinorLocator(2))
 ax.yaxis.set_minor_locator(mpl.ticker.AutoMinorLocator(2))
 # Main plot
-Vidx = np.searchsorted(V_array, 2.0)
+Vidx = np.searchsorted(V_array, 1.8)
 X, Y = np.meshgrid(V_array[:Vidx], U_array)
 
 # im = ax.imshow(gap[:,:Vidx], aspect='auto', cmap='PuBuGn', origin='lower',
 #                extent=[V_array.min(), V_array[Vidx], U_array.min(), U_array.max()])
-im = ax.pcolormesh(X, Y, gap[:,:Vidx], cmap='Purples', vmin=0, vmax=0.2, shading='auto')
+im = ax.pcolormesh(X, Y, polarization[:,:Vidx]/np.max(polarization), cmap='Purples', vmin=0, vmax=1.0, shading='auto')
 
 ax.set_ylabel(r'$U$')
 ax.set_xlabel(r'$V$')
 ax.set_ylim(U_array.min(), min(U_array.max(), 7))
 # Inset plot
-axins = inset_axes(ax, width="45%", height="45%", loc='upper left', bbox_to_anchor=(-0.02, -0.02, 0.98, 0.98),bbox_transform=ax.transAxes)
+axins = inset_axes(ax, width="45%", height="45%", loc='upper right', bbox_to_anchor=(-0.02, -0.02, 0.98, 0.98),bbox_transform=ax.transAxes)
 #im_ins = axins.imshow(np.abs(conduct[:,:Vidx]), aspect='auto', cmap='PuBuGn',vmin = 0, vmax=2, origin='lower',
 #                      extent=[V_array.min(), V_array[Vidx], U_array.min(), U_array.max()])
 im_ins = axins.pcolormesh(X, Y, np.abs(conduct[:,:Vidx]), cmap='Blues', vmin=0, vmax=1, shading='auto')
@@ -168,7 +172,7 @@ cax_1.set_rasterized(True)
 cax_2.set_rasterized(True)
 
 plt.colorbar(im_ins, cax=cax_2, label=r'$\sigma_{xy}$')
-plt.colorbar(im, cax=cax_1, label=r'$\Delta$')
+plt.colorbar(im, cax=cax_1, label=r'$N(Q)$')
 
 plt.savefig("Plots/"+filename+"_U_V.pdf", format = 'pdf')
 
