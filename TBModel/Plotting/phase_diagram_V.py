@@ -19,6 +19,7 @@ filename = "07.15-27.2024_Bilayer"
 filename = "07.21-25.2024_Bilayer"
 #filename = "07.19-29.2024_Bilayer"
 #filename = "07.24-25.2024_Bilayer"
+filename = "07.25-25.2024_Bilayer"
 
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
@@ -130,7 +131,7 @@ fig, ax = plt.subplots(figsize=(8, 8))
 ax.xaxis.set_minor_locator(mpl.ticker.AutoMinorLocator(2))
 ax.yaxis.set_minor_locator(mpl.ticker.AutoMinorLocator(2))
 # Main plot
-Vidx = np.searchsorted(V_array, 1.8)
+Vidx = np.searchsorted(V_array, 2.0)
 X, Y = np.meshgrid(V_array[:Vidx], U_array)
 
 # im = ax.imshow(gap[:,:Vidx], aspect='auto', cmap='PuBuGn', origin='lower',

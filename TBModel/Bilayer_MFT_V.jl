@@ -136,7 +136,7 @@ function MFT(params, filename)
 
     init_up = fill(filling, SkXSize^2 * 3) .+ rand_noise #.- 0.01
     init_dn = fill(filling, SkXSize^2 * 3) .+ rand_noise #.+ 0.01
-    oldfile = loc * "/07.24-25.2024_Bilayer_V=$(round(1.65, digits=3))_U=$(round(1.9, digits=2)).jld2"
+    oldfile = loc * "/07.25-25.2024_Bilayer_V=$(round(V, digits=3))_U=$(round(1.9, digits=2)).jld2"
     init_guess = load(oldfile)["outputs"][end] .+ vcat(fill(0.000,length(hopping_up)*2), fill(0.000,SkXSize^2 * 3), rand_noise,   rand_noise)
     #init_guess = vcat(fill(0.01,length(hopping_up)*2), fill(0.01,SkXSize^2 * 3), init_up, init_dn)
     if isfile(fileName)
@@ -147,8 +147,8 @@ function MFT(params, filename)
         catch e
             println("Error Loading $fileName")
             if haskey(params, "U_prev")
-                if params["U_prev"] < 0.25
-                    oldfile = loc * "/07.23-25.2024_Bilayer_V=$(round(1.6, digits=3))_U=$(round(1.9, digits=2)).jld2"
+                if params["U_prev"] > 1.75
+                    oldfile = loc * "/07.25-25.2024_Bilayer_V=$(round(V, digits=3))_U=$(round(1.9, digits=2)).jld2"
                     init_guess = load(oldfile)["outputs"][end] .+ vcat(fill(0.00001,length(hopping_up)*2), fill(0.00001,SkXSize^2 * 3), rand_noise,   rand_noise)
                     #oldfile = loc * "/$(filename)_p=$(round(filling, digits=3))_U=$(round(params["U_prev"], digits=2))_t1=$(round(t1, digits=2)).jld2"
                 else
@@ -165,7 +165,7 @@ function MFT(params, filename)
     else
         if haskey(params, "U_prev")
             if params["U_prev"] < 0.5
-                oldfile = loc * "/07.23-25.2024_Bilayer_V=$(round(1.6, digits=3))_U=$(round(1.9, digits=2)).jld2"
+                oldfile = loc * "/07.25-25.2024_Bilayer_V=$(round(V, digits=3))_U=$(round(1.9, digits=2)).jld2"
                 init_guess = load(oldfile)["outputs"][end] .+ vcat(fill(0.000,length(hopping_up)*2), fill(0.000,SkXSize^2 * 3), rand_noise,   rand_noise)
                 #oldfile = loc * "/$(filename)_p=$(round(filling, digits=3))_U=$(round(params["U_prev"], digits=2))_t1=$(round(t1, digits=2)).jld2"
             else

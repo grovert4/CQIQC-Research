@@ -24,9 +24,9 @@ function plot_RS(UC::UnitCell, polarizations::Vector{Float64})
         scatter!(Tuple(site), label="", c=:black, markersize=1.0, markeralpha=0.5)
 
         if polarizations[index] > 0.0
-            scatter!(Tuple(site), label="", c=:red, markersize=polarizations[index] * 10.0, markeralpha=0.6)
+            scatter!(Tuple(site), label="", c=:purple, markersize=polarizations[index] * 10.0, markeralpha=0.9)
         else
-            scatter!(Tuple(site), label="", c=:blue, markersize=abs(polarizations[index]) * 10.0, markeralpha=0.6)
+            scatter!(Tuple(site), label="", c=:orange, markersize=abs(polarizations[index]) * 10.0, markeralpha=0.9)
         end
 
     end
@@ -34,9 +34,9 @@ function plot_RS(UC::UnitCell, polarizations::Vector{Float64})
         scatter!(Tuple(site), label="", c=:black, markersize=1.0, markeralpha=0.5)
 
         if polarizations[index] > 0.0
-            scatter!(Tuple(site), label="", c=:red, markersize=polarizations[index] * 10.0, markeralpha=0.6)
+            scatter!(Tuple(site), label="", c=:purple, markersize=polarizations[index] * 10.0, markeralpha=0.9)
         else
-            scatter!(Tuple(site), label="", c=:blue, markersize=abs(polarizations[index]) * 10.0, markeralpha=0.6)
+            scatter!(Tuple(site), label="", c=:orange, markersize=abs(polarizations[index]) * 10.0, markeralpha=0.9)
         end
 
     end
@@ -44,9 +44,9 @@ function plot_RS(UC::UnitCell, polarizations::Vector{Float64})
         scatter!(Tuple(site), label="", c=:black, markersize=1.0, markeralpha=0.5)
 
         if polarizations[index] > 0.0
-            scatter!(Tuple(site), label="", c=:red, markersize=polarizations[index] * 10.0, markeralpha=0.6)
+            scatter!(Tuple(site), label="", c=:purple, markersize=polarizations[index] * 10.0, markeralpha=0.9)
         else
-            scatter!(Tuple(site), label="", c=:blue, markersize=abs(polarizations[index]) * 10.0, markeralpha=0.6)
+            scatter!(Tuple(site), label="", c=:orange, markersize=abs(polarizations[index]) * 10.0, markeralpha=0.9)
         end
 
     end
@@ -55,9 +55,9 @@ function plot_RS(UC::UnitCell, polarizations::Vector{Float64})
         scatter!(Tuple(site), label="", c=:black, markersize=1.0, markeralpha=0.5)
 
         if polarizations[index] > 0.0
-            scatter!(Tuple(site), label="", c=:red, markersize=polarizations[index] * 10.0, markeralpha=0.6)
+            scatter!(Tuple(site), label="", c=:purple, markersize=polarizations[index] * 10.0, markeralpha=0.9)
         else
-            scatter!(Tuple(site), label="", c=:blue, markersize=abs(polarizations[index]) * 10.0, markeralpha=0.6)
+            scatter!(Tuple(site), label="", c=:orange, markersize=abs(polarizations[index]) * 10.0, markeralpha=0.9)
         end
 
     end
@@ -65,9 +65,9 @@ function plot_RS(UC::UnitCell, polarizations::Vector{Float64})
         scatter!(Tuple(site), label="", c=:black, markersize=1.0, markeralpha=0.5)
 
         if polarizations[index] > 0.0
-            scatter!(Tuple(site), label="", c=:red, markersize=polarizations[index] * 10.0, markeralpha=0.6)
+            scatter!(Tuple(site), label="", c=:purple, markersize=polarizations[index] * 10.0, markeralpha=0.9)
         else
-            scatter!(Tuple(site), label="", c=:blue, markersize=abs(polarizations[index]) * 10.0, markeralpha=0.6)
+            scatter!(Tuple(site), label="", c=:orange, markersize=abs(polarizations[index]) * 10.0, markeralpha=0.9)
         end
 
     end
@@ -76,9 +76,9 @@ function plot_RS(UC::UnitCell, polarizations::Vector{Float64})
         scatter!(Tuple(site), label="", c=:black, markersize=1.0, markeralpha=0.5)
 
         if polarizations[index] > 0.0
-            scatter!(Tuple(site), label="", c=:red, markersize=polarizations[index] * 10.0, markeralpha=0.6)
+            scatter!(Tuple(site), label="", c=:purple, markersize=polarizations[index] * 10.0, markeralpha=0.9)
         else
-            scatter!(Tuple(site), label="", c=:blue, markersize=abs(polarizations[index]) * 10.0, markeralpha=0.6)
+            scatter!(Tuple(site), label="", c=:orange, markersize=abs(polarizations[index]) * 10.0, markeralpha=0.9)
         end
 
     end
@@ -86,9 +86,9 @@ function plot_RS(UC::UnitCell, polarizations::Vector{Float64})
         scatter!(Tuple(site), label="", c=:black, markersize=1.0, markeralpha=0.5)
 
         if polarizations[index] > 0.0
-            scatter!(Tuple(site), label="", c=:red, markersize=polarizations[index] * 10.0, markeralpha=0.6)
+            scatter!(Tuple(site), label="", c=:purple, markersize=polarizations[index] * 10.0, markeralpha=0.9)
         else
-            scatter!(Tuple(site), label="", c=:blue, markersize=abs(polarizations[index]) * 10.0, markeralpha=0.6)
+            scatter!(Tuple(site), label="", c=:orange, markersize=abs(polarizations[index]) * 10.0, markeralpha=0.9)
         end
 
     end
@@ -113,7 +113,7 @@ filename = "06.17-1.2024_Bilayer"
 #filename = "05.04-0.66.2024_Bilayer"
 
 filename = "07.09-25.2024_Bilayer"
-filename = "07.24-25.2024_Bilayer"
+filename = "07.25-25.2024_Bilayer"
 
 #println(@__DIR__)
 params = YAML.load_file("../Input/$(filename).yml")
@@ -124,7 +124,7 @@ filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], par
 filling_arr = (24 .+ LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / 48
 
 V_array = collect(LinRange(params["V_min"], params["V_max"], params["V_length"]))
-params["V"] = V_array[5]
+params["V"] = V_array[19]
 
 #J_array = collect(LinRange(params["J_min"], params["J_max"], params["J_length"]))
 
@@ -277,7 +277,7 @@ scatter!(getindex.(skyrmion_vectors, 1), getindex.(skyrmion_vectors, 2), label="
 scatter!(getindex.(symmetry_vectors, 1), getindex.(symmetry_vectors, 2), label="lattice")
 display(ssf_plot)
 
-RSPlot = plot_RS(UC, 1 * ord_array[6, 1:SkXSize^2*3] .- 1 * ord_array[6, SkXSize^2*3+1:SkXSize^2*6])
+RSPlot = plot_RS(UC, 1 * ord_array[10, 1:SkXSize^2*3] .- 1 * ord_array[10, SkXSize^2*3+1:SkXSize^2*6])
 display(RSPlot)
 data = 1 * ord_array[15, 1:SkXSize^2*3] .- 1 * ord_array[15, SkXSize^2*3+1:SkXSize^2*6]
 # RSPlot = plot_RS(UC, ord_array[1, SkXSize^2*3:SkXSize^2*3*2])
@@ -286,3 +286,4 @@ RSPlot = plot_RS(UC, 10 * ord_array[4, 1:SkXSize^2*3] .- 10 * ord_array[4, SkXSi
 display(RSPlot)
 RSPlot = plot_RS(UC, order_parameter[4,:])
 display(RSPlot)
+savefig(RSPlot,"file.png")
