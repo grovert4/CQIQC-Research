@@ -147,7 +147,7 @@ function MFT(params, filename)
         catch e
             println("Error Loading $fileName")
             if haskey(params, "U_prev")
-                if params["U_prev"] > 0.75
+                if params["U_prev"] > 1.75
                     V_old = LinRange(1.0,2.0,21)
                     differences = abs.(V .- V_old)
                     V_close = y[argmin(differences)]
@@ -167,7 +167,7 @@ function MFT(params, filename)
         end
     else
         if haskey(params, "U_prev")
-            if params["U_prev"] > 0.75
+            if params["U_prev"] > 1.75
                 V_old = LinRange(1.0,2.0,21)
                 differences = abs.(V .- V_old)
                 V_close = y[argmin(differences)]
