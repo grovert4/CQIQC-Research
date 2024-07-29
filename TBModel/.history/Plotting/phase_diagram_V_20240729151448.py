@@ -19,7 +19,7 @@ filename = "07.15-27.2024_Bilayer"
 filename = "07.21-25.2024_Bilayer"
 #filename = "07.19-29.2024_Bilayer"
 #filename = "07.24-25.2024_Bilayer"
-filename = "07.29-25.2024_Bilayer"
+filename = "07.25-25.2024_Bilayer"
 
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
@@ -142,7 +142,7 @@ ax.set_ylabel(r'$U$')
 ax.set_xlabel(r'$V$')
 ax.set_ylim(U_array.min(), min(U_array.max(), 7))
 # Inset plot
-axins = inset_axes(ax, width="45%", height="45%", loc='upper left', bbox_to_anchor=(-0.02, -0.02, 0.98, 0.98),bbox_transform=ax.transAxes)
+axins = inset_axes(ax, width="45%", height="45%", loc='upper right', bbox_to_anchor=(-0.02, -0.02, 0.98, 0.98),bbox_transform=ax.transAxes)
 #im_ins = axins.imshow(np.abs(conduct[:,:Vidx]), aspect='auto', cmap='PuBuGn',vmin = 0, vmax=2, origin='lower',
 #                      extent=[V_array.min(), V_array[Vidx], U_array.min(), U_array.max()])
 im_ins = axins.pcolormesh(X, Y, np.abs(conduct[:,:Vidx]), cmap='Blues', vmin=0, vmax=1, shading='auto')
@@ -181,18 +181,13 @@ plt.show()
 fig, ax = plt.subplots(figsize=(8, 8))
 ax.xaxis.set_minor_locator(mpl.ticker.AutoMinorLocator(2))
 ax.yaxis.set_minor_locator(mpl.ticker.AutoMinorLocator(2))
-p = polarization[0,:]/np.max(polarization[0,:])
-for i in range(len(p)):
-    if (1-p[i]) < 0.05:
-        p[i] = 1/2*(p[i-1]+p[i+1])
-    if np.abs(conduct[0,i]) > 2:
-        conduct[0,i] = conduct[0,i+1]*1.1
-#plt.plot(V_array, gap[0,:]/np.max(gap[0,-1]), linewidth = 2, markersize = 15,marker = "^", label = r"$\Delta$")
-plt.plot(V_array, np.abs(conduct[0,:]), linewidth = 2, markersize = 10,marker = "o", label = r"$|\sigma_{xy}|$")
-plt.plot(V_array, p/np.max(p), linewidth = 2, markersize = 15,marker = "X", label = r"$N(Q)$")
+
+plt.plot(U_array, gap[0,:]/gap[0,-1], linewidth = 2, markersize = 15,marker = "^", label = r"$\Delta$")
+plt.plot(U_array, np.abs(conduct[0,:]), linewidth = 2, markersize = 10,marker = "o", label = r"$|\sigma_{xy}|$")
+plt.plot(U_array, polarization[0,:]/np.max(polarization[0,:]), linewidth = 2, markersize = 15,marker = "X", label = r"$N(Q)$")
 
 plt.legend(fontsize = 20)
-plt.xlabel(r"$V$", fontsize = 20)
+plt.xlabel(r"$U$", fontsize = 20)
 plt.savefig("Plots/"+filename+"_U.pdf", format = 'pdf')
 plt.show()
 
