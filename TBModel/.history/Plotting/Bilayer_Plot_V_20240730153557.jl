@@ -125,7 +125,7 @@ filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], par
 filling_arr = (24 .+ LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / 48
 
 V_array = collect(LinRange(params["V_min"], params["V_max"], params["V_length"]))
-params["V"] = V_array[18]
+params["V"] = V_array[15]
 
 #J_array = collect(LinRange(params["J_min"], params["J_max"], params["J_length"]))
 
@@ -178,9 +178,9 @@ gap_array = zeros((length(U_array), 2))
 ord_array = Array{Float64}(undef, (length(U_array), 2 * SkXSize^2 * 3))
 eng_array = Array{Float64}(undef, (length(U_array)))
 
-for (ind, U_var) in enumerate(U_array[:])
+#for (ind, U_var) in enumerate(U_array[:])
 #for (ind, V_var) in enumerate(V_array[:])
-    #U_var = U_array[1]
+    U_var = U_array[1]
     #params["V"] = V_var
     println(U_var)
     if Uniform_Status == true
