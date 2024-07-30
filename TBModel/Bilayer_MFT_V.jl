@@ -196,9 +196,9 @@ function MFT(params, filename)
                 #init_guess = load(oldfile)["outputs"][end] .+ vcat(fill(0.000,length(hopping_up)*2), fill(0.000,SkXSize^2 * 3), rand_noise, -1 .* rand_noise)
                 init_guess = load(oldfile)["outputs"][end] .+ vcat(fill(0.00001,length(hopping_up)*2), fill(0.0001,SkXSize^2 * 3), rand_noise,  rand_noise)
             end
-            SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
+            SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"], Update_kwargs = Dict{Symbol, Any}(:alpha => 0.25))
         else
-            SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"])
+            SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"], Update_kwargs = Dict{Symbol, Any}(:alpha => 0.25))
         end
     end
 end
