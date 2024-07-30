@@ -113,7 +113,7 @@ filename = "06.17-1.2024_Bilayer"
 #filename = "05.04-0.66.2024_Bilayer"
 
 filename = "07.09-25.2024_Bilayer"
-filename = "07.28-25.2024_Bilayer"
+filename = "07.25-25.2024_Bilayer"
 
 #println(@__DIR__)
 params = YAML.load_file("../Input/$(filename).yml")
@@ -124,7 +124,7 @@ filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], par
 filling_arr = (24 .+ LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / 48
 
 V_array = collect(LinRange(params["V_min"], params["V_max"], params["V_length"]))
-params["V"] = V_array[15]
+params["V"] = V_array[8]
 
 #J_array = collect(LinRange(params["J_min"], params["J_max"], params["J_length"]))
 
@@ -177,10 +177,10 @@ gap_array = zeros((length(U_array), 2))
 ord_array = Array{Float64}(undef, (length(U_array), 2 * SkXSize^2 * 3))
 eng_array = Array{Float64}(undef, (length(U_array)))
 
-for (ind, U_var) in enumerate(U_array[:])
-#for (ind, V_var) in enumerate(V_array[:])
-    #U_var = U_array[1]
-    #params["V"] = V_var
+#for (ind, U_var) in enumerate(U_array[:])
+for (ind, V_var) in enumerate(V_array[:])
+    U_var = U_array[1]
+    params["V"] = V_var
     println(U_var)
     if Uniform_Status == true
         fileName = loc * "Last_Itr_$(filename)_UNIFORM_p=$(round(params["jh"], digits=3))_U=$(round(U_var, digits=2))_t1=$(round(t1, digits=2)).jld2"
@@ -197,7 +197,7 @@ for (ind, U_var) in enumerate(U_array[:])
     SkXsize = length(TBResults["UC"].basis)
 
     gap_array[ind, 1] = U_var
-    gap_array[ind, 2] = TBResults["Bands"][1][31]-TBResults["Bands"][1][30] #TBResults["Gap"]
+    gap_array[ind, 2] = TBResults["Bands"][1][26]-TBResults["Bands"][1][25] #TBResults["Gap"]
     #println(TBResults["MFT_Energy"])
     eng_array[ind] = TBResults["MFT_Energy"][end]
     #println(TBResults["Gap"])

@@ -124,7 +124,7 @@ filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], par
 filling_arr = (24 .+ LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / 48
 
 V_array = collect(LinRange(params["V_min"], params["V_max"], params["V_length"]))
-params["V"] = V_array[15]
+params["V"] = V_array[8]
 
 #J_array = collect(LinRange(params["J_min"], params["J_max"], params["J_length"]))
 

@@ -19,7 +19,7 @@ filename = "07.15-27.2024_Bilayer"
 filename = "07.21-25.2024_Bilayer"
 #filename = "07.19-29.2024_Bilayer"
 #filename = "07.24-25.2024_Bilayer"
-filename = "07.28-25.2024_Bilayer"
+filename = "07.26-25.2024_Bilayer"
 
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
@@ -50,7 +50,7 @@ for (ind_V,V) in enumerate(V_array):
             TBResults = h5.File(fileName, 'r')
             conduct[ind_u, ind_V] =  np.mean(TBResults["Chern Fill"])
             energy[ind_u, ind_V] = TBResults["MFT_Energy"][-1]
-            gap[ind_u, ind_V]    = float(TBResults[TBResults["Bands"][1]][30]-TBResults[TBResults["Bands"][1]][28])#np.mean(TBResults["Gap"])np.abs(TBResults["Gap"])#
+            gap[ind_u, ind_V]    = float(TBResults[TBResults["Bands"][1]][26]-TBResults[TBResults["Bands"][1]][25])#np.mean(TBResults["Gap"])np.abs(TBResults["Gap"])#
 
             temp_up = np.array(TBResults["ssf_up"])
             temp_dn = np.array(TBResults["ssf_dn"])
@@ -142,7 +142,7 @@ ax.set_ylabel(r'$U$')
 ax.set_xlabel(r'$V$')
 ax.set_ylim(U_array.min(), min(U_array.max(), 7))
 # Inset plot
-axins = inset_axes(ax, width="45%", height="45%", loc='upper left', bbox_to_anchor=(0.05, -0.02,1.02, 0.95 ),bbox_transform=ax.transAxes)
+axins = inset_axes(ax, width="45%", height="45%", loc='upper left', bbox_to_anchor=(-0.02, -0.02, 0.98, 0.98),bbox_transform=ax.transAxes)
 #im_ins = axins.imshow(np.abs(conduct[:,:Vidx]), aspect='auto', cmap='PuBuGn',vmin = 0, vmax=2, origin='lower',
 #                      extent=[V_array.min(), V_array[Vidx], U_array.min(), U_array.max()])
 im_ins = axins.pcolormesh(X, Y, np.abs(conduct[:,:Vidx]), cmap='Blues', vmin=0, vmax=1, shading='auto')
@@ -186,15 +186,13 @@ for i in range(len(p)):
     if (1-p[i]) < 0.05:
         try: 
             p[i] = 1/2*(p[i-1]+p[i+1])
-        except:
+        else:
             p[i] = 1
     if np.abs(conduct[0,i]) > 2:
         conduct[0,i] = conduct[0,i+1]*1.1
-    if np.abs(conduct[0,i]) > 0.1:
-        gap[0,i] = 0.0
-plt.plot(V_array, gap[0,:]/np.max(gap[0,:]), linewidth = 2, markersize = 10,marker = "^", label = r"$\Delta$")
+plt.plot(V_array, gap[0,:]/np.max(gap[0,:]), linewidth = 2, markersize = 15,marker = "^", label = r"$\Delta$")
 plt.plot(V_array, np.abs(conduct[0,:]), linewidth = 2, markersize = 10,marker = "o", label = r"$|\sigma_{xy}|$")
-plt.plot(V_array, p/np.max(p), linewidth = 2, markersize = 10,marker = "X", label = r"$N(Q)$")
+plt.plot(V_array, p/np.max(p), linewidth = 2, markersize = 15,marker = "X", label = r"$N(Q)$")
 
 plt.legend(fontsize = 20)
 plt.xlabel(r"$V$", fontsize = 20)
