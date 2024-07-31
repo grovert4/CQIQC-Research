@@ -136,7 +136,7 @@ function MFT(params, filename)
 
     init_up = fill(filling, SkXSize^2 * 3) .+ rand_noise #.- 0.01
     init_dn = fill(filling, SkXSize^2 * 3) .+ rand_noise #.+ 0.01
-    V_old = LinRange(0.0,1.5,21)
+    V_old = LinRange(0.0,1.5,11)
     differences = abs.(V .- V_old)
     V_close = V_old[argmin(differences)]
     if (V_close < 1.2) && (V_close > 0.4)
