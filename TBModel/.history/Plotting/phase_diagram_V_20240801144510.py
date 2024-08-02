@@ -12,9 +12,9 @@ os.getcwd()
 
  
 filename = "06.27-27.2024_Bilayer"  
-filename = "07.19.2024_Bilayer"  
+#filename = "07.09-25.2024_Bilayer"  
 #filename = "07.13-29.2024_Bilayer"
-#filename = "07.15-27.2024_Bilayer"
+filename = "07.15-27.2024_Bilayer"
 #filename = "07.20-25.2024_Bilayer"
 filename = "07.21-25.2024_Bilayer"
 #filename = "07.19-29.2024_Bilayer"
@@ -58,8 +58,8 @@ for (ind_V,V) in enumerate(V_array):
             ssf_dn = temp_dn['re'] + 1j*temp_dn['im']
 
             polarization[ind_u, ind_V] = np.abs(np.max(ssf_up)-np.max(ssf_dn))
-            # if V < 0.3:
-            #     conduct[ind_u, ind_V] = 0.000
+            if V < 0.3:
+                conduct[ind_u, ind_V] = 0.000
             # if polarization[ind_u, ind_V] < 0.05:
             #     polarization[ind_u, ind_V] = 0.000
         except:

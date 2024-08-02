@@ -12,11 +12,11 @@ os.getcwd()
 
  
 filename = "06.27-27.2024_Bilayer"  
-filename = "07.19.2024_Bilayer"  
+filename = "07.19-25.2024_Bilayer"  
 #filename = "07.13-29.2024_Bilayer"
 #filename = "07.15-27.2024_Bilayer"
 #filename = "07.20-25.2024_Bilayer"
-filename = "07.21-25.2024_Bilayer"
+#filename = "07.21-25.2024_Bilayer"
 #filename = "07.19-29.2024_Bilayer"
 #filename = "07.24-25.2024_Bilayer"
 #filename = "07.31-25.2024_Bilayer"

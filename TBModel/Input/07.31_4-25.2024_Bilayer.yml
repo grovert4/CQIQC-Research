@@ -12,13 +12,13 @@ V : 0.0
 t_density : 0.0
 filling : 0.5208333333333334
 U_min : 0.0
-U_max : 4.0
-U_length : 41
+U_max : 2.0
+U_length : 21
 filling_min : 1
 filling_max : 12
 filling_length : 12
 V_min : 0.0
 V_max : 1.0
-V_length : 41
+V_length : 21
 SkXSize : 2
 SkX: "Bloch"

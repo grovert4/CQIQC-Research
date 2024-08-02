@@ -200,9 +200,7 @@ for (ind, U_var) in enumerate(U_array)
     SolveModel!(Mdl; get_gap=true)
 
     bands = Plot_Band_Structure!(Mdl, [bz.HighSymPoints["G"], bz.HighSymPoints["K1"], bz.HighSymPoints["M2"]], [13,14,15,16],labels=["G", "K1", "M2"], plot_legend=false)
-    plot!(bands, legend=false, ylims = (5,8))
-    #plot!(bands, legend=false, ylims = (12,15))
-
+    plot!(bands, ylims = (7.5,15), legend=false)
     display(bands)
 
     p = Plot_Fields!(TBResults["UC"]; use_lookup=true, site_size=1.0,
