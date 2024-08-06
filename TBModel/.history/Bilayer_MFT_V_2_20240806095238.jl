@@ -132,7 +132,7 @@ function MFT(params, filename)
     fileName = loc * "/$(filename)_V=$(round(V, digits=3))_U=$(round(U, digits=2)).jld2"
     GC.gc()
     rand_noise = rand(SkXSize^2 * 3) .- 0.5
-    rand_noise = 0.01 .* (rand_noise .- sum(rand_noise) / (SkXSize^2 * 3))
+    rand_noise = 0.001 .* (rand_noise .- sum(rand_noise) / (SkXSize^2 * 3))
 
     init_up = fill(filling, SkXSize^2 * 3) .+ rand_noise .- 0.001
     init_dn = fill(filling, SkXSize^2 * 3) .+ rand_noise .+ 0.001
@@ -164,7 +164,7 @@ function MFT(params, filename)
                     a_guess = load(oldfile)["outputs"][end] .+ vcat(fill(0.000,length(hopping_up)*2), fill(0.000,SkXSize^2 * 3), rand_noise,   -1*rand_noise)
                     oldfile = loc * "/$(filename)_V=$(round(V, digits=3))_U=$(round(params["U_prev"], digits=2)).jld2"
                     b_guess = load(oldfile)["outputs"][end] .+ vcat(fill(0.00001,length(hopping_up)*2), fill(0.0001,SkXSize^2 * 3), rand_noise,  -1*rand_noise)
-                    init_guess = 0.5 .* (a_guess./3 .+ b_guess.*(2/3))
+                    init_guess = 0.5 .* (a_guess .+ b_guess)
                 else
                 #oldfile = loc * "/$(filename)_J=$(round(jh, digits=3))_U=$(round(params["U_prev"], digits=2)).jld2"
                     oldfile = loc * "/$(filename)_V=$(round(V, digits=3))_U=$(round(params["U_prev"], digits=2)).jld2"

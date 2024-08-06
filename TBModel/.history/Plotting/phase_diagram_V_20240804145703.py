@@ -132,7 +132,7 @@ fig, ax = plt.subplots(figsize=(8, 8))
 ax.xaxis.set_minor_locator(mpl.ticker.AutoMinorLocator(2))
 ax.yaxis.set_minor_locator(mpl.ticker.AutoMinorLocator(2))
 # Main plot
-Vidx = np.searchsorted(V_array, 0.5)
+Vidx = np.searchsorted(V_array, 2.0)
 X, Y = np.meshgrid(V_array[:Vidx], U_array)
 
 # im = ax.imshow(gap[:,:Vidx], aspect='auto', cmap='PuBuGn', origin='lower',
@@ -143,7 +143,7 @@ ax.set_ylabel(r'$U$')
 ax.set_xlabel(r'$V$')
 ax.set_ylim(U_array.min(), min(U_array.max(), 7))
 # Inset plot
-axins = inset_axes(ax, width="45%", height="45%", loc='lower right', bbox_to_anchor=(-0.05, 0.05,0.95, 1.05 ),bbox_transform=ax.transAxes)
+axins = inset_axes(ax, width="45%", height="45%", loc='lower left', bbox_to_anchor=(0.05, 0.05,1.05, 1.05 ),bbox_transform=ax.transAxes)
 #im_ins = axins.imshow(np.abs(conduct[:,:Vidx]), aspect='auto', cmap='PuBuGn',vmin = 0, vmax=2, origin='lower',
 #                      extent=[V_array.min(), V_array[Vidx], U_array.min(), U_array.max()])
 im_ins = axins.pcolormesh(X, Y, np.abs(conduct[:,:Vidx]), cmap='Blues', vmin=0, vmax=1, shading='auto')
