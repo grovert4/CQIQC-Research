@@ -5,8 +5,6 @@ import os,sys
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-from matplotlib.ticker import MaxNLocator
-
 loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Bilayer_Data/"
 t1 = -1.0
 os.chdir("/home/andrewhardy/Documents/Graduate/Codes/Skyrmion/TBModel/Plotting")
@@ -65,7 +63,7 @@ for (ind_V,V) in enumerate(V_array):
 
             #polarization[ind_u, ind_V] = np.max(np.abs(ssf_up-ssf_dn))
             polarization[ind_u, ind_V] = np.abs(np.sum(TBResults["Expectations"][-12:]) - np.sum(TBResults["Expectations"][-24:-12]))
-            ssf[ind_u,ind_V] = np.max(np.abs(ssf_up-ssf_dn))
+            ssf[ind_u,ind_V] = np.max(np.abs(ssf_dn))
 
             # if V < 0.3:
             #     conduct[ind_u, ind_V] = 0.000
@@ -139,59 +137,7 @@ plt.xlabel(r'$V$')
 plt.savefig("Plots/Bilayer_Polarization_Extended.pdf")
 
 plt.show()
-fig = plt.figure(figsize=(18, 8))
-gs = fig.add_gridspec(1, 5, width_ratios=[1,1, 0.05, 0.2, 0.05], wspace = 0.05)
 
-ax1 = fig.add_subplot(gs[0, 0])
-cax1 = fig.add_subplot(gs[0, 2])
-ax2 = fig.add_subplot(gs[0, 1])
-cax2 = fig.add_subplot(gs[0, 4])
-
-# Main plot (left subplot)
-Vidx = np.searchsorted(V_array, 1.5)
-Uidx = np.searchsorted(U_array, 1.5)
-
-X, Y = np.meshgrid(V_array[15:Vidx], U_array[:Uidx])
-blues = plt.get_cmap("Blues")
-
-# Create a new colormap with white at the bottom
-colors = blues(np.linspace(0, 1, 256))
-colors[0] = [1, 1, 1, 1]  # Set the first color to white
-new_cmap = LinearSegmentedColormap.from_list("new_Blues", colors)
-
-im1 = ax1.pcolormesh(X, Y, ssf[:Uidx,15:Vidx], cmap=new_cmap, vmin=0, vmax=0.521, shading='auto')
-ax1.set_ylabel(r'$U$', fontsize=30)
-ax1.set_xlabel(r'$V$', fontsize=30)
-ax1.xaxis.set_minor_locator(mpl.ticker.AutoMinorLocator(2))
-ax1.yaxis.set_minor_locator(mpl.ticker.AutoMinorLocator(2))
-ax1.tick_params(axis='both', which='major', labelsize=25)
-ax1.tick_params(axis='both', which='minor', labelsize=20)
-ax1.yaxis.set_major_locator(MaxNLocator(nbins=5))  # Set maximum number of y-axis ticks
-
-# Second plot (right subplot)
-im2 = ax2.pcolormesh(X, Y, np.abs(conduct[:Uidx,15:Vidx]), cmap='Purples', vmin=0, vmax=1, shading='auto')
-ax2.set_xlabel(r'$V$', fontsize=30)
-ax2.xaxis.set_minor_locator(mpl.ticker.AutoMinorLocator(2))
-ax2.yaxis.set_minor_locator(mpl.ticker.AutoMinorLocator(2))
-ax2.tick_params(axis='both', which='major', labelsize=25)
-ax2.tick_params(axis='both', which='minor', labelsize=20)
-ax2.set_yticklabels([])  # Remove y-tick labels for the second plot
-
-# Colorbars
-cbar1 = plt.colorbar(im1, cax=cax1, label=r'$\Delta n$')
-cbar1.ax.yaxis.label.set_size(30)
-cbar2 = plt.colorbar(im2, cax=cax2, label=r'$\sigma_{xy}$')
-cbar2.ax.yaxis.label.set_size(30)
-cbar1.ax.tick_params(labelsize=25)  # Increase colorbar tick label size
-
-cbar2.ax.tick_params(labelsize=25)  # Increase colorbar tick label size
-
-# Rasterize
-ax1.set_rasterized(True)
-ax2.set_rasterized(True)
-
-plt.savefig("Plots/"+filename+"_U_V.pdf", format='pdf', bbox_inches="tight")
-plt.show()
 
 fig, ax = plt.subplots(figsize=(8, 8))
 ax.xaxis.set_minor_locator(mpl.ticker.AutoMinorLocator(2))
@@ -248,21 +194,20 @@ cax_1.set_rasterized(True)
 cax_2.set_rasterized(True)
 
 plt.colorbar(im_ins, cax=cax_2, label=r'$\sigma_{xy}$')
-plt.colorbar(im, cax=cax_1, label=r'$\Delta n(Q)$')
+plt.colorbar(im, cax=cax_1, label=r'$n(Q=K)$')
 
-#plt.savefig("Plots/"+filename+"_U_V.pdf", format = 'pdf')
+plt.savefig("Plots/"+filename+"_U_V.pdf", format = 'pdf')
 
 plt.show()
-u_idx = 9
-v_idx = 25
+u_idx = 25
 from matplotlib import cycler
 colors = plt.cm.Set1(np.linspace(0, 1, 9))  # "Set1" has 9 distinct colors
 plt.rc('axes', prop_cycle=(cycler('color', colors)))
 fig, ax = plt.subplots(figsize=(8, 8))
 ax.xaxis.set_minor_locator(mpl.ticker.AutoMinorLocator(2))
 ax.yaxis.set_minor_locator(mpl.ticker.AutoMinorLocator(2))
-p = polarization[u_idx,v_idx:]#/np.max(polarization[0,:])
-s = ssf[u_idx,v_idx:]
+p = polarization[u_idx,:]#/np.max(polarization[0,:])
+s = ssf[u_idx,:]
 print(U_array[u_idx])
 #for i in range(len(p)):
 
@@ -276,9 +221,9 @@ print(U_array[u_idx])
 #     if np.abs(conduct[u_idx,i]) > 0.1:
 #         gap[0,i] = 0.0
 #plt.plot(V_array, gap[u_idx,:]/np.max(gap[u_idx,:]), linewidth = 2, markersize = 10,marker = "^", label = r"$\Delta$")
-plt.plot(V_array[v_idx:], np.abs(conduct[u_idx,v_idx:]), linewidth = 2.5, markersize = 8,marker = "o", label = r"$|\sigma_{xy}|$", color = colors[3], markeredgecolor='black', markeredgewidth=0.65)
-plt.plot(V_array[v_idx:], 100*p/12, linewidth = 2.5, markersize = 8,marker = "X", label = r"$100 \times \Delta n$",color = colors[1], markeredgecolor='black', markeredgewidth=0.65)
-plt.plot(V_array[v_idx:], s, linewidth = 2.5, markersize = 8,marker = "^", label = r"$\Delta n(Q)$", color = colors[2], markeredgecolor='black', markeredgewidth=0.65)
+plt.plot(V_array, np.abs(conduct[u_idx,:]), linewidth = 2, markersize = 10,marker = "o", label = r"$|\sigma_{xy}|$", color = colors[3])
+plt.plot(V_array, p, linewidth = 2, markersize = 10,marker = "X", label = r"$\Delta \overline{n}$",color = colors[1])
+plt.plot(V_array, s, linewidth = 2, markersize = 10,marker = "X", label = r"$n(Q=K/2)$", color = colors[2])
 
 plt.legend(fontsize = 20)
 plt.xlabel(r"$V$", fontsize = 20)
