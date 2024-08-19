@@ -12,4 +12,6 @@
 #SBATCH --output=/scratch/grovert4/SLURM/slurm-%x-%j.txt
 module load julia/1.8.5
 
+module load StdEnv/2020
+module load julia/1.8.5
 srun julia SkX_MonoLayer_Run.jl 17.08.2024-Monolayer.json
