@@ -10,7 +10,6 @@
 #SBATCH --time=06:00:00
 #SBATCH --mem-per-cpu=8000MB
 #SBATCH --output=/scratch/grovert4/SLURM/slurm-%x-%j.txt
-module load julia/1.8.5
 
 module load StdEnv/2020
 module load julia/1.8.5
