@@ -122,14 +122,13 @@ function StructureFactor(mc, layer)
 end
 
 
-function runAnneal(t0,tf,lat,thermSweeps,MeasureSweeps, coolRate, outfile=nothing, init_rewrite=true, extfiled = false)
+function runAnneal(t0,tf,lat,thermSweeps,MeasureSweeps, coolRate, outfile=nothing, init_rewrite=true, extfield = false)
    ts = [t0 * coolRate^t for t in -500:5000 if t0 >= t0 * coolRate^t >= tf]
    monte = nothing
    for (ind,temp) in enumerate(ts) 
       thermalizationSweeps = thermSweeps
       measurementSweeps = 0
       h = abs.(lat.unitcell.interactionsField[1][3])
-        
       if ind == 1
             thermalizationSweeps = MeasureSweeps
             measurementSweeps = 0
