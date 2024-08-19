@@ -141,7 +141,7 @@ function runAnneal(t0,tf,lat,thermSweeps,MeasureSweeps, coolRate, outfile=nothin
 
             run_nompi!(m, disableOutput = true)
       else
-            if (ind == length(ts)) || (ind == round(0.36 * length(ts))) 
+            if (ind == length(ts)) || (ind == round(0.5 * length(ts))) 
                thermalizationSweeps = 0
                measurementSweeps = MeasureSweeps
             end
