@@ -70,7 +70,7 @@ end_index = start_index + elements_per_process - 1 + (commRank < remainder ? 1 :
 for i in start_index:end_index
    h = round(Hs[i],sigdigits=5)
    j2 = round(J2s[i],sigdigits=5)
-   filename = "/scratch/grovert4/Data/Monolayer_Runs_Take2_36x36/"*ARGS[1]*"_H=$h,J2=$j2.h5"
+   filename = "/scratch/grovert4/Data/Aminus-Monolayer/"*ARGS[1]*"_H=$h,J2=$j2.h5"
 
    if isfile(filename) 
       println("Already Completed "*filename)
