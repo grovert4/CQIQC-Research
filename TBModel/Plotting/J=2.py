@@ -6,6 +6,7 @@ import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator
+from matplotlib.colors import LinearSegmentedColormap
 
 loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Bilayer_Data/"
 t1 = -1.0
@@ -24,6 +25,7 @@ filename = "07.24-25.2024_Bilayer"
 filename = "07.31-25.2024_Bilayer"
 #filename = "07.31_4-25.2024_Bilayer"
 filename = "08.02-25.2024_Bilayer"
+filename = "09.03-25.2024_Bilayer"
 
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
@@ -62,7 +64,6 @@ for (ind_V,V) in enumerate(V_array):
             temp_dn = np.array(TBResults["ssf_dn"])
             ssf_up = temp_up['re'] + 1j*temp_up['im']
             ssf_dn = temp_dn['re'] + 1j*temp_dn['im']
-
             #polarization[ind_u, ind_V] = np.max(np.abs(ssf_up-ssf_dn))
             polarization[ind_u, ind_V] = np.abs(np.sum(TBResults["Expectations"][-12:]) - np.sum(TBResults["Expectations"][-24:-12]))
             ssf[ind_u,ind_V] = np.max(np.abs(ssf_up-ssf_dn))
@@ -74,6 +75,7 @@ for (ind_V,V) in enumerate(V_array):
             #print("everything OK?")# - ssf_dn
 
         except:
+            print(fileName)
             if ssf[ind_u,ind_V] < 0.001:
                 print("IN HERE")
                 ssf[ind_u,ind_V] =  ssf[ind_u,ind_V] = (ssf[ind_u,ind_V-1])
@@ -205,7 +207,6 @@ X, Y = np.meshgrid(V_array[:Vidx], U_array[:Uidx])
 # im = ax.imshow(gap[:,:Vidx], aspect='auto', cmap='PuBuGn', origin='lower',
 #                extent=[V_array.min(), V_array[Vidx], U_array.min(), U_array.max()])
 blues = plt.get_cmap("Blues")
-from matplotlib.colors import LinearSegmentedColormap
 
 # Create a new colormap with white at the bottom
 colors = blues(np.linspace(0, 1, 256))
