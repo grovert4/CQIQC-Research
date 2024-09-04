@@ -31,8 +31,8 @@ for i in start_index:end_index
         #params["jh"] = round(Js[i], sigdigits=5)
         #params["filling"] = round(fillings[i], sigdigits=5)
         #params["date"] = filename # change to output file name. 
-        if j > 2
-            params["U_prev"] = Us_r[j-1]
+        if j > 4
+            params["U_prev"] = Us[j-1] #Us_r
         else
             delete!(params, "U_prev")
         end
