@@ -132,19 +132,19 @@ function MFT(params, filename)
     fileName = loc * "/$(filename)_V=$(round(V, digits=3))_U=$(round(U, digits=2)).jld2"
     GC.gc()
     rand_noise = rand(SkXSize^2 * 3) .- 0.5
-    rand_noise = 0.01 .* (rand_noise .- sum(rand_noise) / (SkXSize^2 * 3))
+    rand_noise = 0.1 .* (rand_noise .- sum(rand_noise) / (SkXSize^2 * 3))
 
-    init_up = fill(filling, SkXSize^2 * 3) .+ rand_noise .- 0.001
-    init_dn = fill(filling, SkXSize^2 * 3) .+ rand_noise .+ 0.001
-    V_old = LinRange(0.0,1.0,21)
-    differences = abs.(V .- V_old)
-    V_close = V_old[argmin(differences)]
-    if (V_close > 0.6)
-        V_close = 0.6
-    end
-    oldfile = loc * "/07.31_4-25.2024_Bilayer_V=$(round(V_close, digits=3))_U=$(round(1.8, digits=2)).jld2"
-    init_guess = load(oldfile)["outputs"][end] .+ 0.5*vcat(fill(0.000,length(hopping_up)*2), fill(0.000,SkXSize^2 * 3), init_up,  init_dn)
-    #init_guess = vcat(fill(0.01,length(hopping_up)*2), fill(0.01,SkXSize^2 * 3), init_up, init_dn)
+    init_up = fill(filling, SkXSize^2 * 3) .+ rand_noise #.- 0.001
+    init_dn = fill(filling, SkXSize^2 * 3) .+ rand_noise #.+ 0.001
+    # V_old = LinRange(0.0,1.0,21)
+    # differences = abs.(V .- V_old)
+    # V_close = V_old[argmin(differences)]
+    # if (V_close > 0.6)
+    #     V_close = 0.6
+    # end
+    #oldfile = loc * "/07.31_4-25.2024_Bilayer_V=$(round(V_close, digits=3))_U=$(round(1.8, digits=2)).jld2"
+    #init_guess = load(oldfile)["outputs"][end] .+ 0.5*vcat(fill(0.000,length(hopping_up)*2), fill(0.000,SkXSize^2 * 3), init_up,  init_dn)
+    init_guess = vcat(fill(0.01,length(hopping_up)*2), fill(0.01,SkXSize^2 * 3), init_up, init_dn)
     if isfile(fileName)
         println("TRYING TO LOAD " * fileName)
         try
@@ -154,22 +154,22 @@ function MFT(params, filename)
             println("Error Loading $fileName")
             if haskey(params, "U_prev")
                 if params["U_prev"] >0.35
-                    V_old = LinRange(0.0,1.0,21)
-                    differences = abs.(V .- V_old)
-                    V_close = V_old[argmin(differences)]
-                    if (V_close > 0.6)
-                        V_close = 0.6
-                    end
-                    oldfile = loc * "/07.31_4-25.2024_Bilayer_V=$(round(V_close, digits=3))_U=$(round(1.8, digits=2)).jld2"
-                    a_guess = load(oldfile)["outputs"][end] .+ vcat(fill(0.000,length(hopping_up)*2), fill(0.000,SkXSize^2 * 3), rand_noise,   -1*rand_noise)
-                    oldfile = loc * "/$(filename)_V=$(round(V, digits=3))_U=$(round(params["U_prev"], digits=2)).jld2"
-                    b_guess = load(oldfile)["outputs"][end] .+ vcat(fill(0.00001,length(hopping_up)*2), fill(0.0001,SkXSize^2 * 3), rand_noise,  -1*rand_noise)
-                    init_guess = 0.5 .* (a_guess./3 .+ b_guess.*(2/3))
+                    # V_old = LinRange(0.0,1.0,21)
+                    # differences = abs.(V .- V_old)
+                    # V_close = V_old[argmin(differences)]
+                    # if (V_close > 0.6)
+                    #     V_close = 0.6
+                    # end
+                    # oldfile = loc * "/07.31_4-25.2024_Bilayer_V=$(round(V_close, digits=3))_U=$(round(1.8, digits=2)).jld2"
+                    # a_guess = load(oldfile)["outputs"][end] .+ vcat(fill(0.000,length(hopping_up)*2), fill(0.000,SkXSize^2 * 3), rand_noise,   -1*rand_noise)
+                    # oldfile = loc * "/$(filename)_V=$(round(V, digits=3))_U=$(round(params["U_prev"], digits=2)).jld2"
+                    # b_guess = load(oldfile)["outputs"][end] .+ vcat(fill(0.00001,length(hopping_up)*2), fill(0.0001,SkXSize^2 * 3), rand_noise,  -1*rand_noise)
+                    # init_guess = 0.5 .* (a_guess./3 .+ b_guess.*(2/3))
                 else
                 #oldfile = loc * "/$(filename)_J=$(round(jh, digits=3))_U=$(round(params["U_prev"], digits=2)).jld2"
                     oldfile = loc * "/$(filename)_V=$(round(V, digits=3))_U=$(round(params["U_prev"], digits=2)).jld2"
                     #init_guess = load(oldfile)["outputs"][end] .+ vcat(fill(0.000,length(hopping_up)*2), fill(0.000,SkXSize^2 * 3), rand_noise, -1 .* rand_noise)
-                    init_guess = load(oldfile)["outputs"][end] .+ vcat(fill(0.00001,length(hopping_up)*2), fill(0.0001,SkXSize^2 * 3), rand_noise,  -1*rand_noise)
+                    init_guess = load(oldfile)["outputs"][end] .+ vcat(fill(0.01,length(hopping_up)*2), fill(0.0001,SkXSize^2 * 3), rand_noise,  -1*rand_noise)
                 end
                 SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"], Update_kwargs = Dict{Symbol, Any}(:alpha =>0.35))
             else
@@ -179,21 +179,20 @@ function MFT(params, filename)
     else
         if haskey(params, "U_prev")
             if params["U_prev"] >0.35
-                V_old = LinRange(0.0,1.0,21)
-                differences = abs.(V .- V_old)
-                V_close = V_old[argmin(differences)]
-                if (V_close > 0.6)
-                    V_close = 0.6
-                end
-                oldfile = loc * "/07.31_4-25.2024_Bilayer_V=$(round(V_close, digits=3))_U=$(round(1.8, digits=2)).jld2"
-                a_guess = load(oldfile)["outputs"][end] .+ vcat(fill(0.000,length(hopping_up)*2), fill(0.000,SkXSize^2 * 3), rand_noise,   -1*rand_noise)
-                oldfile = loc * "/$(filename)_V=$(round(V, digits=3))_U=$(round(params["U_prev"], digits=2)).jld2"
-                b_guess = load(oldfile)["outputs"][end] .+ vcat(fill(0.00001,length(hopping_up)*2), fill(0.0001,SkXSize^2 * 3), rand_noise,  1*rand_noise)
-                init_guess = 0.5 .* (a_guess .+ b_guess)
-                #oldfile = loc * "/$(filename)_p=$(round(filling, digits=3))_U=$(round(params["U_prev"], digits=2))_t1=$(round(t1, digits=2)).jld2"
+                # V_old = LinRange(0.0,1.0,21)
+                # differences = abs.(V .- V_old)
+                # V_close = V_old[argmin(differences)]
+                # if (V_close > 0.6)
+                #     V_close = 0.6
+                # end
+                # oldfile = loc * "/07.31_4-25.2024_Bilayer_V=$(round(V_close, digits=3))_U=$(round(1.8, digits=2)).jld2"
+                # a_guess = load(oldfile)["outputs"][end] .+ vcat(fill(0.000,length(hopping_up)*2), fill(0.000,SkXSize^2 * 3), rand_noise,   -1*rand_noise)
+                # oldfile = loc * "/$(filename)_V=$(round(V, digits=3))_U=$(round(params["U_prev"], digits=2)).jld2"
+                # b_guess = load(oldfile)["outputs"][end] .+ vcat(fill(0.00001,length(hopping_up)*2), fill(0.0001,SkXSize^2 * 3), rand_noise,  1*rand_noise)
+                # init_guess = 0.5 .* (a_guess .+ b_guess)
+                oldfile = loc * "/$(filename)_p=$(round(filling, digits=3))_U=$(round(params["U_prev"], digits=2))_t1=$(round(t1, digits=2)).jld2"
             else
                 oldfile = loc * "/$(filename)_V=$(round(V, digits=3))_U=$(round(params["U_prev"], digits=2)).jld2"
-                #init_guess = load(oldfile)["outputs"][end] .+ vcat(fill(0.000,length(hopping_up)*2), fill(0.000,SkXSize^2 * 3), rand_noise, -1 .* rand_noise)
                 init_guess = load(oldfile)["outputs"][end] .+ vcat(fill(0.00001,length(hopping_up)*2), fill(0.0001,SkXSize^2 * 3), rand_noise,  rand_noise)
             end
             SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"], Update_kwargs = Dict{Symbol, Any}(:alpha =>0.5))

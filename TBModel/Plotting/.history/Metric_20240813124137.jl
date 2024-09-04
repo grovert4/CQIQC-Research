@@ -1,6 +1,7 @@
 using TightBindingToolkit, LinearAlgebra
 using LaTeXStrings, JLD2
 using Plots
+using NPZ
 
 function GeoTensor(Ham::Hamiltonian, subset::Vector{Int64})
 
@@ -215,22 +216,22 @@ end
 
 
 # ##Triangular Lattice
-params = Dict()
-SkXSize = get!(params, "SkXSize", 2)
-SkX = get!(params, "SkX", "Bloch")
-SkX = "Bloch"
-a1 = SkXSize / 2 * [-3.0, sqrt(3)]
-a2 = SkXSize / 2 * [3.0, sqrt(3)]
-l1 = [1.0, 0]
-l2 = [-0.5, sqrt(3) / 2]
-UC = UnitCell([a1, a2], 2, 2)
+# params = Dict()
+# SkXSize = get!(params, "SkXSize", 2)
+# SkX = get!(params, "SkX", "Bloch")
+# SkX = "Bloch"
+# a1 = SkXSize / 2 * [-3.0, sqrt(3)]
+# a2 = SkXSize / 2 * [3.0, sqrt(3)]
+# l1 = [1.0, 0]
+# l2 = [-0.5, sqrt(3) / 2]
+# UC = UnitCell([a1, a2], 2, 2)
 # ##Parameters
 
 # t = get!(params, "t", 1.0)
 # jh = get!(params, "jh", 2.0)
 # U = get!(params, "U", 0.0)
 # ##### Thermodynamic parameters
-# filling = get!(params, "filling", 12.5/24) # filling here 
+# filling = get!(params, "filling", 12.5/24)
 # T = get!(params, "T", 0.0)
 # t1 = -t
 # t1Param = Param(t1, 2)
@@ -239,11 +240,11 @@ UC = UnitCell([a1, a2], 2, 2)
 # su2spin = SpinMats(1 // 2)
 
 # ##Adding inner-hexagon structure
-for j = 0:(SkXSize-1)
-    for i = 0:(SkXSize*3-1)
-        AddBasisSite!(UC, i .* l1 + j .* l2)
-    end
-end
+# for j = 0:(SkXSize-1)
+#     for i = 0:(SkXSize*3-1)
+#         AddBasisSite!(UC, i .* l1 + j .* l2)
+#     end
+# end
 # AddIsotropicBonds!(t1Param, UC, 1.0, su2spin[4], "t1", checkOffsetRange=1)
 # ##Functions that will be useful for adding anisotropic bonds
 # weiss_neel(v) = [sin(pi * (norm(v) / (SkXSize))) * v[1] / norm(v), sin(pi * (norm(v) / (SkXSize))) * v[2] / norm(v), cos(pi * (norm(v) / (SkXSize)))]
@@ -275,13 +276,13 @@ end
 
 
 # ##Creating BZ and Hamiltonian Model
-n = 30
-kSize = 6 * n + 3
-bz = BZ(kSize)
-FillBZ!(bz, UC)
+# n = 30
+# kSize = 6 * n + 3
+# bz = BZ(kSize)
+# FillBZ!(bz, UC)
 
-b1 = [bz.basis[1]; 0.0]
-b2 = [bz.basis[2]; 0.0]
+# b1 = [bz.basis[1]; 0.0]
+# b2 = [bz.basis[2]; 0.0]
 # bzUnitArea = abs(cross(b1, b2)[3])
 
 # H = Hamiltonian(UC, bz)
@@ -299,7 +300,7 @@ b2 = [bz.basis[2]; 0.0]
 # indices = CartesianIndex.(indices)
 
 
-# band = 1 # band # 1 or 13 here. 
+# band = 1
 # geo = GeoTensor(H, [band])
 
 # metric = [real(mat) for mat in geo]
@@ -322,26 +323,12 @@ b2 = [bz.basis[2]; 0.0]
 # chern = sum(berry_curvature) * dA
 # chern_wfn = sum(curvature) * dA
 loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Monolayer_Data/"
-fileName = loc * "J=4.0_band=13_metric.jld2"
-fileName_2 = loc * "J=4.0_band=13_metric.jld2"
+fileName = loc * "J=4.0_band=1_metric"
 
-Data= load(fileName) #MeanFieldToolkit.MFTResume.ReadMFT(fileName)
-Data_2= load(fileName) #MeanFieldToolkit.MFTResume.ReadMFT(fileName)
+berry_plot = plot_data(abs.(curvature[indices]), kxs, kys, bz ;
+    clims=(0.0, 18.0), annotation="(a)")
+volume_plot = plot_data(metric_sqrtDets[indices] , kxs, kys, bz ;
+    clims=(0.0, 12.0), cmap=:algae, colorbar_title=L"V_n(\mathbf{k})",
+    annotation="(b)")
 
-kxs = Data["kxs"]
-kys = Data["kys"]
-curvature = Data["curvature"]
-metric_sqrtDets = Data["metric_sqrtDets"]
-curvature_2 = Data["curvature"]
-metric_sqrtDets_2 = Data["metric_sqrtDets"]
-berry_plot = plot_data(abs.(curvature), kxs, kys, bz ;
-    clims=(0.0, 2.5), annotation="(a)")
-volume_plot = plot_data(metric_sqrtDets , kxs, kys, bz ;
-    clims=(0.0, 2.5), cmap=:algae, colorbar_title=L"V_n(\mathbf{k})",
-    annotation="(b)")
-berry_plot_2 = plot_data(abs.(curvature_2), kxs, kys, bz ;
-    clims=(0.0, 2.5), annotation="(a)")
-volume_plot_2 = plot_data(metric_sqrtDets_2 , kxs, kys, bz ;
-    clims=(0.0, 2.5), cmap=:algae, colorbar_title=L"V_n(\mathbf{k})",
-    annotation="(b)")
-p =plot(berry_plot, volume_plot, berry_plot_2, volume_plot_2, layout=grid(1, 4), size=(1200, 300),link=:y)
+p =plot(berry_plot, volume_plot, layout=grid(2, 1), size=(400, 600))

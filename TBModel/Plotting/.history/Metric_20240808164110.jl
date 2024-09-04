@@ -1,6 +1,7 @@
 using TightBindingToolkit, LinearAlgebra
 using LaTeXStrings, JLD2
 using Plots
+using NPZ
 
 function GeoTensor(Ham::Hamiltonian, subset::Vector{Int64})
 
@@ -214,7 +215,7 @@ function plot_data(data::Matrix{T},
 end
 
 
-# ##Triangular Lattice
+##Triangular Lattice
 params = Dict()
 SkXSize = get!(params, "SkXSize", 2)
 SkX = get!(params, "SkX", "Bloch")
@@ -224,57 +225,57 @@ a2 = SkXSize / 2 * [3.0, sqrt(3)]
 l1 = [1.0, 0]
 l2 = [-0.5, sqrt(3) / 2]
 UC = UnitCell([a1, a2], 2, 2)
-# ##Parameters
+##Parameters
 
-# t = get!(params, "t", 1.0)
-# jh = get!(params, "jh", 2.0)
-# U = get!(params, "U", 0.0)
-# ##### Thermodynamic parameters
-# filling = get!(params, "filling", 12.5/24) # filling here 
-# T = get!(params, "T", 0.0)
-# t1 = -t
-# t1Param = Param(t1, 2)
-# jhParam = Param(jh, 2)
-# HoppingParams = [t1Param, jhParam]
-# su2spin = SpinMats(1 // 2)
+t = get!(params, "t", 1.0)
+jh = get!(params, "jh", 2.0)
+U = get!(params, "U", 0.0)
+##### Thermodynamic parameters
+filling = get!(params, "filling", 12.5/24)
+T = get!(params, "T", 0.0)
+t1 = -t
+t1Param = Param(t1, 2)
+jhParam = Param(jh, 2)
+HoppingParams = [t1Param, jhParam]
+su2spin = SpinMats(1 // 2)
 
-# ##Adding inner-hexagon structure
+##Adding inner-hexagon structure
 for j = 0:(SkXSize-1)
     for i = 0:(SkXSize*3-1)
         AddBasisSite!(UC, i .* l1 + j .* l2)
     end
 end
-# AddIsotropicBonds!(t1Param, UC, 1.0, su2spin[4], "t1", checkOffsetRange=1)
-# ##Functions that will be useful for adding anisotropic bonds
-# weiss_neel(v) = [sin(pi * (norm(v) / (SkXSize))) * v[1] / norm(v), sin(pi * (norm(v) / (SkXSize))) * v[2] / norm(v), cos(pi * (norm(v) / (SkXSize)))]
-# weiss_bloch(v) = [sin(pi * (norm(v) / (SkXSize))) * v[2] / norm(v), sin(pi * (norm(v) / (SkXSize))) * -v[1] / norm(v), cos(pi * (norm(v) / (SkXSize)))]
-# weiss = Dict("Neel" => weiss_neel, "Bloch" => weiss_bloch)
-# sigmav(i, j) = 2 .* [su2spin[1][i, j], su2spin[2][i, j], su2spin[3][i, j]]
-# s11 = sigmav(1, 1)
-# s12 = sigmav(1, 2)
-# s21 = sigmav(2, 1)
-# s22 = sigmav(2, 2)
+AddIsotropicBonds!(t1Param, UC, 1.0, su2spin[4], "t1", checkOffsetRange=1)
+##Functions that will be useful for adding anisotropic bonds
+weiss_neel(v) = [sin(pi * (norm(v) / (SkXSize))) * v[1] / norm(v), sin(pi * (norm(v) / (SkXSize))) * v[2] / norm(v), cos(pi * (norm(v) / (SkXSize)))]
+weiss_bloch(v) = [sin(pi * (norm(v) / (SkXSize))) * v[2] / norm(v), sin(pi * (norm(v) / (SkXSize))) * -v[1] / norm(v), cos(pi * (norm(v) / (SkXSize)))]
+weiss = Dict("Neel" => weiss_neel, "Bloch" => weiss_bloch)
+sigmav(i, j) = 2 .* [su2spin[1][i, j], su2spin[2][i, j], su2spin[3][i, j]]
+s11 = sigmav(1, 1)
+s12 = sigmav(1, 2)
+s21 = sigmav(2, 1)
+s22 = sigmav(2, 2)
 
-# intermat(s) = [dot(s, s11) dot(s, s12); dot(s, s21) dot(s, s22)]
-
-
-# ##Adding anisotropic bonds and normalizing if needed
-# for (ind, bas) in enumerate(UC.basis)
-#     closest = [bas, bas - a1, bas - a2, bas - a1 - a2, bas + a1, bas + a2, bas + a1 + a2, bas + a1 - a2, bas - a1 + a2]
-#     minimal = findmin(x -> norm(x), closest)[2]
-#     if (SkXSize - 1) < norm(closest[minimal]) < SkXSize
-#         mat = intermat(normalize(weiss[SkX](closest[minimal]) + weiss[SkX](-closest[minimal])))
-#     else
-#         spn = weiss[SkX](closest[minimal])
-#         replace!(spn, NaN => 0.0)
-#         mat = intermat(normalize(spn))
-#     end
-#     AddAnisotropicBond!(jhParam, UC, ind, ind, [0, 0], mat, 0.0, "Hunds")
-# end
-# CreateUnitCell!(UC, HoppingParams)
+intermat(s) = [dot(s, s11) dot(s, s12); dot(s, s21) dot(s, s22)]
 
 
-# ##Creating BZ and Hamiltonian Model
+##Adding anisotropic bonds and normalizing if needed
+for (ind, bas) in enumerate(UC.basis)
+    closest = [bas, bas - a1, bas - a2, bas - a1 - a2, bas + a1, bas + a2, bas + a1 + a2, bas + a1 - a2, bas - a1 + a2]
+    minimal = findmin(x -> norm(x), closest)[2]
+    if (SkXSize - 1) < norm(closest[minimal]) < SkXSize
+        mat = intermat(normalize(weiss[SkX](closest[minimal]) + weiss[SkX](-closest[minimal])))
+    else
+        spn = weiss[SkX](closest[minimal])
+        replace!(spn, NaN => 0.0)
+        mat = intermat(normalize(spn))
+    end
+    AddAnisotropicBond!(jhParam, UC, ind, ind, [0, 0], mat, 0.0, "Hunds")
+end
+CreateUnitCell!(UC, HoppingParams)
+
+
+##Creating BZ and Hamiltonian Model
 n = 30
 kSize = 6 * n + 3
 bz = BZ(kSize)
@@ -282,66 +283,50 @@ FillBZ!(bz, UC)
 
 b1 = [bz.basis[1]; 0.0]
 b2 = [bz.basis[2]; 0.0]
-# bzUnitArea = abs(cross(b1, b2)[3])
+bzUnitArea = abs(cross(b1, b2)[3])
 
-# H = Hamiltonian(UC, bz)
-# DiagonalizeHamiltonian!(H)
-# GetVelocity!(H, bz)
+H = Hamiltonian(UC, bz)
+DiagonalizeHamiltonian!(H)
+GetVelocity!(H, bz)
 
-# Mdl = Model(UC, bz, H; filling=filling)
-# SolveModel!(Mdl; get_gap=true)
+Mdl = Model(UC, bz, H; filling=filling)
+SolveModel!(Mdl; get_gap=true)
 
-# kxs = collect(LinRange(-2, 2, 101))
-# kys = collect(LinRange(-2, 2, 101))
-# ks = [[kx, ky] for kx in kxs, ky in kys]
-# indices = GetQIndex.(ks, Ref(bz) ; nearest=true)
-# indices = Tuple.(indices)
-# indices = CartesianIndex.(indices)
+kxs = collect(LinRange(-2, 2, 101))
+kys = collect(LinRange(-2, 2, 101))
+ks = [[kx, ky] for kx in kxs, ky in kys]
+indices = GetQIndex.(ks, Ref(bz) ; nearest=true)
+indices = Tuple.(indices)
+indices = CartesianIndex.(indices)
 
 
-# band = 1 # band # 1 or 13 here. 
-# geo = GeoTensor(H, [band])
+band = 1
+geo = GeoTensor(H, [band])
 
-# metric = [real(mat) for mat in geo]
-# berry = [-2*imag(mat) for mat in geo]
-# berry_curvature = [mat[1, 2] for mat in berry]
-# metric_traces = [tr(mat) for mat in metric]
-# metric_sqrtDets = [sqrt(abs(det(mat))) for mat in metric]
+metric = [real(mat) for mat in geo]
+berry = [-2*imag(mat) for mat in geo]
+berry_curvature = [mat[1, 2] for mat in berry]
+metric_traces = [tr(mat) for mat in metric]
+metric_sqrtDets = [sqrt(abs(det(mat))) for mat in metric]
 
-# curvature = Curvature(H, [band])
-# curvature = curvature * prod(bz.gridSize)/bzUnitArea
+curvature = Curvature(H, [band])
+curvature = curvature * prod(bz.gridSize)/bzUnitArea
 
-# berry_curvature = berry_curvature * prod(bz.gridSize)
-# metric_traces = metric_traces * prod(bz.gridSize)
-# metric_sqrtDets = metric_sqrtDets * prod(bz.gridSize)
+berry_curvature = berry_curvature * prod(bz.gridSize)
+metric_traces = metric_traces * prod(bz.gridSize)
+metric_sqrtDets = metric_sqrtDets * prod(bz.gridSize)
 
-# dA = bzUnitArea / (2*pi*prod(bz.gridSize))
+dA = bzUnitArea / (2*pi*prod(bz.gridSize))
 
-# weight = sum(metric_traces) * dA
-# volume = sum(metric_sqrtDets) * dA * 2
-# chern = sum(berry_curvature) * dA
-# chern_wfn = sum(curvature) * dA
-loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Monolayer_Data/"
-fileName = loc * "J=4.0_band=13_metric.jld2"
-fileName_2 = loc * "J=4.0_band=13_metric.jld2"
+weight = sum(metric_traces) * dA
+volume = sum(metric_sqrtDets) * dA * 2
+chern = sum(berry_curvature) * dA
+chern_wfn = sum(curvature) * dA
 
-Data= load(fileName) #MeanFieldToolkit.MFTResume.ReadMFT(fileName)
-Data_2= load(fileName) #MeanFieldToolkit.MFTResume.ReadMFT(fileName)
-
-kxs = Data["kxs"]
-kys = Data["kys"]
-curvature = Data["curvature"]
-metric_sqrtDets = Data["metric_sqrtDets"]
-curvature_2 = Data["curvature"]
-metric_sqrtDets_2 = Data["metric_sqrtDets"]
-berry_plot = plot_data(abs.(curvature), kxs, kys, bz ;
-    clims=(0.0, 2.5), annotation="(a)")
-volume_plot = plot_data(metric_sqrtDets , kxs, kys, bz ;
-    clims=(0.0, 2.5), cmap=:algae, colorbar_title=L"V_n(\mathbf{k})",
+berry_plot = plot_data(abs.(curvature[indices]), kxs, kys, bz ;
+    clims=(0.0, 18.0), annotation="(a)")
+volume_plot = plot_data(metric_sqrtDets[indices] , kxs, kys, bz ;
+    clims=(0.0, 12.0), cmap=:algae, colorbar_title=L"V_n(\mathbf{k})",
     annotation="(b)")
-berry_plot_2 = plot_data(abs.(curvature_2), kxs, kys, bz ;
-    clims=(0.0, 2.5), annotation="(a)")
-volume_plot_2 = plot_data(metric_sqrtDets_2 , kxs, kys, bz ;
-    clims=(0.0, 2.5), cmap=:algae, colorbar_title=L"V_n(\mathbf{k})",
-    annotation="(b)")
-p =plot(berry_plot, volume_plot, berry_plot_2, volume_plot_2, layout=grid(1, 4), size=(1200, 300),link=:y)
+
+p =plot(berry_plot, volume_plot, layout=grid(2, 1), size=(400, 600))

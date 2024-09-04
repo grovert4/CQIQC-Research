@@ -323,25 +323,15 @@ b2 = [bz.basis[2]; 0.0]
 # chern_wfn = sum(curvature) * dA
 loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Monolayer_Data/"
 fileName = loc * "J=4.0_band=13_metric.jld2"
-fileName_2 = loc * "J=4.0_band=13_metric.jld2"
-
 Data= load(fileName) #MeanFieldToolkit.MFTResume.ReadMFT(fileName)
-Data_2= load(fileName) #MeanFieldToolkit.MFTResume.ReadMFT(fileName)
-
 kxs = Data["kxs"]
 kys = Data["kys"]
 curvature = Data["curvature"]
 metric_sqrtDets = Data["metric_sqrtDets"]
-curvature_2 = Data["curvature"]
-metric_sqrtDets_2 = Data["metric_sqrtDets"]
 berry_plot = plot_data(abs.(curvature), kxs, kys, bz ;
     clims=(0.0, 2.5), annotation="(a)")
 volume_plot = plot_data(metric_sqrtDets , kxs, kys, bz ;
     clims=(0.0, 2.5), cmap=:algae, colorbar_title=L"V_n(\mathbf{k})",
     annotation="(b)")
-berry_plot_2 = plot_data(abs.(curvature_2), kxs, kys, bz ;
-    clims=(0.0, 2.5), annotation="(a)")
-volume_plot_2 = plot_data(metric_sqrtDets_2 , kxs, kys, bz ;
-    clims=(0.0, 2.5), cmap=:algae, colorbar_title=L"V_n(\mathbf{k})",
-    annotation="(b)")
-p =plot(berry_plot, volume_plot, berry_plot_2, volume_plot_2, layout=grid(1, 4), size=(1200, 300),link=:y)
+
+p =plot(berry_plot, volume_plot, layout=grid(2, 1), size=(400, 600))

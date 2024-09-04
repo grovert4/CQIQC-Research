@@ -5,20 +5,6 @@ using Plots
 
 using PyPlot
 using PyCall
-
-style = pyimport("matplotlib.style")
-
-style.use("/home/andrewhardy/Documents/Graduate/Codes/Skyrmion/TBModel/Plotting/lake.mplstyle")
-rcParams = PyPlot.PyDict(PyPlot.matplotlib."rcParams")
-rcParams["text.latex.preamble"] = "\\usepackage{lmodern}"
-
-rcParams["text.usetex"] = true
-rcParams["font.family"] = "lmodern"
-rcParams["font.serif"] = ["lmodern"] 
-rcParams["mathtext.fontset"] = "cm"
-#rcParams["text.latex.unicode"] = true
-#PyPlot.rc("text", usetex=true)
-#PyCall.PyDict(plt."rcParams")["text.latex.preamble"] = [raw"\usepackage{amsmath}"]
 function pyplot_hexagonal_old(bz::BZ, data::Matrix{Float64} ;
     colorbar_title::AbstractString=L"\Omega_n(\mathbf{k})",
     cmap::String="Purples", lim::Float64=1.25,
@@ -36,9 +22,8 @@ function pyplot_hexagonal_old(bz::BZ, data::Matrix{Float64} ;
     shifts = (kSize-1)/kSize .* [[0.0, 0.0], b1, -b1, b2, -b2, b1+b2, -b1-b2, b1-b2, b2-b1]
 
     for shift in shifts
-        p = PyPlot.pcolormesh(getindex.(bz.ks .+ Ref(shift), 1), getindex.(bz.ks .+ Ref(shift), 2), normalized_data,
-            cmap=cmap, vmin=clims[1], vmax=clims[2], rasterized = true,antialiased=true)  
-        p.set_edgecolor("face")# Adjust the size as needed
+        PyPlot.pcolormesh(getindex.(bz.ks .+ Ref(shift), 1), getindex.(bz.ks .+ Ref(shift), 2), normalized_data,
+            cmap=cmap, vmin=clims[1], vmax=clims[2])  # Adjust the size as needed
     end
     PyPlot.colorbar(label=colorbar_title)
 
@@ -68,9 +53,8 @@ function pyplot_hexagonal_old(bz::BZ, data::Matrix{Float64} ;
     PyPlot.annotate(annotation, annotation_position, xycoords="axes fraction")
     PyPlot.gca().set_xlim(-lim, lim)
     PyPlot.gca().set_ylim(-lim, lim)
-    PyPlot.gca().set_xlabel(L"k_x")
-    PyPlot.gca().set_ylabel(L"k_y")
-    
+    PyPlot.gca().set_xlabel(L"k_x", fontfamily = "Helvetica")
+    PyPlot.gca().set_ylabel(L"k_y", fontfamily = "Helvetica")
 
     if !isempty(savename)
         PyPlot.savefig(savename, bbox_inches="tight")
@@ -83,7 +67,7 @@ function pyplot_hexagonal(ax::PyCall.PyObject, cax::PyCall.PyObject, input::Dict
     cmap::String="Blues", lim::Float64=2.025,
     annotation::AbstractString="",
     annotation_position::Tuple{Float64, Float64}=(0.0, 1.0),
-    clims::Tuple{Float64, Float64}=(0.0, 8.0),
+    clims::Tuple{Float64, Float64}=(0.0, 7.0),
     savename::AbstractString="") where {T}
 
     PyPlot.cla()
@@ -91,7 +75,7 @@ function pyplot_hexagonal(ax::PyCall.PyObject, cax::PyCall.PyObject, input::Dict
     im = ax.pcolormesh(input["kxs"], input["kys"], data',
         cmap=cmap, vmin=clims[1], vmax=clims[2])  # Adjust the size as needed
 
-    PyPlot.colorbar(im, label=colorbar_title, cax=cax,fraction=0.1, shrink = 0.5)
+    PyPlot.colorbar(im, label=colorbar_title, cax=cax)
 
     inner_hex = input["inner_hex"]
     for edge in inner_hex
@@ -106,7 +90,7 @@ function pyplot_hexagonal(ax::PyCall.PyObject, cax::PyCall.PyObject, input::Dict
     ax.set_xlim(-lim, lim)
     ax.set_ylim(-lim, lim)
     ax.set_xlabel(L"k_x")
-    #ax.set_ylabel(L"k_y")
+    ax.set_ylabel(L"k_y")
 
     if !isempty(savename)
         PyPlot.savefig(savename, bbox_inches="tight")
@@ -136,8 +120,8 @@ FillBZ!(bz, UC)
 b1 = [bz.basis[1]; 0.0]
 b2 = [bz.basis[2]; 0.0]
 loc = "/media/andrewhardy/9C33-6BBD/Skyrmion/Monolayer_Data/"
-fileName = loc * "J=2.0_band=1_metric.jld2"
-fileName_2 = loc * "J=2.0_band=13_metric.jld2"
+fileName = loc * "J=4.0_band=1_metric.jld2"
+fileName_2 = loc * "J=4.0_band=13_metric.jld2"
 
 Data= load(fileName) #MeanFieldToolkit.MFTResume.ReadMFT(fileName)
 Data_2= load(fileName_2) #MeanFieldToolkit.MFTResume.ReadMFT(fileName)
@@ -146,32 +130,21 @@ kxs = Data["kxs"]
 kys = Data["kys"]
 curvature = Data["curvature"]
 metric_sqrtDets = Data["metric_sqrtDets"]
-curvature_2 = Data_2["curvature"]
-metric_sqrtDets_2 = Data_2["metric_sqrtDets"]
-fig = PyPlot.figure(figsize=(25, 6))
-gs = fig.add_gridspec(1, 8, width_ratios=[1,1,1,1,0.15, 0.075, 0.15, 0.075], wspace = 0.01)
+curvature_2 = Data["curvature"]
+metric_sqrtDets_2 = Data["metric_sqrtDets"]
+fig = PyPlot.figure(figsize=(18, 8))
+gs = fig.add_gridspec(1, 8, width_ratios=[1,1,1,1,0.1, 0.05, 0.1, 0.05], wspace = 0.01)
 
 ax1 = fig.add_subplot(gs[0, 1])
 ax2 = fig.add_subplot(gs[0, 2])
 ax3 = fig.add_subplot(gs[0, 3])
 ax4 = fig.add_subplot(gs[0, 4])
-cax1 = fig.add_subplot(gs[0, 6])
-cax2 = fig.add_subplot(gs[0, 8])
-ax1.set_rasterization_zorder(2)
-ax2.set_rasterization_zorder(2)
-ax3.set_rasterization_zorder(2)
-ax4.set_rasterization_zorder(2)
-
-ax1.set_ylabel(L"k_y")
-ax1.set_title("a)", loc="left",x = 0.05, y = 0.9, fontsize = 25)
-ax2.set_title("b)", loc="left",x = 0.05, y = 0.9, fontsize = 25)
-ax3.set_title("c)", loc="left",x = 0.05, y = 0.9, fontsize = 25)
-ax4.set_title("d)", loc="left",x = 0.05, y = 0.9, fontsize = 25)
-pyplot_hexagonal(ax1, cax1, Data, abs.(curvature), cmap = "Purples")
-pyplot_hexagonal(ax2,cax2, Data, metric_sqrtDets, cmap = "PuRd")
-pyplot_hexagonal(ax3,cax1, Data_2, abs.(curvature_2), cmap = "Purples")
-pyplot_hexagonal(ax4,cax2, Data_2, metric_sqrtDets_2, cmap = "PuRd", colorbar_title=L"V_n(\mathbf{k})")
-PyPlot.savefig("figure_2.pdf", format="pdf", bbox_inches="tight", dpi = 600)
+cax1 = fig.add_subplot(gs[0, 5])
+cax2 = fig.add_subplot(gs[0, 7])
+pyplot_hexagonal(ax1, cax1, Data, curvature)
+pyplot_hexagonal(ax2,cax2, Data, metric_sqrtDets)
+#pyplot_hexagonal(ax3,cax1, Data_2, curvature_2)
+pyplot_hexagonal(ax4,cax2, Data_2, metric_sqrtDets_2)
 
 display(gcf())
 

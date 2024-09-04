@@ -8,7 +8,7 @@ using PyCall
 
 style = pyimport("matplotlib.style")
 
-style.use("/home/andrewhardy/Documents/Graduate/Codes/Skyrmion/TBModel/Plotting/lake.mplstyle")
+style.use("Plotting/lake.mplstyle")
 rcParams = PyPlot.PyDict(PyPlot.matplotlib."rcParams")
 rcParams["text.latex.preamble"] = "\\usepackage{lmodern}"
 
@@ -36,9 +36,8 @@ function pyplot_hexagonal_old(bz::BZ, data::Matrix{Float64} ;
     shifts = (kSize-1)/kSize .* [[0.0, 0.0], b1, -b1, b2, -b2, b1+b2, -b1-b2, b1-b2, b2-b1]
 
     for shift in shifts
-        p = PyPlot.pcolormesh(getindex.(bz.ks .+ Ref(shift), 1), getindex.(bz.ks .+ Ref(shift), 2), normalized_data,
-            cmap=cmap, vmin=clims[1], vmax=clims[2], rasterized = true,antialiased=true)  
-        p.set_edgecolor("face")# Adjust the size as needed
+        PyPlot.pcolormesh(getindex.(bz.ks .+ Ref(shift), 1), getindex.(bz.ks .+ Ref(shift), 2), normalized_data,
+            cmap=cmap, vmin=clims[1], vmax=clims[2])  # Adjust the size as needed
     end
     PyPlot.colorbar(label=colorbar_title)
 
@@ -157,21 +156,16 @@ ax3 = fig.add_subplot(gs[0, 3])
 ax4 = fig.add_subplot(gs[0, 4])
 cax1 = fig.add_subplot(gs[0, 6])
 cax2 = fig.add_subplot(gs[0, 8])
-ax1.set_rasterization_zorder(2)
-ax2.set_rasterization_zorder(2)
-ax3.set_rasterization_zorder(2)
-ax4.set_rasterization_zorder(2)
-
 ax1.set_ylabel(L"k_y")
-ax1.set_title("a)", loc="left",x = 0.05, y = 0.9, fontsize = 25)
-ax2.set_title("b)", loc="left",x = 0.05, y = 0.9, fontsize = 25)
-ax3.set_title("c)", loc="left",x = 0.05, y = 0.9, fontsize = 25)
-ax4.set_title("d)", loc="left",x = 0.05, y = 0.9, fontsize = 25)
+ax1.set_title("a)", loc="right")
+ax2.set_title("b)", loc="right")
+ax3.set_title("c)", loc="right")
+ax4.set_title("d)", loc="right")
 pyplot_hexagonal(ax1, cax1, Data, abs.(curvature), cmap = "Purples")
 pyplot_hexagonal(ax2,cax2, Data, metric_sqrtDets, cmap = "PuRd")
 pyplot_hexagonal(ax3,cax1, Data_2, abs.(curvature_2), cmap = "Purples")
 pyplot_hexagonal(ax4,cax2, Data_2, metric_sqrtDets_2, cmap = "PuRd", colorbar_title=L"V_n(\mathbf{k})")
-PyPlot.savefig("figure_2.pdf", format="pdf", bbox_inches="tight", dpi = 600)
+PyPlot.savefig("figure_2.pdf", format="pdf", bbox_inches="tight")
 
 display(gcf())
 

@@ -24,7 +24,7 @@ start_index = commRank * elements_per_process + min(commRank, remainder) + 1
 end_index = start_index + elements_per_process - 1 + (commRank < remainder ? 1 : 0)
 Us_r = reverse(Us)
 for i in start_index:end_index
-    for (j, U) in enumerate(Us_r)
+    for (j, U) in enumerate(Us)
         println(U, " U value")
         params["U"] = round(U, sigdigits=5)
         params["V"] = round(Vs[i], sigdigits=5)

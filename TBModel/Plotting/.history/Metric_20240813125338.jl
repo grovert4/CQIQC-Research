@@ -344,4 +344,4 @@ berry_plot_2 = plot_data(abs.(curvature_2), kxs, kys, bz ;
 volume_plot_2 = plot_data(metric_sqrtDets_2 , kxs, kys, bz ;
     clims=(0.0, 2.5), cmap=:algae, colorbar_title=L"V_n(\mathbf{k})",
     annotation="(b)")
-p =plot(berry_plot, volume_plot, berry_plot_2, volume_plot_2, layout=grid(1, 4), size=(1200, 300),link=:y)
+p =plot(berry_plot, volume_plot, berry_plot_2, volume_plot_2, layout=grid(1, 4), size=(800, 400))
