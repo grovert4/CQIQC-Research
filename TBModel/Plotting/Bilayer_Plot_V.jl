@@ -114,9 +114,9 @@ filename = "06.17-1.2024_Bilayer"
 
 filename = "07.09-25.2024_Bilayer"
 #filename = "07.31-25.2024_Bilayer"
-#filename = "07.25-25.2024_Bilayer"
+filename = "07.25-25.2024_Bilayer"
 
-filename = "07.21-25.2024_Bilayer"
+#filename = "08.02-25.2024_Bilayer"
 
 #println(@__DIR__)
 params = YAML.load_file("../Input/$(filename).yml")
@@ -281,12 +281,12 @@ scatter!(getindex.(skyrmion_vectors, 1), getindex.(skyrmion_vectors, 2), label="
 scatter!(getindex.(symmetry_vectors, 1), getindex.(symmetry_vectors, 2), label="lattice")
 display(ssf_plot)
 
-RSPlot = plot_RS(UC, 20 * ord_array[20, 1:SkXSize^2*3] .- 20 * ord_array[20, SkXSize^2*3+1:SkXSize^2*6].-0.521)
+RSPlot = plot_RS(UC, 2 * ord_array[20, 1:SkXSize^2*3] .- 2 * ord_array[20, SkXSize^2*3+1:SkXSize^2*6].-0.521)
 display(RSPlot)
 data = 1 * ord_array[15, 1:SkXSize^2*3] .- 1 * ord_array[15, SkXSize^2*3+1:SkXSize^2*6]
 # RSPlot = plot_RS(UC, ord_array[1, SkXSize^2*3:SkXSize^2*3*2])
 # display(RSPlot)
-RSPlot = plot_RS(UC, 10 * ord_array[4, 1:SkXSize^2*3] .- 10 * ord_array[4, SkXSize^2*3+1:SkXSize^2*6])
+RSPlot = plot_RS(UC, 1 * ord_array[4, 1:SkXSize^2*3] .- 10 * ord_array[4, SkXSize^2*3+1:SkXSize^2*6])
 display(RSPlot)
 RSPlot = plot_RS(UC, order_parameter[4,:])
 display(RSPlot)
