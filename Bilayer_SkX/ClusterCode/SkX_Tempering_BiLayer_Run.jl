@@ -91,7 +91,7 @@ for j in 1:length(Jperps)
          addInteraction!(UClocal, b1, b2, -jperp * Sz , (0,0,0))
          latticeLocal = Lattice(UClocal, L)
 
-         closestH = closestfindmin(x -> abs.(abs.(jperp) .- x), monoHs)[2]
+         closestH = findmin(x -> abs.(abs.(jperp) .- x), monoHs)[2]
          closestfile = "/home/grovert4/projects/def-aparamek/grovert4/CQIQC-Research/finalData/monolayer_data/13.10/2024-Monolayer_H=$(closestH),J2=$(closestJ2).h5"
          updateSpins!(closestfile, latticetemp)
          latticeLocal.spins[:, 1:2:end] = latticetemp.spins .* [1, 1, -1]
