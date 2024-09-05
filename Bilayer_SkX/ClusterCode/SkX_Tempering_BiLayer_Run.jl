@@ -65,7 +65,7 @@ j2 = inputFile["J2"]
 for j in 1:length(Jperps)
       jperp = round(Jperps[j],sigdigits=5)
 
-      filename = "/scratch/grovert4/Data/Aminus-Bi/"*ARGS[1]*"_Jperp=$(jperp),J2=$(j2).h5"
+      filename = "/scratch/grovert4/Data/Aminus-Full-Bilayer/"*ARGS[1]*"_Jperp=$(jperp),J2=$(j2).h5"
       if isfile(filename) 
          println("Already Completed "*filename)
       else
