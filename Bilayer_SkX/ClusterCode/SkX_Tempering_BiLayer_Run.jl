@@ -92,7 +92,7 @@ for j in 1:length(Jperps)
          latticeLocal = Lattice(UClocal, L)
 
          closestH = findmin(x -> abs.(abs.(jperp) .- x), monoHs)[2]
-         closestfile = "/home/grovert4/projects/def-aparamek/grovert4/CQIQC-Research/finalData/monolayer_data/13.10.2024-Monolayer_H=$(closestH),J2=$(closestJ2).h5"
+         closestfile = "/home/grovert4/projects/def-aparamek/grovert4/CQIQC-Research/finalData/monolayer_data/13.10.2024-Monolayer_H=$(monoHs[closestH]),J2=$(monoJ2s[closestJ2]).h5"
          updateSpins!(closestfile, latticetemp)
          latticeLocal.spins[:, 1:2:end] = latticetemp.spins .* [1, 1, -1]
          latticeLocal.spins[:, 2:2:end] = latticetemp.spins
