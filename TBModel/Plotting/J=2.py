@@ -25,7 +25,7 @@ filename = "07.24-25.2024_Bilayer"
 filename = "07.31-25.2024_Bilayer"
 #filename = "07.31_4-25.2024_Bilayer"
 filename = "08.02-25.2024_Bilayer"
-filename = "09.03-25.2024_Bilayer"
+filename = "09.04-25.2024_Bilayer"
 
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
@@ -53,7 +53,7 @@ for (ind_V,V) in enumerate(V_array):
     for (ind_u, U_var) in enumerate(U_array):
         #print(V)
         fileName = loc + f"Last_Itr_{filename}_V={round(V, 3)}_U={round(U_var, 2)}.jld2"
-        #print(fileName)
+        print(fileName)
         try:
             TBResults = h5.File(fileName, 'r')
             conduct[ind_u, ind_V] =  np.mean(TBResults["Chern Fill"])
