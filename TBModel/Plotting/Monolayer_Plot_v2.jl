@@ -106,6 +106,7 @@ filename = "06.27.2024_Monolayer"
 #filename = "07.00.2024_Monolayer"
 filename = "07.02.2024_Monolayer"
 #filename = "07.10-25.2024_Monolayer"
+filename = "09.04-25.2024_Monolayer"
 
 
 #println(@__DIR__)
@@ -200,7 +201,7 @@ for (ind, U_var) in enumerate(U_array)
     SolveModel!(Mdl; get_gap=true)
 
     bands = Plot_Band_Structure!(Mdl, [bz.HighSymPoints["G"], bz.HighSymPoints["K1"], bz.HighSymPoints["M2"]], [13,14,15,16],labels=["G", "K1", "M2"], plot_legend=false)
-    plot!(bands, legend=false, ylims = (5,8))
+    plot!(bands, legend=false)
     #plot!(bands, legend=false, ylims = (12,15))
 
     display(bands)

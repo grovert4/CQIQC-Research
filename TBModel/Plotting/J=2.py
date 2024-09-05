@@ -14,16 +14,8 @@ os.chdir("/home/andrewhardy/Documents/Graduate/Codes/Skyrmion/TBModel/Plotting")
 os.getcwd()
 
  
-filename = "06.27-27.2024_Bilayer"  
-filename = "07.19.2024_Bilayer"  
-#filename = "07.13-29.2024_Bilayer"
-#filename = "07.15-27.2024_Bilayer"
-#filename = "07.20-25.2024_Bilayer"
-filename = "07.21-25.2024_Bilayer"
-#filename = "07.19-29.2024_Bilayer"
 filename = "07.24-25.2024_Bilayer"
 filename = "07.31-25.2024_Bilayer"
-#filename = "07.31_4-25.2024_Bilayer"
 filename = "08.02-25.2024_Bilayer"
 #filename = "09.05-25.2024_Bilayer"
 
@@ -68,11 +60,17 @@ for (ind_V,V) in enumerate(V_array):
             polarization[ind_u, ind_V] = np.abs(np.sum(TBResults["Expectations"][-12:]) - np.sum(TBResults["Expectations"][-24:-12]))
             ssf[ind_u,ind_V] = np.max(np.abs(ssf_up-ssf_dn))
 
-            # if V < 0.3:
-            #     conduct[ind_u, ind_V] = 0.000
-            # if polarization[ind_u, ind_V] < 0.05:
-            #     polarization[ind_u, ind_V] = 0.000
-            #print("everything OK?")# - ssf_dn
+            if V < 0.3:
+                conduct[ind_u, ind_V] = 0.000
+                polarization[ind_u, ind_V] = 0.000
+                ssf[ind_u, ind_V] = 0.000
+            if U_var < 0.3:
+                conduct[ind_u, ind_V] = 0.000
+                polarization[ind_u, ind_V] = 0.000
+                ssf[ind_u, ind_V] = 0.000
+
+            if polarization[ind_u, ind_V] < 0.05:
+                polarization[ind_u, ind_V] = 0.000
 
         except:
             print(fileName)

@@ -143,7 +143,7 @@ function MFT(params, filename)
         V_close = 1.425
     end
     oldfile = loc * "/07.31-25.2024_Bilayer_V=$(round(V_close, digits=3))_U=$(round(1.8, digits=2)).jld2"
-    init_guess = load(oldfile)["outputs"][end] .+ vcat(fill(0.000,length(hopping_up)*2), fill(0.000,SkXSize^2 * 3), rand_noise,   rand_noise)
+    init_guess = load(oldfile)["outputs"][end] .+ vcat(fill(0.001,length(hopping_up)*2), fill(0.001,SkXSize^2 * 3), rand_noise,   rand_noise)
     #init_guess = vcat(fill(0.01,length(hopping_up)*2), fill(0.01,SkXSize^2 * 3), init_up, init_dn)
     if isfile(fileName)
         println("TRYING TO LOAD " * fileName)
@@ -161,15 +161,15 @@ function MFT(params, filename)
                         V_close = 1.425
                     end
                     oldfile = loc * "/07.31-25.2024_Bilayer_V=$(round(V_close, digits=3))_U=$(round(1.8, digits=2)).jld2"
-                    a_guess = load(oldfile)["outputs"][end] .+ vcat(fill(0.000,length(hopping_up)*2), fill(0.000,SkXSize^2 * 3), rand_noise,   rand_noise)
+                    a_guess = load(oldfile)["outputs"][end] .+ vcat(fill(0.01,length(hopping_up)*2), fill(0.01,SkXSize^2 * 3), rand_noise,   rand_noise)
                     oldfile = loc * "/$(filename)_V=$(round(V, digits=3))_U=$(round(params["U_prev"], digits=2)).jld2"
-                    b_guess = load(oldfile)["outputs"][end] .+ vcat(fill(0.00001,length(hopping_up)*2), fill(0.0001,SkXSize^2 * 3), rand_noise,  rand_noise)
-                    init_guess = 0.5 .* (a_guess .+ b_guess)
+                    b_guess = load(oldfile)["outputs"][end] .+ vcat(fill(0.01,length(hopping_up)*2), fill(0.01,SkXSize^2 * 3), rand_noise,  rand_noise)
+                    init_guess = 0.5 .* (0.75*a_guess .+ 0.25*b_guess)
                 else
                 #oldfile = loc * "/$(filename)_J=$(round(jh, digits=3))_U=$(round(params["U_prev"], digits=2)).jld2"
                     oldfile = loc * "/$(filename)_V=$(round(V, digits=3))_U=$(round(params["U_prev"], digits=2)).jld2"
                     #init_guess = load(oldfile)["outputs"][end] .+ vcat(fill(0.000,length(hopping_up)*2), fill(0.000,SkXSize^2 * 3), rand_noise, -1 .* rand_noise)
-                    init_guess = load(oldfile)["outputs"][end] .+ vcat(fill(0.00001,length(hopping_up)*2), fill(0.0001,SkXSize^2 * 3), rand_noise,  rand_noise)
+                    init_guess = load(oldfile)["outputs"][end] .+ vcat(fill(0.01,length(hopping_up)*2), fill(0.01,SkXSize^2 * 3), rand_noise,  rand_noise)
                 end
                 SolveMFT!(mft, init_guess, fileName; max_iter=params["max_iter"], tol=params["tol"], Update_kwargs = Dict{Symbol, Any}(:alpha => 0.25))
             else

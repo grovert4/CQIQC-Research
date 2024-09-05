@@ -63,7 +63,7 @@ t = get!(params, "t", 1.0)
 t_inter = get!(params, "t_inter", 5)
 t_inter = 0.5
 t_inter = 1.0
-jh = get!(params, "jh", -2.0)
+jh = get!(params, "jh", -4.0)
 U = get!(params, "U", 0.0)
 t_density = get!(params, "t_density", 0.0)
 ##### Thermodynamic parameters

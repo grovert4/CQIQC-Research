@@ -112,12 +112,11 @@ filename = "06.17-1.2024_Bilayer"
 
 #filename = "05.04-0.66.2024_Bilayer"
 
-filename = "07.09-25.2024_Bilayer"
-#filename = "07.31-25.2024_Bilayer"
 filename = "07.25-25.2024_Bilayer"
+#filename = "07.31-25.2024_Bilayer"
+filename = "08.02-25.2024_Bilayer"
 
-#filename = "08.02-25.2024_Bilayer"
-filename = "09.05-1-25.2024_Bilayer"
+filename = "09.05-25.2024_Bilayer"
 
 #println(@__DIR__)
 params = YAML.load_file("../Input/$(filename).yml")
@@ -126,7 +125,7 @@ U_array = collect(LinRange(params["U_min"], params["U_max"], params["U_length"])
 #filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / (params["filling_max"] )
 #filling_arr = collect(LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / (params["filling_max"] )
 #filling_arr = (24 .+ LinRange(params["filling_min"], params["filling_max"], params["filling_length"])) / 48
-
+params["V_length"] = 11
 V_array = collect(LinRange(params["V_min"], params["V_max"], params["V_length"]))
 params["V"] = V_array[6]
 
@@ -186,16 +185,17 @@ for (ind, V_var) in enumerate(V_array[:])
     U_var = U_array[1]
     params["V"] = V_var
     println(U_var)
-    if Uniform_Status == true
-        fileName = loc * "Last_Itr_$(filename)_UNIFORM_p=$(round(params["jh"], digits=3))_U=$(round(U_var, digits=2))_t1=$(round(t1, digits=2)).jld2"
-    else
-        #fileName = loc * "Last_Itr_$(filename)_J=$(round(params["jh"], digits=3))_U=$(round(U_var, digits=2)).jld2"
-        fileName = loc * "Last_Itr_$(filename)_V=$(round(params["V"], digits=3))_U=$(round(U_var, digits=2)).jld2"
-        #fileName = loc * "Last_Itr_$(filename)_n=$(round(filling, digits=3))_U=$(round(U_var, digits=2)).jld2"
-
-
-    end
+    #fileName = loc * "Last_Itr_$(filename)_J=$(round(params["jh"], digits=3))_U=$(round(U_var, digits=2)).jld2"
+    fileName = loc * "Last_Itr_$(filename)_V=$(round(params["V"], digits=3))_U=$(round(U_var, digits=2)).jld2"
+    #fileName = loc * "Last_Itr_$(filename)_n=$(round(filling, digits=3))_U=$(round(U_var, digits=2)).jld2"
     println(fileName)
+    try 
+        TBResults = load(fileName)
+    catch
+        println("File not found")
+        fileName = loc * "Last_Itr_$(filename)_V=$(round(V_array[ind+1], digits=3))_U=$(round(U_var, digits=2)).jld2"
+        TBResults = load(fileName)
+    end
     TBResults = load(fileName) #MeanFieldToolkit.MFTResume.ReadMFT(fileName)
     #println(length(TBResults["UC"].basis))
     SkXsize = length(TBResults["UC"].basis)
@@ -287,7 +287,7 @@ display(RSPlot)
 data = 1 * ord_array[15, 1:SkXSize^2*3] .- 1 * ord_array[15, SkXSize^2*3+1:SkXSize^2*6]
 # RSPlot = plot_RS(UC, ord_array[1, SkXSize^2*3:SkXSize^2*3*2])
 # display(RSPlot)
-RSPlot = plot_RS(UC, 1 * ord_array[4, 1:SkXSize^2*3] .- 10 * ord_array[4, SkXSize^2*3+1:SkXSize^2*6])
+RSPlot = plot_RS(UC, 1 * ord_array[11, 1:SkXSize^2*3] .- 1 * ord_array[11, SkXSize^2*3+1:SkXSize^2*6])
 display(RSPlot)
 RSPlot = plot_RS(UC, order_parameter[4,:])
 display(RSPlot)
