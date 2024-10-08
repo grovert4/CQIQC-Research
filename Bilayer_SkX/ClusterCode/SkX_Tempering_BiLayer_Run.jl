@@ -6,7 +6,7 @@ commRank = MPI.Comm_rank(MPI.COMM_WORLD)
 using SpinMC_more_more, LinearAlgebra, JSON, LazyGrids
 include("functions.jl")
 
-inputFile = JSON.parsefile("./Input_Files/MPI-Aminus/"*ARGS[1]*".json")
+inputFile = JSON.parsefile("./Input_Files/"*ARGS[1]*".json")
 J1 = inputFile["J_1"]
 D = inputFile["D"]
 A_ion = inputFile["A_ion"]
@@ -77,7 +77,7 @@ j2 = inputFile["J2"]
 for j in 1:length(Jperps)
       jperp = round(Jperps[j],sigdigits=5)
 
-      filename = "/scratch/grovert4/Data/Aminus-Full-Bilayer/"*ARGS[1]*"_Jperp=$(jperp),J2=$(j2).h5"
+      filename = "/scratch/grovert4/Data/tempAMINUS/"*ARGS[1]*"_Jperp=$(jperp),J2=$(j2).h5"
       if isfile(filename) 
          println("Already Completed "*filename)
       else
