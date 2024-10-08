@@ -13,4 +13,4 @@
 module load StdEnv/2020
 module load julia/1.8.5
 
-srun julia SkX_Tempering_BiLayer_Run.jl J2=-0.25-20.08.2024-Bilayer-MPI-Aminus
+srun julia SkX_Tempering_BiLayer_Run.jl J2=-0.25-20.08.2024-Bilayer-MPI-Aminu
