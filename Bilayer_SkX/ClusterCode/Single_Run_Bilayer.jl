@@ -63,7 +63,7 @@ j2 = -0.3
 
 
 jperp = -0.6
-filename = "/scratch/grovert4/Data/single_runs/"*ARGS[1]*"_J=$(jp),J2=$(j2).h5"
+filename = "/scratch/grovert4/Data/single_runs/_J=$(jp),J2=$(j2).h5"
 UClocal = deepcopy(UCglobal)
 for i in 1:length(UClocal.basis)
   #Add J2 2NN AF interaction 
