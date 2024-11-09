@@ -9,10 +9,14 @@ include("functions.jl")
 J1 = 1.0
 D = 0.25
 A_ion = -0.2
-t0 = 5.0
+t0 = 1.0
 tf = 0.001
 thermSweeps = 4500
 measureSweeps = 50000
+tmax = 5.0
+tmin = 0.1
+exchangeRate = 10
+coolRate = 0.99
 
 #Unit Cell Construction
 a1 = (1.0 , 0.0, 0.0)  #-
@@ -79,5 +83,5 @@ latticeLocal = Lattice(UClocal, L)
 # updateSpins!(closestfile, latticetemp)
 # latticeLocal.spins[:, 1:2:end] = latticetemp.spins .* [1, 1, -1]
 # latticeLocal.spins[:, 2:2:end] = latticetemp.spins
-mc = MPIrunAnneal(inputFile["tmax"],inputFile["tmin"],inputFile["exchangeRate"],t0,tf,latticeLocal,thermSweeps,measureSweeps,inputFile["coolRate"],filename,true);
+mc = MPIrunAnneal(tmax,tmin,exchangeRate,t0,tf,latticeLocal,thermSweeps,measureSweeps,coolRate,filename,true);
 
