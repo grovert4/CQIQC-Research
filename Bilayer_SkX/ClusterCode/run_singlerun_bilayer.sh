@@ -4,7 +4,7 @@
 #SBATCH --mail-type=BEGIN
 #SBATCH --mail-type=END
 #SBATCH --mail-type=FAIL
-#SBATCH --ntasks=24
+#SBATCH --ntasks=20
 #SBATCH --cpus-per-task=1 
 #SBATCH --account=def-aparamek
 #SBATCH --time=01:00:00
