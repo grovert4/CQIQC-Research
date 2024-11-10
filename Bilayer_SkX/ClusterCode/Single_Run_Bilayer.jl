@@ -8,10 +8,10 @@ include("functions.jl")
 
 J1 = 1.0
 D = 0.25
-A_ion = -0.2
+A_ion = -0.1
 t0 = 1.0
 tf = 0.001
-thermSweeps = 4500
+thermSweeps = 4000
 measureSweeps = 50000
 tmax = 5.0
 tmin = 0.1
