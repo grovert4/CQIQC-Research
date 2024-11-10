@@ -60,7 +60,7 @@ end
 # J2s = collect(Iterators.flatten(J2arr))
 
 
-L = (36, 36, 1)
+L = (30, 30, 1)
 # gridsize =inputFile["Jperp_length"]*inputFile["J2_length"]
 
 j2 = -0.28
