@@ -60,13 +60,11 @@ end
 # J2s = collect(Iterators.flatten(J2arr))
 
 
-L = (24, 24, 1)
+L = (36, 36, 1)
 # gridsize =inputFile["Jperp_length"]*inputFile["J2_length"]
 
-j2 = -0.3
-
-
-jperp = -0.6
+j2 = -0.28
+jperp = -0.58
 filename = "/scratch/grovert4/Data/single_runs/_J=$(jperp),J2=$(j2).h5"
 UClocal = deepcopy(UCglobal)
 for i in 1:length(UClocal.basis)
