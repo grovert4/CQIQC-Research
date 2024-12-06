@@ -65,7 +65,7 @@ L = (36, 36, 1)
 
 j2 = -0.16
 jperp = -0.144
-filename = "/scratch/grovert4/Data/single_runs/36_J=$(jperp),J2=$(j2).h5"
+filename = "/scratch/grovert4/Data/single_runs/36x36_J=$(jperp),J2=$(j2).h5"
 
 UClocal = deepcopy(UCglobal)
 for i in 1:length(UClocal.basis)
