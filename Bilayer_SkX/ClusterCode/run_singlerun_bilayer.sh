@@ -7,7 +7,7 @@
 #SBATCH --ntasks=20
 #SBATCH --cpus-per-task=1 
 #SBATCH --account=def-aparamek
-#SBATCH --time=01:00:00
+#SBATCH --time=01:30:00
 #SBATCH --mem-per-cpu=8000MB
 #SBATCH --output=/scratch/grovert4/SLURM/slurm-%x-%j.txt
 
