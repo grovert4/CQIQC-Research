@@ -8,7 +8,7 @@ include("functions.jl")
 
 J1 = 1.0
 D = 0.25
-A_ion = -0.1
+A_ion = -0.2
 t0 = 1.0
 tf = 0.001
 thermSweeps = 4000
@@ -63,9 +63,10 @@ end
 L = (30, 30, 1)
 # gridsize =inputFile["Jperp_length"]*inputFile["J2_length"]
 
-j2 = -0.28
-jperp = -0.58
-filename = "/scratch/grovert4/Data/single_runs/_J=$(jperp),J2=$(j2).h5"
+j2 = -0.16
+jperp = -0.144
+filename = "/scratch/grovert4/Data/single_runs/36_J=$(jperp),J2=$(j2).h5"
+
 UClocal = deepcopy(UCglobal)
 for i in 1:length(UClocal.basis)
   #Add J2 2NN AF interaction 
