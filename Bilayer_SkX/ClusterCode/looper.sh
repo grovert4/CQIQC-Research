@@ -1,5 +1,5 @@
 #!/bin/bash
-string_to_search_for="run_MPI_v2Aminus"
+string_to_search_for="run_tempering_bilayer"
 current_dir=$(pwd)
 for FILE in $(ls $current_dir) 
 do
