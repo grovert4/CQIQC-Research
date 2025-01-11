@@ -6,7 +6,7 @@ commRank = MPI.Comm_rank(MPI.COMM_WORLD)
 using SpinMC_more_more, LinearAlgebra, JSON, LazyGrids
 include("functions.jl")
 
-inputFile = JSON.parsefile("./Input_Files/MPI-Aminus/"*ARGS[1]*".json")
+inputFile = JSON.parsefile("./Input_Files/Tempering_Input_File/"*ARGS[1]*".json")
 J1 = inputFile["J_1"]
 D = inputFile["D"]
 A_ion = inputFile["A_ion"]
@@ -62,22 +62,10 @@ L = (inputFile["System_Size"], inputFile["System_Size"], 1)
 
 j2 = inputFile["J2"]
 
-# monoHs = round.(collect(range(0, 1.0, 31)), sigdigits = 5)
-# monoJ2s = round.(collect(range(0, -0.5, 31)), sigdigits = 5)
-# closestJ2 = findmin(x -> abs.(j2 .- x), monoJ2s)[2]
-
-# a1temp = (1.0, 0.0)
-# a2temp = (-1/2, sqrt(3)/2)
-# UCtemp = UnitCell(a1temp, a2temp) 
-# addBasisSite!(UCtemp, (0.0, 0.0))
-# latticetemp = Lattice(UCtemp, (24, 24))
-# vertextemp = getVertex(latticetemp)
-
-
 for j in 1:length(Jperps)
       jperp = round(Jperps[j],sigdigits=5)
 
-      filename = "/scratch/grovert4/Data/aminustry2_J2=-0.096/"*ARGS[1]*"_Jperp=$(jperp),J2=$(j2).h5"
+      filename = "/scratch/grovert4/Data/temperingruns_tryjan2025/temperinggroundstate/"*ARGS[1]*"_Jperp=$(jperp),J2=$(j2).h5"
       if isfile(filename) 
          println("Already Completed "*filename)
       else
@@ -90,12 +78,7 @@ for j in 1:length(Jperps)
             end
          addInteraction!(UClocal, b1, b2, -jperp * Sz , (0,0,0))
          latticeLocal = Lattice(UClocal, L)
-
-         # closestH = findmin(x -> abs.(abs.(jperp) .- x), monoHs)[2]
-         # closestfile = "/home/grovert4/projects/def-aparamek/grovert4/CQIQC-Research/finalData/monolayer_data/13.10.2024-Monolayer_H=$(monoHs[closestH]),J2=$(monoJ2s[closestJ2]).h5"
-         # updateSpins!(closestfile, latticetemp)
-         # latticeLocal.spins[:, 1:2:end] = latticetemp.spins .* [1, 1, -1]
-         # latticeLocal.spins[:, 2:2:end] = latticetemp.spins
+   
          mc = MPIrunAnneal(inputFile["tmax"],inputFile["tmin"],inputFile["exchangeRate"],t0,tf,latticeLocal,thermSweeps,measureSweeps,inputFile["coolRate"],filename,true);
       end
 end
